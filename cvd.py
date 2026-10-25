@@ -3,61 +3,68 @@ import json
 import urllib.request
 from datetime import datetime, timezone
 
-SYMBOL = "ETHUSDT"
-URL = (
-    "https://api.binance.com/api/v3/klines"
-    "?symbol=ETHUSDT&interval=1m&limit=1000"
-)
+URL = "https://api.kraken.com/0/public/Trades?pair=ETHUSD"
 
-def get_klines():
+def get_trades():
     request = urllib.request.Request(
-        URL, headers={"User-Agent": "ETH-CVD-Monitor/1.0"}
+        URL,
+        headers={"User-Agent": "ETH-CVD-Monitor/1.0"}
     )
-    with urllib.request.urlopen(request, timeout=20) as response:
-        return json.load(response)
+    with urllib.request.urlopen(request, timeout=30) as response:
+        data = json.load(response)
 
-def calculate_cvd(klines, minutes):
-    selected = klines[-minutes:]
-    delta = 0.0
-    volume = 0.0
+    if data.get("error"):
+        raise RuntimeError(str(data["error"]))
 
-    for candle in selected:
-        total_volume = float(candle[5])
-        taker_buy_volume = float(candle[9])
-        delta += 2 * taker_buy_volume - total_volume
-        volume += total_volume
-
-    return {
-        "cvd_eth": round(delta, 4),
-        "volume_eth": round(volume, 4),
-        "buy_ratio_pct": round(
-            100 * (volume + delta) / (2 * volume), 2
-        ) if volume else None
-    }
+    result = data["result"]
+    key = next(k for k in result if k != "last")
+    return result[key]
 
 def main():
-    klines = get_klines()
-    # Exclude the currently forming candle.
-    klines = klines[:-1]
+    trades = get_trades()
+    if not trades:
+        raise RuntimeError("No trades received")
+
+    buy_volume = 0.0
+    sell_volume = 0.0
+
+    for trade in trades:
+        volume = float(trade[1])
+        side = trade[3]
+
+        if side == "b":
+            buy_volume += volume
+        elif side == "s":
+            sell_volume += volume
+        else:
+            raise RuntimeError("Unknown trade side")
+
+    timestamps = [float(t[2]) for t in trades]
+    total = buy_volume + sell_volume
 
     result = {
-        "symbol": SYMBOL,
-        "exchange": "Binance Spot",
+        "exchange": "Kraken Spot",
+        "symbol": "ETH/USD",
+        "method": "recent_1000_trades",
+        "trade_count": len(trades),
+        "start_utc": datetime.fromtimestamp(
+            min(timestamps), timezone.utc
+        ).isoformat(),
+        "end_utc": datetime.fromtimestamp(
+            max(timestamps), timezone.utc
+        ).isoformat(),
         "calculated_at_utc": datetime.now(
             timezone.utc
         ).isoformat(),
-        "intervals": {}
+        "buy_volume_eth": round(buy_volume, 6),
+        "sell_volume_eth": round(sell_volume, 6),
+        "cvd_delta_eth": round(
+            buy_volume - sell_volume, 6
+        ),
+        "buy_ratio_pct": round(
+            buy_volume / total * 100, 2
+        ) if total else None
     }
-
-    for label, minutes in {
-        "5m": 5,
-        "15m": 15,
-        "1h": 60,
-        "4h": 240
-    }.items():
-        result["intervals"][label] = calculate_cvd(
-            klines, minutes
-        )
 
     with open("cvd_latest.json", "w") as file:
         json.dump(result, file, indent=2)
