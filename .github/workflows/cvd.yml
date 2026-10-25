@@ -27,9 +27,10 @@ jobs:
       - name: Save CVD result
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add cvd_latest.json cvd_state.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Update ETH spot CVD"
-            git push
-          fi
+git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+git add cvd_latest.json cvd_state.json
+if ! git diff --cached --quiet; then
+  git commit -m "Update ETH spot CVD"
+  git pull --rebase -X ours origin main
+  git push origin HEAD:main
+fi
