@@ -82,6 +82,40 @@ def funding_urls(start, end):
         month = next_month
 
 
+
+def fetch_funding_api_day(day):
+    """Fallback to official Binance USD-M funding history API for one UTC day."""
+    from urllib.parse import urlencode
+    start_ms = int(day.timestamp() * 1000)
+    end_ms = int((day + timedelta(days=1)).timestamp() * 1000) - 1
+    result = []
+    cursor = start_ms
+    while cursor <= end_ms:
+        params = urlencode({'symbol': SYMBOL, 'startTime': cursor, 'endTime': end_ms, 'limit': 1000})
+        url = 'https://fapi.binance.com/fapi/v1/fundingRate?' + params
+        error = None
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(url, headers={'User-Agent': 'ETH-180D-Research/2.1'})
+                with urllib.request.urlopen(req, timeout=30) as response:
+                    payload = json.load(response)
+                if not isinstance(payload, list):
+                    raise ValueError('Unexpected funding API response')
+                result.extend(payload)
+                break
+            except (urllib.error.HTTPError, urllib.error.URLError, OSError, ValueError) as exc:
+                error = exc
+                time.sleep(2 ** attempt)
+        else:
+            raise RuntimeError(f'Funding API unavailable for {day.date()}: {error}')
+        if len(payload) < 1000:
+            break
+        last_ts = max(int(r['fundingTime']) for r in payload)
+        if last_ts < cursor:
+            raise ValueError('Funding API pagination did not advance')
+        cursor = last_ts + 1
+    return result
+
 def main():
     now = datetime.now(timezone.utc)
     end = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -89,6 +123,7 @@ def main():
     end_exclusive = end + timedelta(days=1)
     OUT.mkdir(exist_ok=True)
     missing_metrics, missing_funding, schema_errors = [], [], []
+    funding_api_recovered_days, funding_api_failed_days = [], []
     oi_by_hour = defaultdict(list)
     for day in day_range(start, end):
         stamp = day.strftime('%Y-%m-%d')
@@ -120,8 +155,23 @@ def main():
     for url in funding_urls(start, end):
         rows = fetch_zip(url)
         if rows is None:
-            missing_funding.append(url)
-            continue
+            # Monthly archives are preferred. For missing daily archives, use the
+            # official USD-M funding history endpoint, without fabricating rates.
+            try:
+                day_label = url.rsplit('-', 3)[-3:]
+                day_str = '-'.join(day_label).removesuffix('.zip')
+                day = datetime.strptime(day_str, '%Y-%m-%d').replace(tzinfo=timezone.utc)
+                rows = fetch_funding_api_day(day)
+                if rows:
+                    funding_api_recovered_days.append(day_str)
+                else:
+                    missing_funding.append(url)
+                    funding_api_failed_days.append(day_str + ': empty API response')
+                    continue
+            except (RuntimeError, ValueError) as exc:
+                missing_funding.append(url)
+                funding_api_failed_days.append(str(exc))
+                continue
         for row in rows:
             try:
                 ts = parse_time(row.get('calc_time') or row.get('fundingTime') or row.get('funding_time'))
@@ -152,6 +202,7 @@ def main():
         'generated_utc': now.isoformat(), 'start_utc': start.isoformat(), 'end_utc_exclusive': end_exclusive.isoformat(),
         'expected_hourly_oi_buckets': 4320, 'oi_hourly_buckets': len(oi), 'funding_events': len(funding),
         'missing_metrics_days': missing_metrics, 'missing_funding_archives': missing_funding,
+        'funding_api_recovered_days': funding_api_recovered_days, 'funding_api_failed_days': funding_api_failed_days,
         'schema_errors': schema_errors,
         'limitations': [
             'Binance USD-M ETHUSDT only; not market-wide open interest.',
