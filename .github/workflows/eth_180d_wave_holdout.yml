@@ -1,0 +1,37 @@
+name: ETH Wave Holdout Verification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout isolated research branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/binance-180d-integration
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect Binance hourly flow
+        run: python eth_180d_collect.py
+      - name: Collect historical OI and funding
+        run: python eth_180d_derivatives.py
+      - name: Integrate historical observations
+        run: python eth_180d_integrate.py
+      - name: Run existing Elliott structure comparison
+        run: python eth_180d_wave_comparison.py
+      - name: Evaluate held-out predictions
+        run: python eth_180d_wave_holdout.py
+      - name: Upload paired and holdout reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-wave-holdout-${{ github.run_id }}
+          path: research_wave_comparison/
+          retention-days: 90
+          if-no-files-found: warn
