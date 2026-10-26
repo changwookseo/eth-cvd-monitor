@@ -62,16 +62,27 @@ def evaluate(rows,width):
                 fib={"38.2pct_retracement":round(b["price"]-distance*.382,2),"50pct_retracement":round(b["price"]-distance*.5,2),"61.8pct_retracement":round(b["price"]-distance*.618,2)}
             else:
                 fib={"38.2pct_retracement":round(b["price"]+distance*.382,2),"50pct_retracement":round(b["price"]+distance*.5,2),"61.8pct_retracement":round(b["price"]+distance*.618,2)}
-    return {"last_complete_candle":rows[-1]["date"] if rows else None,"candles":len(rows),"pivot_confirmation_bars":width,"structure":state,"last_confirmed_pivots":recent,"scenario_invalidation_reference":invalidations,"fibonacci_reference":fib,"elliott_1_to_5_or_abc_count":"not_determined","warning":"Candidates only; no retrospective pivot can be used before its confirmed_date."}
+    current=rows[-1] if rows else None
+    last_pivot=ps[-1] if ps else None
+    ongoing=None
+    if current and last_pivot:
+        tail=[x for x in rows if x["date"]>=last_pivot["pivot_date"]]
+        highest=max(tail,key=lambda x:x["high"])
+        lowest=min(tail,key=lambda x:x["low"])
+        ongoing={"status":"unconfirmed","from_last_confirmed_pivot":last_pivot,"highest_since_pivot":{"date":highest["date"],"price":highest["high"]},"lowest_since_pivot":{"date":lowest["date"],"price":lowest["low"]},"latest_close":current["close"],"last_close_date":current["date"],"above_last_confirmed_high":bool(highs and current["close"]>highs[-1]["price"]),"below_last_confirmed_low":bool(lows and current["close"]<lows[-1]["price"])}
+    return {"ongoing_unconfirmed_move":ongoing,"last_complete_candle":rows[-1]["date"] if rows else None,"candles":len(rows),"pivot_confirmation_bars":width,"structure":state,"last_confirmed_pivots":recent,"scenario_invalidation_reference":invalidations,"fibonacci_reference":fib,"elliott_1_to_5_or_abc_count":"not_determined","warning":"Candidates only; no retrospective pivot can be used before its confirmed_date."}
 def main():
     rows=read()
     if not rows:raise RuntimeError("Missing ETH daily data")
     coverage=json.loads((ROOT/"coverage.json").read_text())
+    current_path=ROOT/"current_month_status.json"
+    freshness=json.loads(current_path.read_text()) if current_path.exists() else {"current_through_yesterday":False,"warning":"Current month archive not fetched"}
     results={}
     for frame,width in (("daily",5),("weekly",2),("monthly",1)):
         data=aggregate(rows,frame)
+        if frame=="monthly" and data and data[-1]["date"]==rows[-1]["utc_date"][:7]:data=data[:-1]
         results[frame]=evaluate(data,width)
-    result={"generated_utc":datetime.now(timezone.utc).isoformat(),"market":"Binance spot ETHUSDT","coverage_complete":coverage["complete"],"timeframes":results,"interpretation":"Weekly/monthly are trend context; daily is structural confirmation; hourly CVD/OI/funding remain independent.","warnings":["NOT formal Elliott 1-5/ABC count. No deterministic full-wave classification is claimed.","Levels are scenario references, not executable signals or probabilities.","Weekly/monthly incomplete current candle excluded; latest daily data also excludes current partial month by design.","Missing data or exchange-specific price can change conclusions.","Existing 8-factor weights and production reports unchanged."]}
+    result={"generated_utc":datetime.now(timezone.utc).isoformat(),"market":"Binance spot ETHUSDT","historical_month_coverage_complete":coverage["complete"],"latest_daily_archive_status":freshness,"timeframes":results,"interpretation":"Weekly/monthly are trend context; daily is structural confirmation; hourly CVD/OI/funding remain independent.","warnings":["NOT formal Elliott 1-5/ABC count. No deterministic full-wave classification is claimed.","Levels are scenario references, not executable signals or probabilities.","Weekly incomplete current candle excluded; current partial month not used for confirmed monthly bars.","Ongoing moves are unconfirmed and must not be treated as confirmed Elliott waves.","Missing data or exchange-specific price can change conclusions.","Existing 8-factor weights and production reports unchanged."]}
     (ROOT/"multi_timeframe_scenarios.json").write_text(json.dumps(result,indent=2,ensure_ascii=False))
     print(json.dumps(result,indent=2,ensure_ascii=False))
 if __name__=="__main__":main()
