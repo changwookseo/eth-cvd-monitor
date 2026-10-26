@@ -1,0 +1,49 @@
+name: ETH RSI MACD Daily Weekly
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '10 0,14 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eth-technical
+  cancel-in-progress: false
+
+jobs:
+  calculate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch candles and compute daily weekly RSI MACD SMA
+        run: python eth_technical_indicators.py
+      - name: Validate output and required fields
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('eth_technical_latest.json'))
+          assert x['status']=='VERIFIED', x.get('failure_reason')
+          for timeframe in ('daily','weekly'):
+              y=x[timeframe]
+              assert y['candle_count']>=210
+              assert all(isinstance(y[k],(int,float)) for k in ('rsi14','macd','signal','histogram'))
+              assert abs(y['macd']-y['signal']-y['histogram'])<0.000003
+              assert set(y['sma'])=={'20','50','100','200'}
+          print('PASS: daily and weekly indicators verified')
+          PY
+      - name: Commit indicator snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eth_technical_latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update daily and weekly ETH RSI MACD"
+            git pull --rebase -X ours origin main
+            git push origin HEAD:main
+          fi
