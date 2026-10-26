@@ -1,0 +1,33 @@
+name: ETH Historical Current Crosscheck
+on:
+  workflow_dispatch:
+jobs:
+  crosscheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/binance-180d-integration
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Collect 180-day hourly data
+        run: python eth_180d_collect.py
+      - name: Collect derivatives
+        run: python eth_180d_derivatives.py
+      - name: Integrate aligned data
+        run: python eth_180d_integrate.py
+      - name: Run historical and current crosscheck
+        run: python eth_historical_live_crosscheck.py
+      - name: Preserve run artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-crosscheck-${{ github.run_id }}
+          path: research_predictions/
+          retention-days: 90
+          if-no-files-found: warn
