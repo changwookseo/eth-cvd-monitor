@@ -51,7 +51,7 @@ def main():
                 # Entry at close of next completed hour (i+1), exit h hours later.
                 if times[i+1]!=t+timedelta(hours=1):continue
                 ret=(prices[j]/prices[i+1]-1)*100
-                path=[prices[bytime[t+timedelta(hours+k)]] for k in range(1,horizon+2) if t+timedelta(hours=k) in bytime]
+                path=[prices[bytime[t+timedelta(hours=k)]] for k in range(1,horizon+2) if t+timedelta(hours=k) in bytime]
                 if len(path)!=horizon+1 or any(p is None for p in path):continue
                 adverse=(min(path)/prices[i+1]-1)*100
                 signals.append({"signal_utc_hour":t.isoformat(),"condition":tag,"horizon_hours":horizon,"entry_utc_hour":times[i+1].isoformat(),"exit_utc_hour":times[j].isoformat(),"return_pct":round(ret,6),"max_adverse_close_pct":round(min(0,adverse),6)})
