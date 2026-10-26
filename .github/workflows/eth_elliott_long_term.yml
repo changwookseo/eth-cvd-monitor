@@ -1,0 +1,31 @@
+name: ETH Long-Term Elliott Context
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  context:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/binance-180d-integration
+          persist-credentials: false
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download multi-year ETH daily history
+        run: python eth_elliott_collect.py
+      - name: Calculate daily weekly monthly structure
+        run: python eth_elliott_multiframe.py
+      - name: Upload Elliott research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-long-term-elliott-${{ github.run_id }}
+          path: research_elliott/
+          retention-days: 90
+          if-no-files-found: warn
