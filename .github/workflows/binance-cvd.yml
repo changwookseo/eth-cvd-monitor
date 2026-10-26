@@ -1,1 +1,39 @@
+name: Binance Spot CVD
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: binance-cvd-main
+  cancel-in-progress: false
+
+jobs:
+  calculate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Calculate Binance CVD
+        run: python binance_cvd.py
+
+      - name: Save Binance CVD
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add binance_cvd_latest.json binance_cvd_state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Binance ETH spot CVD"
+            git pull --rebase -X ours origin main
+            git push origin HEAD:main
+          fi
 
