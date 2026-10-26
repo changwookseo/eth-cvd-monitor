@@ -1,1 +1,46 @@
+name: Binance Vision API Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-binance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Check Binance Vision ETHUSDT API
+        run: |
+          python3 - <<'PY'
+          import json
+          import urllib.request
+          import urllib.error
+          import sys
+
+          url = "https://data-api.binance.vision/api/v3/aggTrades?symbol=ETHUSDT&limit=5"
+
+          try:
+              with urllib.request.urlopen(url, timeout=15) as response:
+                  status = response.status
+                  data = json.load(response)
+
+              if status != 200 or not isinstance(data, list) or not data:
+                  raise ValueError("Unexpected API response")
+
+              print("SUCCESS: Binance Vision API connected")
+              print("HTTP status:", status)
+              print("Trades received:", len(data))
+              print("Latest trade ID:", data[-1]["a"])
+
+          except urllib.error.HTTPError as e:
+              print("FAILED: HTTP", e.code)
+              sys.exit(1)
+
+          except Exception as e:
+              print("FAILED:", str(e))
+              sys.exit(1)
+          PY
 
