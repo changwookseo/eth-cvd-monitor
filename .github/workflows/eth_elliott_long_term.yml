@@ -33,6 +33,8 @@ jobs:
         run: python eth_180d_integrate.py
       - name: Join wave context with historical flows
         run: python eth_elliott_flow_join.py
+      - name: Validate 7 14 30 day forward wave-flow outcomes
+        run: python eth_elliott_flow_forward_validation.py
       - name: Upload Elliott research artifacts
         if: always()
         uses: actions/upload-artifact@v4
