@@ -1,0 +1,38 @@
+name: ETH 180D Integration Validation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out isolated integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/binance-180d-integration
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect 180-day Binance spot and futures
+        run: python eth_180d_collect.py
+      - name: Collect 180-day OI and funding
+        run: python eth_180d_derivatives.py
+      - name: Integrate and report coverage
+        run: python eth_180d_integrate.py
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-180d-validation
+          path: |
+            research_data/
+            research_derivatives/
+            research_integrated/
+          retention-days: 30
