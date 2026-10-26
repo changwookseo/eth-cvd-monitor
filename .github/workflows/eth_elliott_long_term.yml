@@ -19,6 +19,8 @@ jobs:
           python-version: '3.12'
       - name: Download multi-year ETH daily history
         run: python eth_elliott_collect.py
+      - name: Add completed current-month daily candles
+        run: python eth_elliott_current_month.py
       - name: Calculate daily weekly monthly structure
         run: python eth_elliott_multiframe.py
       - name: Upload Elliott research artifacts
