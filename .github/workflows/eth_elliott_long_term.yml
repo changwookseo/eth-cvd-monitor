@@ -25,6 +25,14 @@ jobs:
         run: python eth_elliott_multiframe.py
       - name: Compare bullish and bearish medium-term scenarios
         run: python eth_elliott_competing_scenarios.py
+      - name: Collect 180-day spot and futures flows
+        run: python eth_180d_collect.py
+      - name: Collect historical OI and funding
+        run: python eth_180d_derivatives.py
+      - name: Align 180-day hourly flow observations
+        run: python eth_180d_integrate.py
+      - name: Join wave context with historical flows
+        run: python eth_elliott_flow_join.py
       - name: Upload Elliott research artifacts
         if: always()
         uses: actions/upload-artifact@v4
