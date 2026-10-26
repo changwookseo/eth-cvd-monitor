@@ -17,7 +17,7 @@ def aggregate(rows,frame):
     for r in rows:buckets[period(r["utc_date"],frame)].append(r)
     # Omit last bucket for weekly/monthly unless a later bucket exists.
     keys=sorted(buckets)
-    if frame!="daily":keys=keys[:-1]
+    if frame=="weekly" and datetime.fromisoformat(buckets[keys[-1]][-1]["utc_date"]).weekday()!=6:keys=keys[:-1]
     result=[]
     for key in keys:
         b=buckets[key]
