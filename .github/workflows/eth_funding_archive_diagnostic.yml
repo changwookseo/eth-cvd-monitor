@@ -1,0 +1,26 @@
+name: ETH October Funding Archive Diagnosis
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check October 2026 public funding ZIP availability
+        run: python eth_funding_archive_diagnostic.py
+      - name: Upload diagnostic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-october-funding-diagnostic
+          path: research_diagnostics/
+          retention-days: 30
