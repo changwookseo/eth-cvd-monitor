@@ -1,0 +1,33 @@
+name: ETH 180D Integrated Research
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Collect Binance spot and futures flow
+        run: python eth_180d_collect.py
+      - name: Collect Binance OI and settled funding
+        run: python eth_180d_derivatives.py
+      - name: Integrate and assess completeness
+        run: python eth_180d_integrate.py
+      - name: Upload source and integrated datasets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-180d-integrated-research
+          path: |
+            research_data/
+            research_derivatives/
+            research_integrated/
+          retention-days: 30
