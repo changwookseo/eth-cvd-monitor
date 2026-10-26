@@ -20,7 +20,7 @@ def main():
     latest=rows[-1]
     span=peak["high"]-trough["low"]
     valid=peak["utc_date"]>trough["utc_date"] and span>0
-    recent=[r for r in rows if r["utc_date"]>=end-timedelta(days=30)]
+    recent=[r for r,d in zip(rows,dates) if d>=end-timedelta(days=30)]
     recent_low=min(recent,key=lambda r:r["low"])
     recent_high=max(recent,key=lambda r:r["high"])
     retracements={str(level):round(peak["high"]-span*level,2) for level in (0.382,0.5,0.618)} if valid else {}
