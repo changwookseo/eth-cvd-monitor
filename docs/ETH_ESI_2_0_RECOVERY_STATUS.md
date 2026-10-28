@@ -176,3 +176,13 @@ The initial statement that changing execution environment was required was prema
 - 보고서 호출 규칙의 `2-1`에 OKX OI JSON의 신선도·거래소 범위 확인 지침이 있음을 재확인했으나, **실제 ETH ESI 2.0 보고서 출력**에서 이 실측값이 표시됐다는 증거는 아직 없습니다. 저장소에는 별도 보고서 생성 실행기가 없으며 문서 지침만으로 자동 반영을 단정할 수 없습니다. OI 전체 게이트는 **자동 갱신까지 통과, 실제 보고서 출력 반영 검증 대기**입니다.
 - Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 미등록이며 접근·우회·노출·재발급하지 않았습니다. 기존 현물 CVD, 기술지표, 보고서 정본, 7지표 가중치(20/15/18/20/12/10/5), 180일 백데이터 및 기존 수집 코드는 수정하지 않았습니다.
 - **순차 판정:** OI 전체 게이트 미통과(보고서 실제 출력 반영 미검증). 펀딩비·선물 CVD는 미착수 상태를 유지합니다. 전체 복구 완료 알림 금지. 다음 실행에서 최신 OI JSON의 지속 갱신과 실제 보고서 출력 증거를 우선 확인합니다.
+
+## 자동 복구 점검 — 2026-10-28 17:27 KST (08:27 UTC)
+
+- 이전 16:13 KST 체크포인트를 먼저 읽고 OI 선행 게이트를 다시 검증했습니다. 펀딩비·선물 CVD는 시작하지 않았습니다.
+- GitHub Actions 전체 실행 목록의 최신 OKX OI 실행 [40656683719](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40656683719)은 08:25:31 UTC에 `event=workflow_run`으로 시작되어 `conclusion=success`로 종료되었습니다. 직전 [40656098812](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40656098812)(08:20:39 UTC), [40655508110](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40655508110)(08:15:37 UTC)도 동일하게 `workflow_run` 성공입니다. 두 최신 실행의 jobs API에서 `Fetch and validate OKX ETH swap OI`, `Validate output contract and freshness`, `Commit verified OKX OI snapshot` 단계 모두 success를 확인했습니다. 이는 기존 Binance Spot CVD 성공 완료를 이용한 보조 트리거이며, **GitHub 자체 `schedule` 이벤트의 성공을 의미하지 않습니다**.
+- 실제 저장된 서로 다른 세 JSON 버전을 커밋 SHA로 읽었습니다. 모두 `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `unit=ETH`, `status=VERIFIED`입니다: 08:15:43.285 UTC **651379.418 ETH** (commit `6f48b1b`); 08:20:45.659 UTC **651514.837 ETH** (`94d32c4`); 08:25:39.904 UTC **652661.245 ETH** (`4b444b8`). 마지막 시각은 17:25:39.904 KST이며, 이번 점검 시각보다 약 2분 전입니다. 값은 **OKX ETH-USDT-SWAP 단일 거래소 OI**이며 Binance OI 또는 전체 시장 OI가 아닙니다.
+- 마지막 [JSON 변경 커밋](https://github.com/changwookseo/eth-cvd-monitor/commit/4b444b8c26a6ce67fe16ebaaba600fa99baf1ca4)의 변경 파일이 `eth_oi_okx_latest.json` 하나임을 확인했습니다. 최신 main JSON의 blob SHA는 `bea0a715ca29bd7d3edda7b09f64eda6c4cb6584`입니다. 자동 실행 → 수집기/신선도 검증 → JSON 저장·커밋 → 연속 갱신 게이트는 보조 트리거 기준으로 계속 통과 중입니다. 별도의 원천 API 수동 직접 호출은 이번 점검에서 수행하지 않았으며 Actions 수집 단계의 성공 및 저장값으로 검증했습니다.
+- 보고서 호출 규칙 `docs/ETH_ESI_2_0_REPORT_CALL_RULES.md`의 2-1에 OKX OI를 읽고 신선도·거래소 범위를 검증하라는 지침이 있음을 재확인했습니다. 그러나 저장소 루트에는 독립적인 보고서 생성 실행기가 확인되지 않았고, **ETH ESI 2.0 실제 보고서 출력에 이 최신 OI 실측값이 반영된 실행 증거는 확보하지 못했습니다**. 문서 지침만으로 보고서 반영 완료라고 선언하지 않습니다.
+- Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 미등록으로 취급합니다. 우회·조회·재발급·노출하지 않았습니다. 기존 현물 CVD·기술지표·정본·7지표 가중치(20/15/18/20/12/10/5)·180일 백데이터는 변경하지 않았습니다.
+- **판정: OI 자동 수집·연속 저장은 검증됨 / 실제 보고서 출력 반영 미검증 → OI 전체 게이트 미통과.** 펀딩비·선물 CVD 미착수. 전체 복구 완료 알림 금지. 다음 실행에서는 최신 JSON 연속 갱신과 보고서 실제 출력의 확인 가능한 증거를 우선 조사합니다.
