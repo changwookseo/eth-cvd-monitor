@@ -1,6 +1,6 @@
 # ETH ESI 2.0 recovery verification — 2026-10-28 KST
 
-Overall: BLOCKED, NOT COMPLETE.
+Overall: IN PROGRESS, NOT COMPLETE. Cron-side live Binance OI access succeeded; automatic GitHub import and report verification remain pending.
 
 ## OI: first verification gate
 - Added an independent collector: `eth_oi_live.py`.
@@ -39,3 +39,18 @@ The initial statement that changing execution environment was required was prema
 - The 2026-10-27 metrics archive returned HTTP 404 in the current environment.
 - Binance documents daily public archives as becoming available the next day: https://github.com/binance/binance-public-data . Archive results must retain observation times and must not be represented as live snapshots.
 - Overall real-time OI gate remains incomplete. Original report layout, weights and 180-day data are unchanged.
+
+## Cron-side live OI recovery — 2026-10-28
+
+- Signed-in Cron console confirmed existing Kraken job 8720420 and Binance spot job 8723157 enabled, each running every five minutes. Both returned GitHub dispatch HTTP 204; corresponding GitHub spot workflows succeeded.
+- The prior direct GitHub runner OI HTTP 451 is not a complete diagnosis of source availability.
+- A real Cron test run against the exact Binance OI source returned HTTP 200 at 2026-10-28T01:54:24Z, with body:
+  {"symbol":"ETHUSDT","openInterest":"2354781.565","time":1793152461259}
+- Observation time: 2026-10-28T01:54:21.259Z (10:54:21.259 KST). Scope: Binance USD-M ETHUSDT perpetual, unit ETH. Do not interpret as market-wide or USD-denominated OI.
+- Created independent Cron job 8738287, title Binance ETH OI 5min, enabled, schedule */5 * * * *, Asia/Seoul, saveResponses=true. Existing CVD jobs unchanged.
+- First scheduled execution was planned for 11:00 KST. At preparation time, its success had not yet been verified.
+- Prepared eth_oi_cron_import.py and updated the existing manual eth-oi-live.yml to import saved Cron responses with CRONJOB_API_KEY from GitHub Actions Secrets. No key has been created or registered by this recovery work.
+- Simulated-response checks passed for value/symbol/source/job/freshness/status checks and preservation of existing data on failure. These checks are not a live authenticated import.
+- Creating a new Cron API key and storing it as repository secret grants GitHub Actions new access to the Cron account and requires user approval before that action.
+- Cron API documentation lists a default 100 requests/day limit. Import uses two API requests per snapshot; five-minute imports would require at least 576 requests/day. Actual account quota and a sustainable refresh schedule must be checked before enabling automatic import. No quota upgrade or purchase is authorized or performed.
+- No live OI snapshot has yet been automatically committed by this importer. No full report integration is claimed. Funding and futures CVD remain unstarted under the sequential gate.
