@@ -141,3 +141,14 @@ The initial statement that changing execution environment was required was prema
 - 보고서 호출 규칙에는 OKX OI 읽기 지침이 존재하지만, 실제 보고서 출력에 최신 실측치가 사용됐다는 실행 증거는 없습니다. 코드·보고서 정본·가중치·180일 백데이터는 변경하지 않았습니다.
 - Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 등록 미완료이며 우회하거나 자격증명을 요청/노출하지 않았습니다.
 - 판정: **OI 전체 게이트 미통과**(5분 예약 연속 갱신 및 실제 보고서 출력 미검증). 펀딩비·선물 CVD 미착수. 전체 완료 알림 금지. 다음 실행에서는 먼저 Actions `schedule` 이벤트 로그에 접근 가능한지와 새 JSON/커밋의 갱신 여부를 확인하고, 확인되지 않은 상태에서 성공으로 표기하지 않습니다.
+
+## 자동 점검 실행 — 2026-10-28 14:53 KST (05:53 UTC)
+
+- 이전 13:52 KST 체크포인트와 main의 실제 `eth_oi_okx_latest.json`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_live.py`, 보고서 호출 규칙 및 정본을 재조회했습니다.
+- OKX OI JSON은 여전히 `observed_at_utc=2026-10-28T03:23:59.771000+00:00` (12:23:59.771 KST), `value=646687.4260000017 ETH`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`, blob SHA `3fc2a28ca698a7238b4ade8e1e71e79ab745f752`로 **변화가 없습니다**. 이 관측은 이번 점검보다 약 2시간 30분 오래되었으므로 현재 실시간값으로 사용할 수 없습니다. Binance 또는 시장 전체 OI로 표기하지 않습니다.
+- GitHub 커밋 검색에서 `Update verified OKX ETH OI`는 기존 2건(`1c13dee0...`, `39ae1316...`)뿐이었고 새로운 OKX OI JSON 커밋은 확인되지 않았습니다. 같은 기간 기존 Kraken/Binance 현물 CVD JSON 커밋은 다수 확인되어 저장소 전체의 변경이 멈춘 것은 아닙니다.
+- OKX 워크플로의 `schedule: 2-59/5 * * * *` 설정은 그대로 존재하지만, 현재 제공된 GitHub 커넥터에는 워크플로별 실행 목록과 트리거 이벤트를 조회하는 기능이 없습니다. 공개 GitHub Actions API 접근도 실패했습니다. 따라서 예약 실행 발생 여부 자체는 확정하지 않되, **5분 자동 연속 저장은 검증되지 않았고 최신 JSON으로는 갱신 성공 증거가 없습니다**.
+- OKX 수집기는 실제 API 응답의 성공 코드, 정확한 종목, 양수·유한 OI, 300초 신선도를 검증하도록 작성돼 있음을 확인했습니다. 그러나 이번 점검에서 새로운 API 성공 응답을 직접 검증한 것은 아닙니다.
+- 보고서 호출 규칙에 OKX OI 보조 원천을 읽는 조건이 있는 것은 확인했으나, 최신 실측값이 ETH ESI 2.0의 **실제 출력 결과에 반영된 실행 증거는 여전히 없습니다**. 오래된 값을 현재값으로 대체하지 않습니다.
+- Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 등록 미완료이며 우회·노출·재발급하지 않았습니다. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터는 변경하지 않았습니다.
+- **판정: OI 전체 게이트 미통과**(예약 실행 연속 갱신 및 실제 보고서 출력 미검증). 펀딩비·선물 CVD 미착수. 전체 완료 알림 금지. 다음 실행에서는 우선 새로운 OKX OI JSON 관측시각과 커밋을 재확인하고, 가능하면 `schedule` 트리거의 Actions 실행 로그를 확인합니다.
