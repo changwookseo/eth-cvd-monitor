@@ -1,0 +1,74 @@
+name: ETH OI public endpoint diagnostic
+on:
+  push:
+    branches:
+      - repair/eth-oi-public-api-probe-20261028
+    paths:
+      - .github/workflows/eth-oi-endpoint-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe public OI endpoints without credentials
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          import urllib.error
+          from datetime import datetime, timezone
+          endpoints = {
+              "binance_fapi": "https://fapi.binance.com/fapi/v1/openInterest?symbol=ETHUSDT",
+              "binance_fapi1": "https://fapi1.binance.com/fapi/v1/openInterest?symbol=ETHUSDT",
+              "binance_fapi2": "https://fapi2.binance.com/fapi/v1/openInterest?symbol=ETHUSDT",
+              "okx_swap": "https://www.okx.com/api/v5/public/open-interest?instType=SWAP&instId=ETH-USDT-SWAP",
+              "bybit_linear": "https://api.bybit.com/v5/market/open-interest?category=linear&symbol=ETHUSDT&intervalTime=5min&limit=1",
+              "bitget_usdt": "https://api.bitget.com/api/v2/mix/market/open-interest?symbol=ETHUSDT&productType=USDT-FUTURES",
+          }
+          results = {"checked_at_utc": datetime.now(timezone.utc).isoformat(), "endpoints": {}}
+          for name, url in endpoints.items():
+              entry = {"reachable": False, "http_status": None, "valid_oi": False}
+              try:
+                  req = urllib.request.Request(url, headers={"User-Agent": "eth-esi-oi-diagnostic/1.0", "Accept": "application/json"})
+                  with urllib.request.urlopen(req, timeout=12) as res:
+                      entry["http_status"] = res.status
+                      data = json.load(res)
+                  if name.startswith("binance"):
+                      entry["valid_oi"] = data.get("symbol") == "ETHUSDT" and float(data.get("openInterest", 0)) > 0 and int(data.get("time", 0)) > 0
+                  elif name == "okx_swap":
+                      items = data.get("data", [])
+                      entry["valid_oi"] = data.get("code") == "0" and any(x.get("instId") == "ETH-USDT-SWAP" and float(x.get("oi", 0)) > 0 for x in items)
+                  elif name == "bybit_linear":
+                      items = data.get("result", {}).get("list", [])
+                      entry["valid_oi"] = data.get("retCode") == 0 and any(float(x.get("openInterest", 0)) > 0 for x in items)
+                  elif name == "bitget_usdt":
+                      value = data.get("data")
+                      if isinstance(value, list):
+                          entry["valid_oi"] = data.get("code") == "00000" and any(float(x.get("amount", x.get("openInterest", 0))) > 0 for x in value)
+                      elif isinstance(value, dict):
+                          entry["valid_oi"] = data.get("code") == "00000" and float(value.get("amount", value.get("openInterest", 0))) > 0
+                  entry["reachable"] = True
+              except urllib.error.HTTPError as exc:
+                  entry["http_status"] = exc.code
+                  entry["error"] = "HTTPError"
+              except Exception as exc:
+                  entry["error"] = type(exc).__name__
+              results["endpoints"][name] = entry
+              print(name, json.dumps(entry, sort_keys=True), flush=True)
+          with open("oi_public_endpoint_probe.json", "w", encoding="utf-8") as f:
+              json.dump(results, f, indent=2)
+          PY
+      - name: Save diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-oi-endpoint-probe
+          path: oi_public_endpoint_probe.json
+          if-no-files-found: warn
+          retention-days: 7
