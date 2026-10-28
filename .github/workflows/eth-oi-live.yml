@@ -16,8 +16,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Collect and validate current OI
-        run: python eth_oi_live.py
+      - name: Import and validate OI collected by Cron
+        env:
+          CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+        run: python eth_oi_cron_import.py
       - name: Save failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
@@ -29,7 +31,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eth_oi_latest.json eth_oi_attempt.json
+          git add eth_oi_latest.json
           if ! git diff --cached --quiet; then
             git commit -m "Update verified ETH open interest"
             git pull --rebase origin main
