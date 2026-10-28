@@ -1,0 +1,54 @@
+name: ETH OKX Live Funding
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - eth_funding_okx_live.py
+      - .github/workflows/eth-funding-okx.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eth-funding-okx-main
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch and validate OKX ETH funding
+        run: python eth_funding_okx_live.py
+      - name: Validate funding snapshot and freshness
+        run: |
+          python - <<'PY'
+          import json
+          import math
+          from datetime import datetime, timezone
+          with open('eth_funding_okx_latest.json', encoding='utf-8') as f:
+              x = json.load(f)
+          assert x['status'] == 'VERIFIED'
+          assert x['exchange'] == 'OKX' and x['symbol'] == 'ETH-USDT-SWAP'
+          assert x['rate_type'] == 'indicative_current_period_not_realized'
+          assert math.isfinite(x['funding_rate_decimal'])
+          assert abs(x['funding_rate_decimal']) <= 0.05
+          age = (datetime.now(timezone.utc) - datetime.fromisoformat(x['observed_at_utc'])).total_seconds()
+          assert -30 <= age <= 300, f'Stale funding: {age:.1f}s'
+          print('PASS: OKX indicative funding verified; not Binance or realized funding')
+          PY
+      - name: Commit verified OKX funding snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eth_funding_okx_latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update verified OKX ETH indicative funding"
+            git pull --rebase -X ours origin main
+            git push origin HEAD:main
+          fi
