@@ -1,0 +1,43 @@
+name: ETH Live OI
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - eth_oi_live.py
+      - .github/workflows/eth-oi-live.yml
+  schedule:
+    - cron: '2,17,32,47 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: eth-live-oi
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect and validate current OI
+        run: python eth_oi_live.py
+      - name: Save failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-oi-failure-${{ github.run_id }}
+          path: eth_oi_attempt.json
+          if-no-files-found: warn
+      - name: Commit verified OI
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eth_oi_latest.json eth_oi_attempt.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update verified ETH open interest"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
