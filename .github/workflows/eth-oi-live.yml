@@ -1,13 +1,7 @@
 name: ETH Live OI
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - eth_oi_live.py
-      - .github/workflows/eth-oi-live.yml
-  schedule:
-    - cron: '2,17,32,47 * * * *'
+# Automatic collection remains disabled until the runner can access the source API.
 permissions:
   contents: write
 concurrency:
