@@ -104,3 +104,18 @@ The initial statement that changing execution environment was required was prema
 - 현재 전체 상태: **OI 부분 복구 / GitHub 인증 단계에서 중단 / 펀딩비·선물 CVD 미착수**.
 
 재개 요청 예: “ETH ESI 2.0 복구를 저장된 진행 상태부터 이어서 해줘.”
+
+
+## 자동 복구 점검 추가 — 2026-10-28 11:34 KST
+
+- 사용자가 작업 재개와 화면 이탈 후 복구 시도를 승인했으므로 이전의 "일시 중단" 문구는 과거 체크포인트로만 해석합니다.
+- GitHub 기본 브랜치의 기존 Binance OI Cron importer는 그대로 유지했습니다. GitHub Secret `CRONJOB_API_KEY` 등록은 이 실행 환경의 GitHub 커넥터에서 지원되지 않아 인증 수집을 완료하지 못했습니다. Cron 작업의 최신 예약 실행 성공도 직접 확인하지 못했습니다.
+- Binance OI REST 엔드포인트는 GitHub hosted runner에서 재시험 결과 HTTP 451이었습니다. `fapi1`/`fapi2`는 HTTP 202 비JSON 응답이었으므로 대체 경로로 사용할 수 없습니다.
+- 독립 진단 브랜치 `repair/eth-oi-public-api-probe-20261028`에서 다른 거래소의 공개 OI 경로를 실제 테스트했습니다. OKX ETH-USDT-SWAP는 HTTP 200 및 필드 검증 성공, Bybit는 HTTP 403, Bitget는 HTTP 200이나 현재 검증 로직의 필드 기준 미통과였습니다. 진단 실행: https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40621641014
+- **OKX OI는 Binance OI와 다른 시장입니다.** 기존 Binance 수집기를 대체하거나 두 OI를 무조건 합산하지 않습니다.
+- OKX 전용 독립 실시간 수집기 `eth_oi_okx_live.py`와 자동 워크플로 `.github/workflows/eth-oi-okx.yml`을 `main`에 추가했습니다. 기존 현물 CVD·기술지표·정본 파일은 수정하지 않았습니다.
+- 최초 GitHub Actions push 실행 https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40621692565 은 수집·검증·JSON 커밋 단계까지 모두 성공했습니다.
+- 첫 저장 스냅샷 `eth_oi_okx_latest.json`: 2026-10-28T02:34:11.266Z 관측, 642833.886 ETH (OKX ETH-USDT-SWAP 전용), 상태 VERIFIED. 이 값은 해당 시각의 기록이며 현재값으로 재사용하지 않습니다.
+- 5분 GitHub schedule은 구성했으나 **다음 예약 실행과 연속 자동 갱신은 아직 검증 전**입니다. GitHub schedule은 지연될 수 있습니다.
+- 기존 보고서의 OI 소스 읽기 및 실제 출력 반영은 미검증입니다. OI 전체 게이트 완료 아님; 펀딩비와 선물 CVD는 순차 원칙에 따라 미착수 상태입니다.
+- 현재 상태: **OKX OI 실수집 및 GitHub 저장 성공 / 자동 반복 갱신·보고서 반영 미검증 / Binance OI Cron Secret 연동 미완료**.
