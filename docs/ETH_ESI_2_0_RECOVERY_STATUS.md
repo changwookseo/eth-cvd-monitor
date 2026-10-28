@@ -283,3 +283,9 @@ The initial statement that changing execution environment was required was prema
 - 보고서 정본은 수정하지 않고 `docs/ETH_ESI_2_0_REPORT_CALL_RULES.md`의 기존 2-1 OI 규칙 뒤에 2-2 OKX 펀딩비 조회·신선도·예상/정산 구분 지침만 추가했습니다([commit 9811c6f](https://github.com/changwookseo/eth-cvd-monitor/commit/9811c6f4b18d251d6b9688c441e5d81b3d42d584)). **실제 완성 보고서에 펀딩비가 반영됐다는 증거는 아직 없으며** 문서 지침만으로 보고서 반영 완료라고 판정하지 않습니다.
 - Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 미등록으로 취급하고 우회·조회·노출·재발급·등록하지 않았습니다.
 - **판정: OKX OI 범위 게이트 통과 / 펀딩비 실수집·JSON 저장 성공, 자동 반복·실제 보고서 출력 미검증 / 선물 CVD 미착수 / 전체 복구 미완료. 완료 알림 금지.** 다음 실행에서는 펀딩비 자체 schedule 또는 workflow_run 자동 실행과 서로 다른 관측시각의 연속 JSON 갱신을 먼저 검증하고, 실제 ETH ESI 2.0 완성 보고서 출력 반영을 확인한 뒤에만 선물 CVD 단계로 넘어갑니다.
+
+### 추가 검증 — 2026-10-29 02:11 KST
+
+- Funding 워크플로의 첫 자동 `workflow_run` [#40733182668](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40733182668)은 02:10:39 KST에 생성됐지만 `skipped`입니다. 부모 Binance Spot CVD [#40733124401](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40733124401)이 실패했기 때문에 성공 부모 조건이 충족되지 않았습니다. **이를 funding 자동 수집 성공으로 세지 않습니다.**
+- Binance Spot CVD 부모의 실패는 이번 로그상 API 수집이 아니라 `Save Binance CVD` 단계의 GitHub push 충돌입니다. 로그: `cannot lock ref 'refs/heads/main': is at a13f74b... but expected 970ea2f...`, `failed to push some refs`. 문서 수정 등 동시 커밋과의 경쟁 상태이며 API 장애로 단정하지 않습니다. 기존 Binance 현물 CVD 수집 코드/워크플로는 변경하지 않았습니다.
+- Funding 자체 `event=schedule` 성공과 실제 연속 관측값 갱신은 여전히 미검증입니다. OI schedule 실증과 혼동하지 않습니다. 다음 주기에서 다시 확인합니다. 전체 복구 완료 알림 금지.
