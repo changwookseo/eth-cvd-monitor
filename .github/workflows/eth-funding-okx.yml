@@ -58,6 +58,19 @@ jobs:
           git add eth_funding_okx_latest.json
           if ! git diff --cached --quiet; then
             git commit -m "Update verified OKX ETH indicative funding"
-            git pull --rebase -X ours origin main
-            git push origin HEAD:main
+            # Retry if another collector advances main between rebase and push.
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch --no-tags origin main
+              if ! git rebase -X ours origin/main; then
+                git rebase --abort || true
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              echo "Main advanced during funding push; retry ${attempt}/8"
+              sleep $((attempt * 2))
+            done
+            echo "Could not store verified OKX funding after retries" >&2
+            exit 1
           fi
