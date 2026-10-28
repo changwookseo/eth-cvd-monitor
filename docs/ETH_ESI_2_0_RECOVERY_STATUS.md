@@ -119,3 +119,14 @@ The initial statement that changing execution environment was required was prema
 - 5분 GitHub schedule은 구성했으나 **다음 예약 실행과 연속 자동 갱신은 아직 검증 전**입니다. GitHub schedule은 지연될 수 있습니다.
 - 기존 보고서의 OI 소스 읽기 및 실제 출력 반영은 미검증입니다. OI 전체 게이트 완료 아님; 펀딩비와 선물 CVD는 순차 원칙에 따라 미착수 상태입니다.
 - 현재 상태: **OKX OI 실수집 및 GitHub 저장 성공 / 자동 반복 갱신·보고서 반영 미검증 / Binance OI Cron Secret 연동 미완료**.
+
+
+## 자동 점검 실행 — 2026-10-28 12:24 KST (03:24 UTC)
+
+- OI 선행 게이트를 유지했으며 펀딩비·선물 CVD 수집기는 수정하거나 실행하지 않았습니다.
+- GitHub Actions 실행 목록을 직접 조회한 결과, 최초 OKX OI push 성공(02:34 UTC) 이후 03:23 UTC까지 **OKX OI의 `schedule` 이벤트 실행이 없었습니다**. 현물 CVD 워크플로의 5분 `workflow_dispatch` 성공은 OKX OI 예약 실행 증거가 아닙니다.
+- OKX OI 워크플로의 예약 cron을 혼잡한 정각/5분 경계 `*/5 * * * *`에서 `2-59/5 * * * *`으로 최소 수정했습니다. 파일: `.github/workflows/eth-oi-okx.yml`, 커밋 `bc78ac36275ac7324c2bcc562cc750fc50843e10`. 기존 현물 CVD, 기술지표, 보고서 정본, 가중치, 백데이터는 변경하지 않았습니다.
+- 수정 push로 발생한 GitHub Actions 실행 [40626442990](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40626442990)은 `success`로 종료됐습니다. 이는 **push 실행 성공이며 예약 실행 성공은 아닙니다**.
+- 저장 JSON `eth_oi_okx_latest.json`이 실제로 새로 갱신됨을 재조회했습니다. 새 관측시각 `2026-10-28T03:23:59.771Z` (12:23:59.771 KST), OKX `ETH-USDT-SWAP` OI `646687.426 ETH`, `status=VERIFIED`, JSON blob SHA `3fc2a28ca698a7238b4ade8e1e71e79ab745f752`. 기존 11:34 KST 관측값과 다른 **두 번째 성공한 수집·커밋**입니다. Binance 또는 전체 시장 OI가 아닙니다.
+- **남은 OI 게이트**: 변경된 cron으로 실제 `event=schedule` 실행이 발생하는지, 예약 실행이 다음 주기에서도 연속 성공하며 JSON이 갱신되는지, 실제 ETH ESI 2.0 보고서 출력에 관측시각·거래소 범위와 함께 반영되는지 검증. Binance Cron importer의 `CRONJOB_API_KEY` Secret은 미등록이며, 이를 우회하거나 자격증명을 출력하지 않았습니다.
+- 현재 판정: OKX OI 공개 API 실제 수집 및 GitHub JSON 저장 **2회 확인**(서로 다른 push 기반 실행). **자동 예약 실행·연속 갱신·실제 보고서 출력 반영 미검증**. OI 전체 완료 아님; 펀딩비·선물 CVD 미착수; 완료 알림 금지.
