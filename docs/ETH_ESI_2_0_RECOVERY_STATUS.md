@@ -152,3 +152,15 @@ The initial statement that changing execution environment was required was prema
 - 보고서 호출 규칙에 OKX OI 보조 원천을 읽는 조건이 있는 것은 확인했으나, 최신 실측값이 ETH ESI 2.0의 **실제 출력 결과에 반영된 실행 증거는 여전히 없습니다**. 오래된 값을 현재값으로 대체하지 않습니다.
 - Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 등록 미완료이며 우회·노출·재발급하지 않았습니다. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터는 변경하지 않았습니다.
 - **판정: OI 전체 게이트 미통과**(예약 실행 연속 갱신 및 실제 보고서 출력 미검증). 펀딩비·선물 CVD 미착수. 전체 완료 알림 금지. 다음 실행에서는 우선 새로운 OKX OI JSON 관측시각과 커밋을 재확인하고, 가능하면 `schedule` 트리거의 Actions 실행 로그를 확인합니다.
+
+## 자동 복구 점검 — 2026-10-28 15:47 KST (06:47 UTC)
+
+- 이전 14:53 KST 체크포인트를 먼저 읽고 OI 선행 게이트를 재검증했습니다.
+- 이번 실행에서는 GitHub REST Actions 전체 실행 목록 `GET /repos/changwookseo/eth-cvd-monitor/actions/runs?event=schedule&per_page=100`에 접근하여 **총 17건의 schedule 이벤트 전체를 확인**했습니다. 이 중 `ETH OKX Live OI` 실행은 **0건**이었습니다. 기존 기술지표와 Schedule Test의 예약 실행은 확인되어 저장소의 모든 schedule이 중단된 것은 아닙니다. 5분 간격 OKX 예약 실행은 실제로 작동했다고 확인할 수 없습니다.
+- 기존 Binance Spot CVD는 외부 Cron이 약 5분마다 `workflow_dispatch`하는 실제 성공 실행이 확인됐습니다(예: [40645778581](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40645778581), 06:45 UTC, success). 간헐적인 실패도 있어 이 성공을 OKX 성공으로 대체하지 않습니다.
+- **OI만 최소 수정:** `.github/workflows/eth-oi-okx.yml`에 기존 `schedule: 2-59/5 * * * *`를 유지하면서 `workflow_run`(Binance Spot CVD 완료, main)을 보조 트리거로 추가했습니다. 선행 현물 워크플로가 성공한 경우에만 OKX 수집 잡을 실행하도록 조건을 설정했습니다. 기존 Binance Spot CVD 워크플로는 수정하지 않았습니다. 수정 커밋: [09709a3](https://github.com/changwookseo/eth-cvd-monitor/commit/09709a3c647f04cd8cb00463dd5d35869ffffb59).
+- 수정으로 발생한 **push** 실행 [40645957118](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40645957118)은 success로 종료됐습니다. API 수집·신선도 검증·JSON 커밋 잡 단계도 성공했습니다. JSON을 다시 읽어 `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`, `unit=ETH`, `observed_at_utc=2026-10-28T06:47:06.884000+00:00` (15:47:06.884 KST), `value=651390.976000002 ETH`, blob SHA `ec90268f89fc4f619260bfa040ae4335c0726d66`을 확인했습니다. **OKX 단일 거래소 스냅샷**이며 Binance 또는 전체 시장 OI가 아닙니다.
+- 이번 신규 성공은 **push 기반 실행**이며 자동 예약 또는 `workflow_run` 성공을 증명하지 않습니다. 다음 Binance Spot CVD 성공 종료 후 OKX `event=workflow_run` 발생 여부와 두 번 이상의 연속 자동 JSON 갱신·커밋을 확인해야 합니다.
+- 실제 ETH ESI 2.0 보고서 **출력**에서 최신 OKX OI가 관측시각·범위와 함께 사용됐다는 증거는 여전히 없습니다. 보고서 호출 규칙에 OKX 파일을 읽는 조건만 확인했습니다. 따라서 OI 전체 게이트는 미통과입니다.
+- `CRONJOB_API_KEY` Secret은 여전히 미등록으로 취급하며 접근·우회·노출·재발급하지 않았습니다. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터는 수정하지 않았습니다.
+- **판정: OI 부분 복구 진전 / 자동 연속 갱신 및 보고서 실측 반영 미검증 / 펀딩비·선물 CVD 미착수 / 전체 완료 알림 금지.**
