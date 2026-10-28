@@ -1,6 +1,6 @@
 # ETH ESI 2.0 recovery verification — 2026-10-28 KST
 
-Overall (latest checkpoint 2026-10-29 05:51 KST): PARTIAL RECOVERY, NOT COMPLETE. OKX ETH-USDT-SWAP OI scoped gate now PASSED: independent schedule success, repeated workflow_run collection and JSON commits, and historical real report-output match all verified. Binance OI Cron Secret is still unregistered; do not claim Binance/market-wide OI. OKX indicative funding live collection, repeated GitHub Actions bot JSON commits, and observation-time refresh are verified; independent funding schedule success and actual rendered report-output match remain unverified. Futures CVD remains unstarted. Historical checkpoints below are preserved.
+Overall (latest checkpoint 2026-10-29 07:34 KST): PARTIAL RECOVERY, NOT COMPLETE. OKX ETH-USDT-SWAP OI scoped gate PASSED (independent schedule, API/JSON repeat, historical actual report match); NOT Binance/market-wide OI. OKX indicative funding independent schedule, live API, successive workflow_run, JSON commits VERIFIED, but matching completed ETH ESI 2.0 report output still NOT VERIFIED. Futures CVD NOT STARTED. Binance Cron importer Secret remains unregistered. Historical checkpoints below preserved.
 
 ## OI: first verification gate
 - Added an independent collector: `eth_oi_live.py`.
@@ -344,3 +344,16 @@ The initial statement that changing execution environment was required was prema
 - **남은 펀딩비 게이트: 최신 완성 ETH ESI 2.0 보고서의 실제 출력에 OKX 예상 펀딩비 수치·원천 관측시각·예상치 구분이 해당 JSON과 일치하게 표시됐다는 증거가 없습니다.** `docs/ETH_ESI_2_0_REPORT_CALL_RULES.md`의 2-2 지침만으로 실제 보고서 출력 검증을 대체하지 않습니다. 따라서 **펀딩비 전체 게이트 미통과 → 선물 CVD 미착수 → 전체 복구 미완료 / 완료 알림 금지**입니다.
 - 이번 실행은 기존 수집기·워크플로·현물 CVD·기술지표·보고서 정본·7지표 가중치(20/15/18/20/12/10/5)·180일 백데이터를 수정하지 않았습니다. Binance Cron importer `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 미등록 취급하며 조회·우회·노출·재발급·등록하지 않았습니다. **이 상태 문서에 확인된 진척만 추가**했습니다.
 - 다음 실행에서는 실제 완성 보고서 출력과 동일 시각의 funding JSON을 직접 대조하고, 그 일치가 입증된 경우에만 선물 CVD 단계로 넘어갑니다.
+
+
+## 자동 복구 점검 — 2026-10-29 07:34 KST (2026-10-28 22:34 UTC)
+
+- 먼저 최신 07:06 KST 체크포인트를 읽고 OI → 펀딩비 → 선물 CVD 게이트를 유지했습니다. **OKX ETH-USDT-SWAP 단일 거래소 OI**의 이전 전체 게이트 통과(독립 schedule, 실제 API/JSON 연속 갱신, 과거 완성 보고서 OI 실측 일치)는 유지합니다. Binance OI 또는 전체 시장 OI로 표기하지 않습니다.
+- GitHub Actions REST `event=schedule` 목록에서 이전에 검증된 Funding 독립 예약 실행 [#40773622865](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40773622865), OI 독립 예약 실행 [#40771013070](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40771013070)의 `success`를 재확인했습니다. 이번 조회 시 이 두 실행 이후의 새로운 독립 `schedule` 성공은 목록에 없었습니다. 이 사실만으로 schedule이 중단됐다고 단정하지 않습니다.
+- 최신 Funding 자동 `workflow_run` [#40779868998](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40779868998)의 collect 잡 #123138502708 실제 로그에서 OKX 공개 API 수집 결과 출력, `PASS: OKX indicative funding verified`, GitHub push 성공을 확인했습니다. **원천 관측 2026-10-28T22:25:14.697Z (07:25:14.697 KST), +0.010000%**, `rate_type=indicative_current_period_not_realized`. 처음 push는 main 경쟁으로 거부됐으나 재시도하여 `HEAD -> main` 성공했습니다. 이는 OKX ETH-USDT-SWAP **현재 기간 예상 펀딩비**이며 확정 정산값, Binance/전체 시장 펀딩비 또는 8시간 정규화값이 아닙니다.
+- 직전 Funding 자동 실행 [#40779239237](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40779239237)도 실제 로그에서 **07:20:07.711 KST 관측, +0.010000%**, 검증 PASS 및 JSON push 성공을 확인했습니다. 관측시각은 갱신됐지만 펀딩비 숫자 자체는 동일합니다.
+- 최신 OI 자동 `workflow_run` [#40779868921](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40779868921)의 collect 잡 #123138502524 실제 로그에서 공개 API 응답, 검증 PASS, GitHub push 성공을 확인했습니다. **원천 관측 07:25:41.599 KST, 614292.868 ETH**. 직전 [#40779239327](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40779239327)에서는 **07:20:51.824 KST, 613935.494 ETH**였고 push 충돌 후 재시도 성공했습니다. `main:eth_oi_okx_latest.json` 및 `main:eth_funding_okx_latest.json`을 다시 읽어 최신 로그의 원천 관측시각·값·거래소 범위·VERIFIED 상태와 정확히 일치함을 확인했습니다.
+- 07:30 KST 부근의 후속 `workflow_run` [OI #40780519757](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40780519757), [Funding #40780519717](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40780519717)은 `skipped`이므로 새로운 성공 관측으로 세지 않았습니다. **5분 무결점 갱신을 주장하지 않습니다.**
+- **Funding의 마지막 남은 게이트는 완성 ETH ESI 2.0 보고서 실제 출력 대조입니다.** 보고서 호출 규칙 2-2는 원천·예상치 표시를 요구하지만, 최신 완료 보고서 5번 항목이 위 JSON의 OKX 예상 펀딩비·원천 관측시각·예상치 구분을 실제로 일치시켜 표시했다는 검증 가능한 출력 증거는 여전히 확보하지 못했습니다. 저장소에는 정본/호출 규칙은 있지만 완성 보고서의 새 출력 파일은 없습니다. 규칙이나 로그를 보고서 출력 성공으로 간주하지 않습니다.
+- **판정: OI 단일 거래소 게이트 통과 유지 / Funding 수집·독립 schedule·연속 자동 JSON 갱신 확인, 완성 보고서 출력 일치 미검증 → Funding 전체 게이트 미통과 / 선물 CVD 미착수 / 전체 복구 미완료. 완료 알림 금지.** 다음 실행에서 완성 보고서의 5번 펀딩비 출력과 해당 시각의 GitHub JSON을 실제 대조한 후에만 선물 CVD로 진행합니다.
+- 이번 변경은 이 상태 문서에 확인된 결과를 추가한 것뿐입니다. 기존 현물 CVD·기술지표·정본·7지표 가중치(20/15/18/20/12/10/5)·180일 백데이터 및 수집기/워크플로는 수정하지 않았습니다. Binance Cron importer `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 미등록 취급하며 우회·노출·등록·재발급하지 않았습니다.
