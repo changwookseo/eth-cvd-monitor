@@ -130,3 +130,14 @@ The initial statement that changing execution environment was required was prema
 - 저장 JSON `eth_oi_okx_latest.json`이 실제로 새로 갱신됨을 재조회했습니다. 새 관측시각 `2026-10-28T03:23:59.771Z` (12:23:59.771 KST), OKX `ETH-USDT-SWAP` OI `646687.426 ETH`, `status=VERIFIED`, JSON blob SHA `3fc2a28ca698a7238b4ade8e1e71e79ab745f752`. 기존 11:34 KST 관측값과 다른 **두 번째 성공한 수집·커밋**입니다. Binance 또는 전체 시장 OI가 아닙니다.
 - **남은 OI 게이트**: 변경된 cron으로 실제 `event=schedule` 실행이 발생하는지, 예약 실행이 다음 주기에서도 연속 성공하며 JSON이 갱신되는지, 실제 ETH ESI 2.0 보고서 출력에 관측시각·거래소 범위와 함께 반영되는지 검증. Binance Cron importer의 `CRONJOB_API_KEY` Secret은 미등록이며, 이를 우회하거나 자격증명을 출력하지 않았습니다.
 - 현재 판정: OKX OI 공개 API 실제 수집 및 GitHub JSON 저장 **2회 확인**(서로 다른 push 기반 실행). **자동 예약 실행·연속 갱신·실제 보고서 출력 반영 미검증**. OI 전체 완료 아님; 펀딩비·선물 CVD 미착수; 완료 알림 금지.
+
+## 자동 점검 실행 — 2026-10-28 13:52 KST (04:52 UTC)
+
+- 앞선 12:24 KST 체크포인트를 먼저 읽고 OI 선행 게이트만 재점검했습니다. 펀딩비·선물 CVD는 변경하거나 시작하지 않았습니다.
+- GitHub 기본 브랜치의 `.github/workflows/eth-oi-okx.yml`은 여전히 `schedule: 2-59/5 * * * *`, `workflow_dispatch`, 제한된 `push` 이벤트를 선언합니다. 이는 예약 설정의 존재이지 예약 실행 성공 증거가 아닙니다.
+- `eth_oi_okx_latest.json`을 다시 읽었으나 관측시각은 여전히 **2026-10-28T03:23:59.771Z (12:23:59.771 KST)**, **646687.426 ETH**, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`, blob SHA `3fc2a28ca698a7238b4ade8e1e71e79ab745f752`로 변함없었습니다. 현재 실행 시각보다 약 88분 오래된 기록이며 **현재 실시간값으로 사용할 수 없습니다**. Binance OI나 전체 시장 OI가 아닙니다.
+- GitHub 커밋 검색에서 `Update verified OKX ETH OI`는 02:34 UTC와 03:24 UTC의 **2건만** 확인했습니다. 03:24 UTC 이후 새 OKX OI 저장 커밋은 발견되지 않았습니다. 기존 push 실행 [40626442990](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40626442990)의 collect 잡 성공(수집·검증·커밋)은 재확인했으나 이는 예약 실행 증거가 아닙니다.
+- 현 시점 GitHub 커넥터는 전체 Actions 실행 목록에서 이벤트 종류(`schedule`)를 조회하는 기능이 없고 공개 Actions URL 조회도 실패했습니다. 따라서 **예약 실행이 전혀 발생하지 않았다고 확정하지는 않습니다**. 다만 최신 JSON·커밋으로는 5분 주기 자동 저장과 연속 갱신을 검증할 수 없습니다.
+- 보고서 호출 규칙에는 OKX OI 읽기 지침이 존재하지만, 실제 보고서 출력에 최신 실측치가 사용됐다는 실행 증거는 없습니다. 코드·보고서 정본·가중치·180일 백데이터는 변경하지 않았습니다.
+- Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 등록 미완료이며 우회하거나 자격증명을 요청/노출하지 않았습니다.
+- 판정: **OI 전체 게이트 미통과**(5분 예약 연속 갱신 및 실제 보고서 출력 미검증). 펀딩비·선물 CVD 미착수. 전체 완료 알림 금지. 다음 실행에서는 먼저 Actions `schedule` 이벤트 로그에 접근 가능한지와 새 JSON/커밋의 갱신 여부를 확인하고, 확인되지 않은 상태에서 성공으로 표기하지 않습니다.
