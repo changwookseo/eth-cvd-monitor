@@ -1,6 +1,6 @@
 # ETH ESI 2.0 recovery verification — 2026-10-28 KST
 
-Overall: PAUSED AT USER REQUEST, NOT COMPLETE. Resume from the checkpoint below. Cron-side live Binance OI access succeeded; GitHub Secret registration, automatic import and report verification remain pending.
+Overall: RECOVERY RESUMED, NOT COMPLETE. Independent OKX OI live collection has passed its first GitHub Actions run; repeated scheduled refresh and actual report output remain unverified. Binance Cron Secret registration remains pending. Historical pause checkpoint is preserved below.
 
 ## OI: first verification gate
 - Added an independent collector: `eth_oi_live.py`.
