@@ -5,6 +5,7 @@ on:
       - repair/eth-oi-public-api-probe-20261028
     paths:
       - .github/workflows/eth-oi-endpoint-probe.yml
+      - eth_oi_okx_live.py
   workflow_dispatch:
 
 permissions:
@@ -15,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@v4
+      - name: Validate OKX OI collector
+        run: python eth_oi_okx_live.py
       - name: Probe public OI endpoints without credentials
         shell: bash
         run: |
@@ -69,6 +73,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: eth-oi-endpoint-probe
-          path: oi_public_endpoint_probe.json
+          path: |
+            oi_public_endpoint_probe.json
+            eth_oi_okx_latest.json
           if-no-files-found: warn
           retention-days: 7
