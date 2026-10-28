@@ -1,0 +1,54 @@
+name: ETH OKX Live OI
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - eth_oi_okx_live.py
+      - .github/workflows/eth-oi-okx.yml
+  schedule:
+    - cron: '*/5 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eth-oi-okx-main
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch and validate OKX ETH swap OI
+        run: python eth_oi_okx_live.py
+      - name: Validate output contract and freshness
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          with open('eth_oi_okx_latest.json', encoding='utf-8') as f:
+              x = json.load(f)
+          assert x['status'] == 'VERIFIED'
+          assert x['exchange'] == 'OKX' and x['symbol'] == 'ETH-USDT-SWAP'
+          assert x['unit'] == 'ETH' and x['value'] > 0 and x['oi_usd'] > 0
+          t = datetime.fromisoformat(x['observed_at_utc'])
+          age = (datetime.now(timezone.utc) - t).total_seconds()
+          assert -30 <= age <= 300, f'Stale OI: {age:.1f}s'
+          print('PASS: OKX OI verified; this is not Binance or total-market OI')
+          PY
+      - name: Commit verified OKX OI snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eth_oi_okx_latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update verified OKX ETH OI"
+            git pull --rebase -X ours origin main
+            git push origin HEAD:main
+          fi
