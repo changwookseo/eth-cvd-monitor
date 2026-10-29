@@ -1,0 +1,92 @@
+name: ETH OKX Futures CVD Candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - eth_futures_cvd_okx_candidate.py
+      - .github/workflows/eth-futures-cvd-okx-candidate.yml
+  schedule:
+    - cron: '3-59/5 * * * *'
+  workflow_run:
+    workflows: ["Binance Spot CVD"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eth-futures-cvd-okx-candidate-main
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile isolated candidate collector
+        run: python -m py_compile eth_futures_cvd_okx_candidate.py
+      - name: Collect bounded OKX futures taker-volume candidate
+        run: python eth_futures_cvd_okx_candidate.py
+      - name: Validate candidate is not report eligible
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          with open('eth_futures_cvd_okx_candidate.json', encoding='utf-8') as f:
+              x = json.load(f)
+          assert x['status'] == 'PROVISIONAL_NOT_REPORT_VERIFIED'
+          assert x['report_eligible'] is False
+          assert x['exchange'] == 'OKX' and x['symbol'] == 'ETH-USDT-SWAP'
+          assert x['unit'] == 'ETH'
+          assert set(x['windows']) == {'5m', '15m', '1h', '4h', '24h'}
+          age = (datetime.now(timezone.utc) - datetime.fromisoformat(x['observed_at_utc'])).total_seconds()
+          assert 0 <= age <= 720
+          print('PASS: candidate only; NOT report-verified futures CVD')
+          PY
+      - name: Commit monotonic candidate snapshot without overwriting newer data
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp eth_futures_cvd_okx_candidate.json "$RUNNER_TEMP/cvd_candidate.json"
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --no-tags origin main
+            git reset --hard origin/main
+            if python - "$RUNNER_TEMP/cvd_candidate.json" eth_futures_cvd_okx_candidate.json <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          from datetime import datetime
+          candidate = json.loads(Path(sys.argv[1]).read_text())
+          previous_path = Path(sys.argv[2])
+          previous = json.loads(previous_path.read_text()) if previous_path.exists() else None
+          assert candidate['status'] == 'PROVISIONAL_NOT_REPORT_VERIFIED'
+          assert candidate['report_eligible'] is False
+          if previous is not None:
+              assert previous['exchange'] == 'OKX' and previous['symbol'] == 'ETH-USDT-SWAP'
+              if datetime.fromisoformat(previous['observed_at_utc']) >= datetime.fromisoformat(candidate['observed_at_utc']):
+                  print('SKIP: main already contains equal or newer OKX candidate')
+                  sys.exit(0)
+          sys.exit(1)
+          PY
+            then
+              exit 0
+            fi
+            cp "$RUNNER_TEMP/cvd_candidate.json" eth_futures_cvd_okx_candidate.json
+            git add eth_futures_cvd_okx_candidate.json
+            git commit -m "Update provisional OKX ETH futures CVD candidate"
+            if git push origin HEAD:main; then
+              echo "STORED: provisional OKX futures CVD candidate (NOT report-eligible)"
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "Failed to store OKX CVD candidate after retries" >&2
+          exit 1
