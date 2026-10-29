@@ -80,6 +80,13 @@ def main():
             buy += eth
         else:
             sell += eth
+    # Aggregated per-contract taker volume is a possible scalable alternative
+    # to hundreds of raw trade-history pages. Do not infer field order yet.
+    rubik_5m = get_json("/rubik/stat/taker-volume-contract", {
+        "instId": INST, "period": "5m", "unit": "1", "limit": "10"
+    })
+    if not rubik_5m or not all(isinstance(x, list) and len(x) >= 3 for x in rubik_5m):
+        raise ValueError("Unexpected contract taker-volume schema")
     result = {
         "status": "DIAGNOSTIC_ONLY",
         "report_eligible": False,
@@ -89,6 +96,10 @@ def main():
         "market": "perpetual_swap",
         "unit": "ETH",
         "eth_per_contract": eth_per_contract,
+        "rubik_5m_rows_returned": len(rubik_5m),
+        "rubik_5m_first_3_raw_rows": rubik_5m[:3],
+        "rubik_contract_taker_volume_source": ROOT + "/rubik/stat/taker-volume-contract?instId=" + INST + "&period=5m&unit=1",
+        "rubik_column_semantics_verified": False,
         "sample_pages": len(pages),
         "sample_trade_count": len(all_rows),
         "sample_oldest_trade_utc": min(stamps).isoformat(),
