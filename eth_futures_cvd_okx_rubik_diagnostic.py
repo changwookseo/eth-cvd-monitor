@@ -87,7 +87,7 @@ def get_ticker():
 def main():
     now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
     raw = {}
-    for period, limit in (("5m", 300), ("1H", 6), ("1D", 3)):
+    for period, limit in (("5m", 100), ("1H", 30), ("1D", 3)):
         raw[period] = {}
         for unit in ("0", "1"):
             raw[period][unit] = request(period, unit, limit)
@@ -106,7 +106,23 @@ def main():
                 "closed_24h_raw_column_sums": [sum(v[i] for v in buckets) for i in (0, 1)],
                 "closed_24h_total": sum(sum(v) for v in buckets),
             }
-    ticker_comparison = {"ticker": ticker, "closed_24h_bucket_counts": {
+    # Hourly history (30 rows) can cover a full rolling 24h even when the
+    # OKX 5m endpoint caps a request at 100 rows.
+    hourly_end_ms = (now_ms // 3600000) * 3600000
+    hourly_start_ms = hourly_end_ms - 86400000
+    for unit in ("0", "1"):
+        source = raw["1H"][unit]
+        buckets = [source.get(hourly_start_ms + i * 3600000) for i in range(24)]
+        if all(v is not None for v in buckets):
+            matched[unit] = {
+                "closed_24h_raw_column_sums": [sum(v[i] for v in buckets) for i in (0, 1)],
+                "closed_24h_total": sum(sum(v) for v in buckets),
+                "source_period": "1H",
+            }
+    ticker_comparison = {"ticker": ticker, "closed_24h_hourly_bucket_counts": {
+        unit: sum(hourly_start_ms + i * 3600000 in raw["1H"][unit] for i in range(24))
+        for unit in ("0", "1")
+    }, "closed_24h_bucket_counts": {
         unit: sum(start_ms + i * 300000 in raw["5m"][unit] for i in range(288))
         for unit in ("0", "1")
     }, "unit_comparison": matched}
