@@ -457,3 +457,7 @@ The initial statement that changing execution environment was required was prema
 - **완성 보고서 반영 미검증:** 일일 보고서 자동화 최신 완료 결과를 다시 조회했으나 마지막 출력은 **2026-10-28 22:07 KST**입니다. 해당 5번 항목에는 OKX OI 실측은 출력됐지만 GitHub OKX 예상 펀딩비 JSON의 값·원천 관측시각·예상치 구분은 없습니다. 따라서 Funding JSON의 실제 최신 저장 성공만으로 완성 보고서 출력 일치 게이트를 통과시키지 않습니다. 새로운 완성 보고서와 동시점 JSON의 직접 대조가 필요합니다.
 - **판정: OI 단일 거래소 게이트 통과 유지(동시 쓰기 수정의 충돌 회귀 검증은 추가 필요) / Funding API·독립 예약·JSON 연속 저장 확인, 실제 완성 보고서 출력 일치 미검증 → Funding 전체 게이트 미통과 / 선물 CVD 미착수 / 전체 복구 미완료. 완료 알림 금지.** 다음 실행에서는 새 완성 보고서 5번 항목의 펀딩비 실측 일치와 OI 수정 후 동시 경합 시 최신값 보존 여부를 확인합니다.
 - Binance Cron importer `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 미등록으로 취급하며 우회·조회·등록·재발급·노출하지 않았습니다. **이번 변경은 OI 워크플로의 저장 충돌 방지 최소 수정과 이 상태 문서 기록만**입니다.
+
+### 16:41 KST 추가 확인 — 수정 후 두 번째 자동 실행
+- [OI #40836967360](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40836967360) (`workflow_run`, collect #123323896680, success)에서 새 저장 로직으로 **16:40:47.441 KST, 657655.341 ETH**의 API 관측·검증 PASS·`STORED`·`HEAD -> main` 저장을 추가 확인했습니다([커밋 4086c82](https://github.com/changwookseo/eth-cvd-monitor/commit/4086c82)). 직전 수정 후 push 실행의 **16:40:06.079 KST, 657132.715 ETH**보다 늦은 관측이 실제 main JSON에 남아 연속 갱신을 확인했습니다. 다만 실제 동일 파일 쓰기 충돌 시나리오의 단조 증가 검증은 아직 재현되지 않았습니다.
+- [Funding #40836967312](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/40836967312) (`workflow_run`, collect #123323897002, success)는 **16:40:27.625 KST, OKX 현재 기간 예상 +0.00587155915354%**의 API·PASS·동시 push 충돌 재시도 후 main 저장을 확인했습니다. **완성 보고서 5번 항목 반영은 여전히 검증되지 않았고, 선물 CVD로 진행하지 않습니다.**
