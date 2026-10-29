@@ -56,6 +56,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           cp eth_futures_cvd_okx_candidate.json "$RUNNER_TEMP/cvd_candidate.json"
+          # First run creates an untracked output; remove it so the prior-main check
+          # cannot mistake this local generated file for a previously saved snapshot.
+          rm -f eth_futures_cvd_okx_candidate.json
           for attempt in 1 2 3 4 5 6 7 8; do
             git fetch --no-tags origin main
             git reset --hard origin/main
