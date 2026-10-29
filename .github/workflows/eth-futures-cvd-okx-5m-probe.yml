@@ -1,0 +1,32 @@
+name: ETH OKX Futures CVD 5m Probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - eth_futures_cvd_okx_5m_probe.py
+      - .github/workflows/eth-futures-cvd-okx-5m-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile bounded 5m futures CVD collector
+        run: python -m py_compile eth_futures_cvd_okx_5m_probe.py
+      - name: Verify full 5m trade history and ETH contract conversion
+        run: python eth_futures_cvd_okx_5m_probe.py
+      - name: Save verified diagnostic JSON artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: okx-futures-cvd-5m-probe-${{ github.run_id }}
+          path: eth_futures_cvd_okx_5m_probe_latest.json
+          if-no-files-found: error
+          retention-days: 7
