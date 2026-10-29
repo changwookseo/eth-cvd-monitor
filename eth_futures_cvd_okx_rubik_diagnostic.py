@@ -31,13 +31,17 @@ def request(period, unit, limit):
     if not isinstance(rows, list) or len(rows) < 2:
         raise ValueError("Insufficient OKX Rubik rows")
     parsed = {}
+    alignment_offset = None
     for row in rows:
         if not isinstance(row, list) or len(row) < 3:
             raise ValueError("Unexpected Rubik row shape")
         ts = int(row[0])
         vals = [float(row[1]), float(row[2])]
-        if ts % PERIOD_MS[period] != 0 or ts in parsed:
-            raise ValueError("Unaligned/duplicate bucket timestamp")
+        offset = ts % PERIOD_MS[period]
+        if alignment_offset is None:
+            alignment_offset = offset
+        if offset != alignment_offset or ts in parsed:
+            raise ValueError("Inconsistent/duplicate bucket timestamp")
         if any(not math.isfinite(v) or v < 0 for v in vals):
             raise ValueError("Invalid taker volume")
         parsed[ts] = vals
@@ -73,6 +77,7 @@ def main():
             issues.append(period + ": no positive volume pairs to infer unit scaling")
         results[period] = {
             "unit0_rows": len(zero), "unit1_rows": len(one),
+            "bucket_alignment_offset_ms": min(one) % step,
             "shared_closed_bucket_count": len(closed),
             "first_closed_bucket_utc": datetime.fromtimestamp(min(closed) / 1000, timezone.utc).isoformat() if closed else None,
             "last_closed_bucket_utc": datetime.fromtimestamp(max(closed) / 1000, timezone.utc).isoformat() if closed else None,
