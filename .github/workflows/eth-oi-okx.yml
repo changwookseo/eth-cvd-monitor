@@ -51,24 +51,46 @@ jobs:
           PY
       - name: Commit verified OKX OI snapshot
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eth_oi_okx_latest.json
-          if ! git diff --cached --quiet; then
+          # Keep the validated API result outside the checkout while main advances.
+          cp eth_oi_okx_latest.json "$RUNNER_TEMP/eth_oi_okx_candidate.json"
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --no-tags origin main
+            # Reset only this disposable Actions checkout; never reset the remote branch.
+            git reset --hard origin/main
+            # Do not overwrite a newer OI snapshot, and do not let rebase silently
+            # discard a valid newer candidate when two collectors update the same file.
+            if python - "$RUNNER_TEMP/eth_oi_okx_candidate.json" eth_oi_okx_latest.json <<'PY'
+          import json
+          import sys
+          from datetime import datetime
+          from pathlib import Path
+          candidate = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          previous_path = Path(sys.argv[2])
+          previous = json.loads(previous_path.read_text(encoding="utf-8")) if previous_path.exists() else None
+          assert candidate["status"] == "VERIFIED"
+          assert candidate["exchange"] == "OKX" and candidate["symbol"] == "ETH-USDT-SWAP"
+          if previous is not None:
+              assert previous["exchange"] == "OKX" and previous["symbol"] == "ETH-USDT-SWAP"
+              if datetime.fromisoformat(previous["observed_at_utc"]) >= datetime.fromisoformat(candidate["observed_at_utc"]):
+                  print("SKIP: main already has an equal or newer verified OKX OI observation")
+                  sys.exit(0)
+          sys.exit(1)
+          PY
+            then
+              exit 0
+            fi
+            cp "$RUNNER_TEMP/eth_oi_okx_candidate.json" eth_oi_okx_latest.json
+            git add eth_oi_okx_latest.json
             git commit -m "Update verified OKX ETH OI"
-            # Other collectors write to main concurrently; retry only on a moving branch head.
-            for attempt in 1 2 3 4 5 6 7 8; do
-              git fetch --no-tags origin main
-              if ! git rebase -X ours origin/main; then
-                git rebase --abort || true
-                exit 1
-              fi
-              if git push origin HEAD:main; then
-                exit 0
-              fi
-              echo "Main advanced during OI push; retry ${attempt}/8"
-              sleep $((attempt * 2))
-            done
-            echo "Could not store verified OKX OI after retries" >&2
-            exit 1
-          fi
+            if git push origin HEAD:main; then
+              echo "STORED: verified OKX OI observation committed to main"
+              exit 0
+            fi
+            echo "Main advanced during OI push; retry ${attempt}/8"
+            sleep $((attempt * 2))
+          done
+          echo "Could not store verified OKX OI after retries" >&2
+          exit 1
