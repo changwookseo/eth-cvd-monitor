@@ -1,0 +1,31 @@
+name: ETH OKX Futures CVD Probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - eth_futures_cvd_okx_probe.py
+      - .github/workflows/eth-futures-cvd-okx-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile read-only futures trade probe
+        run: python -m py_compile eth_futures_cvd_okx_probe.py
+      - name: Check OKX public trade pagination and ETH contract conversion
+        run: python eth_futures_cvd_okx_probe.py
+      - name: Save diagnostic JSON as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: okx-futures-cvd-probe-${{ github.run_id }}
+          path: eth_futures_cvd_okx_probe_latest.json
+          retention-days: 7
