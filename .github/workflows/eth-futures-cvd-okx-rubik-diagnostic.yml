@@ -1,0 +1,33 @@
+name: ETH OKX Futures Rubik Schema Diagnostic
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - eth_futures_cvd_okx_rubik_diagnostic.py
+      - .github/workflows/eth-futures-cvd-okx-rubik-diagnostic.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile isolated diagnostic
+        run: python -m py_compile eth_futures_cvd_okx_rubik_diagnostic.py
+      - name: Compare OKX Rubik units and completed 5m versus 1H buckets
+        run: python eth_futures_cvd_okx_rubik_diagnostic.py
+      - name: Upload read-only diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: okx-futures-rubik-schema-${{ github.run_id }}
+          path: eth_futures_cvd_okx_rubik_diagnostic.json
+          if-no-files-found: warn
+          retention-days: 7
