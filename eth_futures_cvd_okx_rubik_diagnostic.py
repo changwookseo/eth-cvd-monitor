@@ -58,13 +58,65 @@ def request(period, unit, limit):
     return parsed
 
 
+def get_ticker():
+    url = "https://www.okx.com/api/v5/market/ticker?instId=" + INST
+    req = urllib.request.Request(url, headers={
+        "Accept": "application/json", "User-Agent": "eth-cvd-monitor/2.0"
+    })
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=25) as response:
+                obj = json.load(response)
+            break
+        except urllib.error.HTTPError as exc:
+            if exc.code != 429 or attempt == 4:
+                raise
+            time.sleep(2 + 2 * attempt)
+    if obj.get("code") != "0" or not isinstance(obj.get("data"), list) or len(obj["data"]) != 1:
+        raise ValueError("Invalid OKX ticker response")
+    row = obj["data"][0]
+    if row.get("instId") != INST:
+        raise ValueError("Wrong ticker instrument")
+    return {
+        "observed_at_utc": datetime.fromtimestamp(int(row["ts"]) / 1000, timezone.utc).isoformat(),
+        "vol24h_contracts": float(row["vol24h"]),
+        "volCcy24h_base_eth": float(row["volCcy24h"]),
+    }
+
+
 def main():
     now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
     raw = {}
-    for period, limit in (("5m", 48), ("1H", 6), ("1D", 3)):
+    for period, limit in (("5m", 300), ("1H", 6), ("1D", 3)):
         raw[period] = {}
         for unit in ("0", "1"):
             raw[period][unit] = request(period, unit, limit)
+
+    # Compare 288 completed 5m buckets with independent rolling 24h ticker
+    # volume. Edge differences are expected and must not be hidden.
+    ticker = get_ticker()
+    end_ms = (now_ms // 300000) * 300000
+    start_ms = end_ms - 86400000
+    matched = {}
+    for unit in ("0", "1"):
+        source = raw["5m"][unit]
+        buckets = [source.get(start_ms + i * 300000) for i in range(288)]
+        if all(v is not None for v in buckets):
+            matched[unit] = {
+                "closed_24h_raw_column_sums": [sum(v[i] for v in buckets) for i in (0, 1)],
+                "closed_24h_total": sum(sum(v) for v in buckets),
+            }
+    ticker_comparison = {"ticker": ticker, "closed_24h_bucket_counts": {
+        unit: sum(start_ms + i * 300000 in raw["5m"][unit] for i in range(288))
+        for unit in ("0", "1")
+    }, "unit_comparison": matched}
+    for unit, value in matched.items():
+        value["difference_to_ticker_contracts_pct"] = 100 * abs(
+            value["closed_24h_total"] - ticker["vol24h_contracts"]
+        ) / max(ticker["vol24h_contracts"], 1)
+        value["difference_to_ticker_base_eth_pct"] = 100 * abs(
+            value["closed_24h_total"] - ticker["volCcy24h_base_eth"]
+        ) / max(ticker["volCcy24h_base_eth"], 1)
 
     results = {}
     issues = []
@@ -123,10 +175,12 @@ def main():
         "exchange": "OKX", "instrument": INST, "source": URL,
         "fetched_at_utc": datetime.now(timezone.utc).isoformat(),
         "raw_column_order": "not independently established for ETH; external documentation suggests [ts,sell,buy]",
-        "unit_1": "coin (ETH) per external documentation; cross-unit ratio measured below",
+        "unit_1": "UNRESOLVED: external docs say coin, observed unit0/unit1 ratio contradicts ctVal=0.1 ETH/contract",
+        "independent_24h_ticker_comparison": ticker_comparison,
         "period_results": results, "cross_period_checks": cross, "issues": issues,
         "limitations": [
             "No full-window trade-tape reconciliation of ETH aggressor side.",
+            "Rolling ticker 24h and closed 5m bucket 24h have slightly different edges.",
             "Closed buckets and historical coverage do not establish continuous automated capture.",
             "No 180-day futures CVD or production/report integration.",
             "Not Binance futures or aggregate-market CVD."
