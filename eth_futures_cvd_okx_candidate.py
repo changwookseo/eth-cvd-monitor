@@ -2,8 +2,9 @@
 
 This is an independent candidate pipeline, NOT a report-approved futures CVD.
 unit=0 was cross-checked against OKX 24h base-volume ticker on 2026-10-29.
-The raw array [ts,sell,buy] mapping has external corroboration but still
-requires an ETH raw-tape cross-check before report eligibility.
+The raw array [ts,sell,buy] mapping and unit=0 Crypto are confirmed in
+OKX's official Trading Statistics API schema. An ETH raw-tape cross-check,
+missing-bucket recovery and finished-report verification remain pending.
 """
 import json
 import math
@@ -111,8 +112,12 @@ def collect():
     if not math.isfinite(ticker_eth) or ticker_eth <= 0 or ticker_contracts <= 0:
         raise ValueError("Invalid OKX ticker")
     ratio = windows["24h"]["total_eth"] / ticker_eth
-    if not 0.8 <= ratio <= 1.2:
-        raise ValueError("24h OKX unit=0 volume disagrees with ETH ticker")
+    # The ticker is a rolling 24h window ending now, while the Rubik 24h
+    # total ends at the last completed hour. During a sharp volume surge,
+    # this alignment difference can exceed 20% without a unit error.
+    # This broad check rejects gross (e.g. 10x) unit mistakes only.
+    if not 0.5 <= ratio <= 1.5:
+        raise ValueError("Gross OKX 24h volume/unit discrepancy")
     # Completed hour comparison is diagnostic; recently closed buckets can be revised.
     cross = None
     try:
@@ -134,16 +139,20 @@ def collect():
         "source": ROOT + "/rubik/stat/taker-volume-contract",
         "observed_at_utc": windows["5m"]["end_utc"],
         "fetched_at_utc": fetched.isoformat(),
-        "raw_array_semantics": "[ts,sell,buy] externally corroborated; ETH tape cross-check pending",
+        "raw_array_semantics": "[ts,sell,buy] confirmed by official OKX API schema; ETH tape cross-check pending",
+        "official_schema": "https://www.okx.com/docs-v5/en/#trading-statistics-rest-api-get-contract-taker-volume",
         "unit_mapping": "unit=0 base ETH; 24h independent OKX ticker cross-check",
         "ticker_24h_eth": ticker_eth, "ticker_24h_contracts": ticker_contracts,
         "closed_hourly_24h_to_ticker_eth_ratio": ratio,
+        "volume_comparison_warning": not 0.9 <= ratio <= 1.1,
+        "volume_comparison_alignment": "closed hourly 24h versus rolling ticker 24h; not identical endpoints",
         "last_complete_hour_consistency": cross,
         "windows": windows,
         "limitations": [
             "Provisional directional mapping; do not use as official ESI CVD.",
             "5m/15m/1h and 4h/24h use distinct closed-bucket end times.",
             "Historical 180-day futures CVD not backfilled.",
+            "Rolling ticker and closed-hourly 24h volume may diverge during high volatility.",
             "No continuous schedule or report integration verified yet.",
             "Not Binance futures or market-wide futures CVD."
         ]
