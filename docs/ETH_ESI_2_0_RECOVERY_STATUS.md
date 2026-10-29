@@ -1,6 +1,6 @@
 # ETH ESI 2.0 recovery verification — 2026-10-28 KST
 
-Overall (latest checkpoint 2026-10-29 22:47 KST): PARTIAL RECOVERY, NOT COMPLETE. OKX ETH-USDT-SWAP single-exchange OI gate PASSED (independent schedule/API/JSON successive updates and completed-report match). OKX indicative funding gate PASSED for the same scoped source (independent schedule/API/JSON and 2026-10-29 22:35 KST completed-report historical snapshot match). Futures CVD: read-only OKX raw trades and contract taker-volume API probes succeeded, but full 5m history pagination exceeded 400 pages; production continuous multi-window CVD and report integration NOT VERIFIED. Binance Cron importer Secret remains unregistered. Historical checkpoints below preserved.
+Overall (latest checkpoint 2026-10-30 00:38 KST): PARTIAL RECOVERY, NOT COMPLETE. OKX ETH-USDT-SWAP single-exchange OI gate PASSED (actual API, historical independent schedule, successive GitHub JSON, completed-report match). OKX current-period indicative funding gate PASSED for the same scoped source. OKX futures CVD candidate now has repeated workflow_run API collection and successive provisional JSON commits, but independent schedule for candidate, ETH raw-trade directional verification, gap-free persistence and completed-report integration are NOT VERIFIED; report_eligible=false. Binance Cron importer Secret remains unregistered. Historical checkpoints below preserved.
 
 ## OI: first verification gate
 - Added an independent collector: `eth_oi_live.py`.
