@@ -7,6 +7,8 @@ import json
 import math
 import urllib.parse
 import urllib.request
+import urllib.error
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -23,8 +25,16 @@ def request(period, unit, limit):
     req = urllib.request.Request(url, headers={
         "Accept": "application/json", "User-Agent": "eth-cvd-monitor/2.0"
     })
-    with urllib.request.urlopen(req, timeout=25) as response:
-        obj = json.load(response)
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=25) as response:
+                obj = json.load(response)
+            break
+        except urllib.error.HTTPError as exc:
+            if exc.code != 429 or attempt == 4:
+                raise
+            time.sleep(2 + attempt * 2)
+    time.sleep(0.65)  # OKX public Rubik endpoint has per-IP request limits
     if not isinstance(obj, dict) or obj.get("code") != "0":
         raise ValueError("OKX nonzero API code: " + str(obj.get("code")))
     rows = obj.get("data")
