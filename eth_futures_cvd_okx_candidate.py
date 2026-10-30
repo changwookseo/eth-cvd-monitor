@@ -95,6 +95,24 @@ def collect():
     if not 0 <= now_ms - end1 <= 75 * 60000:
         raise ValueError("Stale OKX 1H bucket")
 
+    # Bounded provisional recovery buffer. Keep closed 5m source buckets so
+    # a missed single snapshot can be reconstructed without claiming 180d history.
+    recent_closed_5m = []
+    for ts in sorted(five):
+        if ts + FIVE > end5:
+            continue
+        sell, buy = five[ts]
+        recent_closed_5m.append({
+            "end_utc": datetime.fromtimestamp((ts + FIVE) / 1000, timezone.utc).isoformat(),
+            "taker_buy_eth_provisional": buy,
+            "taker_sell_eth_provisional": sell,
+            "total_eth": buy + sell,
+            "cvd_eth_provisional": buy - sell,
+        })
+    recent_closed_5m = recent_closed_5m[-96:]
+    if len(recent_closed_5m) < 12:
+        raise ValueError("Insufficient closed 5m recovery buffer")
+
     windows = {
         "5m": window(five, end5, FIVE, 1),
         "15m": window(five, end5, FIVE, 3),
@@ -148,10 +166,12 @@ def collect():
         "volume_comparison_alignment": "closed hourly 24h versus rolling ticker 24h; not identical endpoints",
         "last_complete_hour_consistency": cross,
         "windows": windows,
+        "recent_closed_5m_buckets_provisional": recent_closed_5m,
         "limitations": [
             "Provisional directional mapping; do not use as official ESI CVD.",
             "5m/15m/1h and 4h/24h use distinct closed-bucket end times.",
             "Historical 180-day futures CVD not backfilled.",
+            "Recent 5m buffer is provisional and bounded; not a durable 180-day history.",
             "Rolling ticker and closed-hourly 24h volume may diverge during high volatility.",
             "No continuous schedule or report integration verified yet.",
             "Not Binance futures or market-wide futures CVD."
