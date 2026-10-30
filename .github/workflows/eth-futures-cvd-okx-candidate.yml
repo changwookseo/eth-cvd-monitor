@@ -76,9 +76,20 @@ jobs:
           assert candidate['report_eligible'] is False
           if previous is not None:
               assert previous['exchange'] == 'OKX' and previous['symbol'] == 'ETH-USDT-SWAP'
-              if datetime.fromisoformat(previous['observed_at_utc']) >= datetime.fromisoformat(candidate['observed_at_utc']):
-                  print('SKIP: main already contains equal or newer OKX candidate')
+              previous_end = datetime.fromisoformat(previous['observed_at_utc'])
+              candidate_end = datetime.fromisoformat(candidate['observed_at_utc'])
+              if previous_end > candidate_end:
+                  print('SKIP: main contains a newer closed OKX candidate bucket')
                   sys.exit(0)
+              if previous_end == candidate_end:
+                  if datetime.fromisoformat(previous['fetched_at_utc']) >= datetime.fromisoformat(candidate['fetched_at_utc']):
+                      print('SKIP: main contains an equal or newer re-fetch')
+                      sys.exit(0)
+                  # Same closed bucket may be revised by OKX after first publication.
+                  # Store only materially changed source buckets, not every re-fetch.
+                  if previous.get('recent_closed_5m_buckets_provisional') == candidate.get('recent_closed_5m_buckets_provisional') and previous.get('windows') == candidate.get('windows'):
+                      print('SKIP: same closed bucket; no source-volume revision')
+                      sys.exit(0)
           sys.exit(1)
           PY
             then
