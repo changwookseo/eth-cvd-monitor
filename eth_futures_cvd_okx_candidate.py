@@ -120,6 +120,16 @@ def collect():
         "4h": window(hour, end1, HOUR, 4),
         "24h": window(hour, end1, HOUR, 24),
     }
+    # Exchange 5m buckets can be revised after the first closed observation.
+    # A 15-minute lag is a diagnostic safeguard, NOT proof of finality.
+    lagged_end5 = end5 - 3 * FIVE
+    lagged_5m = window(five, lagged_end5, FIVE, 1)
+    lagged_5m["age_since_close_minutes"] = (now_ms - lagged_end5) / 60000
+    lagged_5m["status"] = "PROVISIONAL_LAGGED_NOT_FINAL"
+    lagged_5m["note"] = (
+        "At least 15 minutes behind latest closed 5m bucket; observed revisions "
+        "may still occur later. Not report eligible or independently tape-verified."
+    )
     # Independently compare unit=0 24h ETH volumes with the OKX swap ticker.
     ticker_rows = api("/market/ticker", {"instId": INST})
     if len(ticker_rows) != 1 or ticker_rows[0].get("instId") != INST:
@@ -166,12 +176,14 @@ def collect():
         "volume_comparison_alignment": "closed hourly 24h versus rolling ticker 24h; not identical endpoints",
         "last_complete_hour_consistency": cross,
         "windows": windows,
+        "lagged_5m_stability_diagnostic": lagged_5m,
         "recent_closed_5m_buckets_provisional": recent_closed_5m,
         "limitations": [
             "Provisional directional mapping; do not use as official ESI CVD.",
             "5m/15m/1h and 4h/24h use distinct closed-bucket end times.",
             "Historical 180-day futures CVD not backfilled.",
             "Recent 5m buffer is provisional and bounded; not a durable 180-day history.",
+            "Lagged 5m diagnostic is not an exchange finality guarantee.",
             "Rolling ticker and closed-hourly 24h volume may diverge during high volatility.",
             "No continuous schedule or report integration verified yet.",
             "Not Binance futures or market-wide futures CVD."
