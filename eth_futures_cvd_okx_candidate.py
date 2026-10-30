@@ -179,8 +179,50 @@ def collect():
     }
 
 
+def add_bounded_revision_audit(result, previous):
+    """Record changed overlapping OKX buckets; this does NOT prove finality."""
+    old_audit = previous.get("revision_audit_recent", []) if previous else []
+    if not isinstance(old_audit, list):
+        old_audit = []
+    old_buckets = {
+        x["end_utc"]: x
+        for x in (previous or {}).get("recent_closed_5m_buckets_provisional", [])
+    }
+    revisions = []
+    for current in result["recent_closed_5m_buckets_provisional"]:
+        earlier = old_buckets.get(current["end_utc"])
+        if earlier is None:
+            continue
+        buy0 = earlier["taker_buy_eth_provisional"]
+        sell0 = earlier["taker_sell_eth_provisional"]
+        buy1 = current["taker_buy_eth_provisional"]
+        sell1 = current["taker_sell_eth_provisional"]
+        if abs(buy1 - buy0) > 0.001 or abs(sell1 - sell0) > 0.001:
+            revisions.append({
+                "end_utc": current["end_utc"],
+                "previous_fetched_at_utc": previous.get("fetched_at_utc"),
+                "new_fetched_at_utc": result["fetched_at_utc"],
+                "buy_eth_before": buy0, "buy_eth_after": buy1,
+                "sell_eth_before": sell0, "sell_eth_after": sell1,
+            })
+    result["revision_audit_recent"] = (old_audit + revisions)[-100:]
+    result["revision_audit_new_count"] = len(revisions)
+    result["revision_audit_note"] = (
+        "Best-effort comparison of overlapping 96-bucket snapshots; "
+        "revisions may occur later or between missed runs. Not finality proof."
+    )
+
+
 def main():
+    previous = None
+    if OUTPUT.exists():
+        previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
+        if (previous.get("exchange") != "OKX" or
+                previous.get("symbol") != INST or
+                previous.get("report_eligible") is not False):
+            raise ValueError("Unexpected prior candidate; refusing revision audit")
     result = collect()
+    add_bounded_revision_audit(result, previous)
     tmp = OUTPUT.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
                    encoding="utf-8")
