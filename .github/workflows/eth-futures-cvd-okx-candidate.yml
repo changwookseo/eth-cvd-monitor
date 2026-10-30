@@ -9,7 +9,9 @@ on:
   schedule:
     - cron: '3-59/5 * * * *'
   workflow_run:
-    workflows: ["ETH Spot CVD"]
+    # Either existing spot workflow may trigger this isolated OKX candidate.
+    # Only a successful parent is accepted by the collect job guard below.
+    workflows: ["ETH Spot CVD", "Binance Spot CVD"]
     types: [completed]
     branches: [main]
 
