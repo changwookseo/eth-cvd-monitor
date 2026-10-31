@@ -24,7 +24,8 @@ concurrency:
 
 jobs:
   collect:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    # OKX collection is independent of Binance Spot CVD success; run on any completed upstream workflow.
+    # This avoids missing OKX observations when the upstream spot workflow has a git push collision.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
