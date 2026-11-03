@@ -1619,3 +1619,12 @@ The initial statement that changing execution environment was required was prema
 - **독립 예약 게이트:** GitHub Actions REST `/actions/runs?event=schedule&per_page=100`에서 전체 123건 중 OKX OI의 마지막 독립 `schedule/success`는 [2026-11-03 01:54 KST #41486025173](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41486025173). 이후 이번 08:20까지 독립 예약의 5분 연속 성공은 입증되지 않았습니다. 보조 `workflow_run` 연속 성공과 구분합니다.
 - **원시 API 및 보고서:** 별도 컨테이너의 OKX 공개 API GET은 DNS `Temporary failure in name resolution`로 실패했으며 웹 직접 URL 접근도 불가했습니다. GitHub runner의 실제 API 파싱·검증과 독립 HTTP 200/원문 대조를 구분합니다. 이전에 검증된 2026-11-02 22:27 KST 완성 보고서의 22:25 KST OKX OI 실측 반영 기록은 유지하지만, 이번 08:20 값이 반영된 새로운 완성 보고서 출력은 확보하지 못했습니다. `docs` 폴더에는 정본/호출 규칙/검증 계약/상태 문서만 확인됐으며 최신 완성 보고서 증거는 없습니다.
 - **보호·순차 판정:** 이번 실행에서 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치(20/15/18/20/12/10/5)·180일 백데이터 및 OI collector/workflow는 변경하지 않았습니다. Binance Cron importer의 `CRONJOB_API_KEY` Secret은 이전 미등록 체크포인트를 유지하며 우회·조회·노출·등록하지 않았습니다. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 신규 복구 단계 미진행. 전체 완료 알림 금지.**
+
+
+## 자동 복구 점검 — 2026-11-03 10:10 KST
+
+- **체크포인트 우선:** 이전 08:22 KST 기록을 읽고 main의 `eth_oi_okx_live.py` (blob `6661e379`), `.github/workflows/eth-oi-okx.yml` (blob `e83eda46`)와 최신 `eth_oi_okx_latest.json` (blob `9e97c3b83cb187b77b97e8cb1f5fabe310f996a6`)을 확인했습니다. 워크플로에는 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run`이 함께 설정되어 있습니다.
+- **새 독립 schedule 성공:** [GitHub Actions #41548338334](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41548338334)는 2026-11-03 08:49:29 KST에 생성된 `schedule/success`입니다. job `125629340610`의 실제 수집, 신선도 검증, JSON 커밋 단계가 모두 success입니다. 그러나 직전 독립 schedule 성공은 01:54 KST이므로 **독립 schedule 5분 연속 성공은 미검증**입니다. 보조 workflow_run과 혼동하지 않습니다.
+- **현재 main JSON:** `observed_at_utc=2026-11-03T01:10:49.360000+00:00`, `fetched_at_utc=2026-11-03T01:10:49.445429+00:00`, `value=649910.407000002 ETH`, `oi_contracts=6499104.07000002`, `oi_usd=1468518058.3449945`, `status=VERIFIED`. 범위는 **OKX ETH-USDT-SWAP 단일 거래소 OI**이며 Binance OI 또는 전체 시장 OI가 아닙니다. 최신 JSON의 값과 관측시각은 확인했으나 이번 실행에서 독립 원시 HTTP 200/응답 전문과 해당 최신 관측값의 원본 Actions 로그 대조는 확보하지 못했습니다.
+- **보고서:** 최신 관측값이 들어간 새로운 완성 보고서의 출력 증거를 확보하지 못했습니다. 이전 2026-11-02 22:27 KST 보고서 실측 반영 기록만 유지하며 최신 반영 검증으로 간주하지 않습니다.
+- **보호·판정:** 수집기·워크플로·현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 및 Binance Cron `CRONJOB_API_KEY` Secret은 변경하지 않았습니다. **독립 schedule 연속 성공, 독립 원시 HTTP, 최신 완성 보고서 반영이 모두 입증되지 않아 OI 전체 게이트 미통과. 펀딩비·선물 CVD 신규 복구 미진행. 전체 완료 알림 금지.**
