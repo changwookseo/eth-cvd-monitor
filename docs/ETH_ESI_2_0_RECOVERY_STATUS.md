@@ -1628,3 +1628,13 @@ The initial statement that changing execution environment was required was prema
 - **현재 main JSON:** `observed_at_utc=2026-11-03T01:10:49.360000+00:00`, `fetched_at_utc=2026-11-03T01:10:49.445429+00:00`, `value=649910.407000002 ETH`, `oi_contracts=6499104.07000002`, `oi_usd=1468518058.3449945`, `status=VERIFIED`. 범위는 **OKX ETH-USDT-SWAP 단일 거래소 OI**이며 Binance OI 또는 전체 시장 OI가 아닙니다. 최신 JSON의 값과 관측시각은 확인했으나 이번 실행에서 독립 원시 HTTP 200/응답 전문과 해당 최신 관측값의 원본 Actions 로그 대조는 확보하지 못했습니다.
 - **보고서:** 최신 관측값이 들어간 새로운 완성 보고서의 출력 증거를 확보하지 못했습니다. 이전 2026-11-02 22:27 KST 보고서 실측 반영 기록만 유지하며 최신 반영 검증으로 간주하지 않습니다.
 - **보호·판정:** 수집기·워크플로·현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 및 Binance Cron `CRONJOB_API_KEY` Secret은 변경하지 않았습니다. **독립 schedule 연속 성공, 독립 원시 HTTP, 최신 완성 보고서 반영이 모두 입증되지 않아 OI 전체 게이트 미통과. 펀딩비·선물 CVD 신규 복구 미진행. 전체 완료 알림 금지.**
+
+
+## 자동 복구 점검 — 2026-11-03 10:17 KST
+
+- **체크포인트 우선:** 직전 10:10 KST 기록을 확인한 후 main의 OI JSON 및 워크플로를 재조회했습니다. 워크플로에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 함께 있습니다.
+- **새 보조 자동 실행 확인:** [10:15 KST Actions #41558556522](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41558556522)는 `workflow_run/success`이며 job `125663317665`의 API 수집·출력 신선도 검증·JSON 커밋 단계가 모두 success입니다. 직전 10:05·10:10 KST 보조 실행 [#41557409029](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41557409029), [#41557986373](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41557986373)도 success입니다. 이는 독립 schedule 연속 성공의 증거가 아닙니다.
+- **최신 main JSON:** `observed_at_utc=2026-11-03T01:15:46.108000+00:00` (10:15:46 KST), `fetched_at_utc=2026-11-03T01:15:46.186901+00:00`, `value=650300.651 ETH`, `oi_contracts=6503006.510`, `oi_usd=1468417887.997`, `status=VERIFIED`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`. **OKX 단일 거래소 OI이며 Binance 또는 시장 전체 OI가 아닙니다.** 이번에는 원본 job 로그의 API 응답 전문/별도 독립 HTTP 200 대조를 확보하지 못했습니다.
+- **독립 예약 게이트:** Actions `event=schedule` 조회에서 최신 OKX OI 독립 성공은 [08:49 KST #41548338334](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41548338334), 직전 성공은 01:54 KST입니다. 5분 간격 독립 schedule 연속 성공은 미입증입니다.
+- **보고서 게이트:** 최신 10:15 KST OI 관측값이 실제 완성 보고서에 반영된 출력은 확인하지 못했습니다. 과거 보고서 반영 증거를 최신 증거로 대체하지 않습니다.
+- **보호·판정:** 이 상태 문서 외 수집기·워크플로·현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 및 Binance Cron Secret을 변경하지 않았습니다. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진행. 전체 복구 완료 알림 금지.**
