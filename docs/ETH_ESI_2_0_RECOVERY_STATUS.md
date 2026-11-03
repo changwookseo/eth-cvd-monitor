@@ -1676,3 +1676,12 @@ The initial statement that changing execution environment was required was prema
 - **독립 예약 게이트:** Actions REST `/actions/runs?event=schedule&per_page=100` (전체 128건)에서 최신 OKX OI 독립 `schedule/success`는 13:49 KST [#41580362323](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41580362323)입니다. 그 전 성공은 08:49 KST로, **독립 schedule의 5분 연속 성공 미입증**입니다. 보조 `workflow_run`을 독립 예약으로 간주하지 않습니다.
 - **원시 API/보고서:** 별도 OKX 공개 HTTP GET은 DNS `Temporary failure in name resolution`로 실패했습니다. 15:05 실측값을 반영한 새로운 완성 보고서 출력은 확보하지 못했습니다. JSON `VERIFIED` 표시는 독립 원시 HTTP 200/본문 대조나 최신 보고서 반영의 증거를 대체하지 않습니다.
 - **보호 및 판정:** 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 및 Binance Cron `CRONJOB_API_KEY` Secret은 변경하지 않았습니다. Secret 미등록 체크포인트를 유지하고 우회/노출하지 않았습니다. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 신규 복구 미진행. 전체 완료 알림 금지.**
+
+
+## 자동 복구 점검 — 2026-11-03 15:32 KST
+
+- **체크포인트 우선:** 직전 15:10 KST 기록을 확인하고 main의 `eth_oi_okx_live.py` (blob `6661e379`), `.github/workflows/eth-oi-okx.yml` (blob `e83eda46`), `eth_oi_okx_latest.json` (blob `0c2a9c89`)을 직접 재조회했습니다. 기존 코드 및 워크플로 수정 없음.
+- **최신 JSON 관측:** `observed_at_utc=2026-11-03T06:30:54.870000+00:00` (15:30:54 KST), `fetched_at_utc=2026-11-03T06:30:54.926636+00:00`, `value=645446.273 ETH`, `oi_contracts=6454462.730`, `oi_usd=1454183998.606`, `status=VERIFIED`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`. 이는 **OKX ETH-USDT-SWAP 단일 거래소 OI**로 Binance OI나 전체 시장 OI가 아닙니다. 이 관측의 개별 원본 Actions 로그 및 독립 OKX HTTP 200/응답 전문은 이번 실행에서 확인하지 못했습니다.
+- **독립 예약 검증:** GitHub Actions REST `/actions/runs?event=schedule&per_page=100`에서 총 128건, 최신 OKX OI 독립 `schedule/success`는 [13:49 KST #41580362323](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41580362323)입니다. 이전 독립 성공은 08:49 KST이므로 5분 연속 독립 예약 성공은 여전히 미입증입니다. 보조 `workflow_run`의 5분 갱신은 독립 schedule 연속 성공으로 대체하지 않습니다.
+- **보고서 게이트:** 15:30 관측 OI가 실제 최신 완성 보고서에 반영된 출력은 이번 실행에서 확보하지 못했습니다. 과거 보고서 실측 반영을 최신 검증으로 간주하지 않습니다.
+- **보호 및 순차 판정:** 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터, 수집기/워크플로, Binance Cron importer `CRONJOB_API_KEY` Secret은 변경하지 않았습니다. Secret 미등록 체크포인트를 유지하고 우회·노출하지 않았습니다. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 신규 복구 미진행. 전체 완료 알림 금지.**
