@@ -1783,3 +1783,13 @@ The initial statement that changing execution environment was required was prema
 - 최신 OKX ETH-USDT-SWAP 단일 거래소 OI JSON: 02:45:57 KST 관측, 652711.362 ETH, VERIFIED. Binance OI/전체 시장 OI 아님.
 - 보조 workflow_run 02:25~02:45 KST 연속 5건 성공; 최신 [#41687364837](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41687364837). JSON 저장 [커밋 95c4634](https://github.com/changwookseo/eth-cvd-monitor/commit/95c4634f348b8956e1404e346f0ec918c6179162) 02:46:01 KST, 직전 1879ab0 02:41:20 KST.
 - 독립 schedule 5분 연속 성공, 원시 OKX HTTP 응답 전문, job 로그와 커밋 1:1 대조, 완성 보고서 실측 반영은 미검증. OI 전체 게이트 미통과, 펀딩비·선물 CVD 미진행, 완료 알림 금지. 기존 수집기·정본·7지표·180일 데이터 및 Secret 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-04 03:22 KST
+
+- 직전 02:50 KST 체크포인트를 먼저 읽고 main의 수집기 `eth_oi_okx_live.py` (blob `6661e379`), 워크플로 `.github/workflows/eth-oi-okx.yml` (blob `e83eda46`), 저장 JSON을 재조회했습니다. 수집기와 워크플로 수정 없음.
+- 최신 저장 실측: `observed_at_utc=2026-11-03T18:21:24.008000+00:00` (03:21:24.008 KST), `fetched_at_utc=2026-11-03T18:21:24.076041+00:00`, `value=655410.422 ETH`, `oi_contracts=6554104.220`, `oi_usd=1504868207.642`, `status=VERIFIED`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`; JSON blob `c2efd059`. **OKX 단일 거래소 OI**이며 Binance OI/시장 전체 OI가 아닙니다.
+- 실제 자동 실행 [#41692983259](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41692983259) (`workflow_run/success`)의 job `126116070320` 원본 로그에서 수집·신선도 검증 PASS, `git commit 73e7949`, `git push HEAD:main`, `STORED`까지 확인했습니다. 로그의 18:21:24 UTC 수집 시각과 JSON 관측 시각 및 18:21:29 UTC 저장 시각이 일치합니다. 이로써 해당 실행의 JSON-로그-커밋 연결을 확인했습니다. 다만 원시 OKX HTTP 응답의 상태코드/본문을 별도로 독립 재요청해 대조하지 않았습니다.
+- GitHub Actions REST `event=schedule&per_page=30` 총 134건에서 마지막 OKX OI 독립 `schedule/success`는 2026-11-03 21:33:53 KST [#41636774548](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41636774548), 그 이전은 13:49 KST입니다. **독립 schedule 5분 연속 성공은 미입증**입니다. 보조 `workflow_run`과 혼동하지 않습니다.
+- 최신 03:21 OI 실측값을 반영한 완성 ETH ESI 2.0 보고서 출력도 미검증입니다. 따라서 **OI 전체 게이트 미통과**. 펀딩비·선물 CVD 신규 복구 단계로 넘어가지 않았습니다. 다른 워크플로의 성공은 이 순차 게이트를 대신하지 않습니다.
+- 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터, Binance Cron `CRONJOB_API_KEY` Secret은 변경하지 않았습니다. Secret 미등록 체크포인트 유지, 우회·노출 없음. **전체 복구 미완료; 완료 알림 금지.**
