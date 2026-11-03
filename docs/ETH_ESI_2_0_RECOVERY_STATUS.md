@@ -1803,3 +1803,13 @@ The initial statement that changing execution environment was required was prema
 - **보조 실행의 저장 대조:** [Actions #41707119012](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41707119012) `workflow_run/success`, job `126165258275` 원본 로그에서 04:51:29 KST 관측 및 검증 PASS, `git commit ac18ad8`, push/STORED 확인. [저장 커밋 ac18ad8](https://github.com/changwookseo/eth-cvd-monitor/commit/ac18ad82afe1cee8e71b1d9a0d8e23627c7cb766)의 04:51:37 KST 시각과 최신 JSON 관측이 부합합니다. 앞선 04:48:38 독립 예약의 [커밋 9124980](https://github.com/changwookseo/eth-cvd-monitor/commit/9124980a2132a77488e4fb401b32bb8e3ba9e5c4)도 확인했습니다.
 - **잔여 게이트:** OKX 원시 HTTP 상태코드/본문의 별도 독립 재조회 대조와 최신 OI 실측값이 반영된 완성 ETH ESI 2.0 보고서 출력은 확인하지 못했습니다. 보조 workflow_run 연속 성공을 독립 schedule 연속 성공으로 간주하지 않습니다. **OI 전체 게이트 미통과**이므로 펀딩비 및 선물 CVD 신규 복구를 진행하지 않았습니다.
 - **보호:** 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음. Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. **전체 복구 미완료, 완료 알림 금지.**
+
+
+## 자동 복구 점검 — 2026-11-04 05:33 KST
+
+- **체크포인트 우선:** 직전 04:53 KST 기록을 읽고 main의 `eth_oi_okx_live.py` (blob `6661e379`), `.github/workflows/eth-oi-okx.yml` (blob `e83eda46`), `eth_oi_okx_latest.json`을 재조회했습니다. 수집기/워크플로 변경 없음.
+- **최신 저장 관측:** `observed_at_utc=2026-11-03T20:31:29.161000+00:00` (05:31:29 KST), `fetched_at_utc=2026-11-03T20:31:29.235691+00:00`, `value=643518.789 ETH`, `oi_contracts=6435187.890`, `oi_usd=1470723581.132`, `status=VERIFIED`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`. 이는 **OKX 단일 거래소 OI**이며 Binance 또는 전체 시장 OI가 아닙니다. JSON blob `c2975b5d`; 저장 커밋 [11f0d8f](https://github.com/changwookseo/eth-cvd-monitor/commit/11f0d8f019a754f20f47c8e1819e1dca7f9fdc2f) (20:31:29 UTC). 직전 20:26:33/20:21:27/20:16:31 UTC에도 해당 JSON 경로의 별도 커밋이 확인되어 연속 갱신 근거가 있습니다.
+- **보조 자동 실행:** [Actions #41713327672](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41713327672) `workflow_run/success`, job `126186788858`의 API 수집·신선도 검증·JSON 커밋 단계가 모두 success. 원본 stdout 및 별도 OKX HTTP 200/본문 대조는 이번 회차에 확보하지 못해 실행 로그-커밋 일대일 검증을 완료로 표기하지 않습니다.
+- **독립 예약:** GitHub Actions `event=schedule&per_page=100` 총 138건에서 최신 OKX OI 독립 `schedule/success`는 04:48:19 KST [#41706667731](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/41706667731), 이전 성공은 03:25:12 및 03:24:27 KST입니다. 5분 간격의 독립 schedule 연속 성공은 **미입증**입니다. 보조 `workflow_run` 연속 성공으로 대체하지 않습니다.
+- **남은 게이트:** 독립 OKX 원시 HTTP 응답/상태코드 대조, 독립 schedule 5분 연속 성공, 최신 실측 OI를 실제 반영한 완성 ETH ESI 2.0 보고서 출력 검증이 필요합니다. **OI 전체 게이트 미통과**이므로 펀딩비 및 선물 CVD 신규 복구 단계 미진행.
+- **보호:** 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 및 Binance Cron `CRONJOB_API_KEY` Secret은 변경하지 않았습니다. Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. **전체 복구 미완료, 완료 알림 금지.**
