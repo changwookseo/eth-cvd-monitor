@@ -1840,3 +1840,12 @@ The initial statement that changing execution environment was required was prema
 - JSON 경로의 GitHub bot 저장 커밋 [`1601126`](https://github.com/changwookseo/eth-cvd-monitor/commit/1601126d46838ec9addcce2d9554a763c22c5998) (08:31:03 KST), 이전 [`4958a58`](https://github.com/changwookseo/eth-cvd-monitor/commit/4958a58841b2c93a4b6eda6501b877a458e433cd) (08:25:39 KST), [`90abd2a`](https://github.com/changwookseo/eth-cvd-monitor/commit/90abd2a1b74c9d2814e0f63e4f9718a59e3d6251) (08:20:55 KST)을 확인해 연속 저장 근거를 확보했습니다. 다만 각 실행의 트리거는 커밋만으로 판별할 수 없습니다.
 - GitHub Actions 독립 `schedule` 조회 엔드포인트가 이번에도 커넥터 오류로 실패하여 독립 예약의 5분 연속 성공을 검증하지 못했습니다. 원시 OKX HTTP 상태/본문 독립 대조, 개별 Actions 원본 job 로그-커밋 1:1 대조, 최신 OI가 반영된 완성 보고서 출력도 미검증입니다. YAML의 `schedule` 선언과 JSON `VERIFIED`만으로 전체 게이트 통과 처리하지 않습니다.
 - **OI 전체 게이트 미통과**로 펀딩비 및 선물 CVD 신규 복구는 진행하지 않았습니다. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음. Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. **전체 복구 미완료; 완료 알림 금지.**
+
+
+## 자동 복구 점검 — 2026-11-04 09:19 KST
+
+- 직전 08:32 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py` (blob `6661e379`), `.github/workflows/eth-oi-okx.yml` (blob `e83eda46`), `eth_oi_okx_latest.json`을 재조회했습니다. 수집기와 워크플로 수정 없음.
+- 최신 저장 JSON: `observed_at_utc=2026-11-04T00:16:29.234000+00:00` (09:16:29 KST), `fetched_at_utc=2026-11-04T00:16:29.318350+00:00`, `value=641978.561 ETH`, `oi_contracts=6419785.610`, `oi_usd=1460693819.843`, `status=VERIFIED`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`. **OKX 단일 거래소 OI**이며 Binance/전체 시장 OI 아님.
+- OI JSON의 실제 GitHub bot 저장 커밋 [619a450](https://github.com/changwookseo/eth-cvd-monitor/commit/619a450adf8895fdfafdd5477abecdd9384df7ad) (09:16:29 KST), [54fd156](https://github.com/changwookseo/eth-cvd-monitor/commit/54fd1561c8de473a1a88e05232dbe72834a87f43) (09:15:47 KST), [30d5fa1](https://github.com/changwookseo/eth-cvd-monitor/commit/30d5fa14a631f7bf005369396f9594460269e90b) (09:10:47 KST)을 확인했습니다. 약 5분 간격의 저장 갱신은 확인되나 각 커밋의 Actions 트리거 종류는 이 증거만으로 확정하지 않습니다.
+- GitHub 커넥터의 Actions workflow runs 조회가 오류로 실패했습니다. 독립 `schedule` 5분 연속 성공과 개별 job 원본 로그-커밋 일대일 검증은 이번 회차에 확보하지 못했습니다. 별도 OKX 원시 HTTP 200/본문 독립 대조 및 09:16 OI 실측값을 반영한 완성 보고서 출력도 미검증입니다. **OI 전체 게이트 미통과**로 펀딩비·선물 CVD 신규 복구 미진행.
+- 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음. Binance Cron `CRONJOB_API_KEY` Secret은 미등록 체크포인트를 유지하며 우회·노출·등록하지 않았습니다. **전체 복구 미완료; 완료 알림 금지.**
