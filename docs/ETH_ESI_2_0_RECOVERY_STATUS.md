@@ -2258,3 +2258,10 @@ The initial statement that changing execution environment was required was prema
 - 최신 JSON: observed_at_utc=2026-11-05T22:20:59.112000+00:00 (07:20:59.112 KST), fetched_at_utc=2026-11-05T22:20:59.192752+00:00, value=660811.647 ETH, oi_contracts=6608116.470, oi_usd=1481096968.771, exchange=OKX, symbol=ETH-USDT-SWAP, status=VERIFIED. **OKX 단일 거래소 OI이며 Binance 또는 시장 전체 OI가 아님.** JSON 내부 VERIFIED는 독립 HTTP 원시 응답 대조 증거가 아님.
 - 보조 workflow_run/success [#42120707937](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42120707937) (07:20:50 KST), #42119983968 (07:15:49), #42119239072 (07:10:48), #42118484506 (07:05:43), #42117786094 (07:01:00) 확인. 최신 job 127571991982의 API 수집·출력 신선도 검증·JSON 커밋 단계 모두 success. 단, 이는 독립 schedule 성공 증거가 아니며 원본 stdout과 저장 커밋 SHA의 일대일 대조는 이번 회차 미확보.
 - 독립 schedule의 5분 연속 성공, 별도 OKX 원시 HTTP 상태코드·응답 본문 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 여전히 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 단계 미진입. 전체 복구 미완료; 완료 알림 금지.** Binance Cron CRONJOB_API_KEY Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-06 08:30 KST
+
+- 직전 07:22 체크포인트 확인 후 main의 OKX OI JSON 및 Actions 실행 재조회. `observed_at_utc=2026-11-05T23:21:01.700000+00:00` (08:21:01.700 KST), `fetched_at_utc=2026-11-05T23:21:01.788837+00:00`, `value=665147.856 ETH`, `oi_contracts=6651478.560`, `oi_usd=1476116076.471`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 OI; Binance/전체 시장 OI 아님.**
+- 보조 `workflow_run/success` [#42128930712](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42128930712) (08:20:52 KST), #42128296893 (08:16:02), #42127610351 (08:10:55), #42126912198 (08:05:44), #42126261604 (08:01:02) 연속 성공. 독립 `schedule` 연속 성공은 미입증. YAML `cron: '2-59/5 * * * *'` 설정만으로 실제 예약 성공을 인정하지 않음.
+- 별도 OKX 원시 HTTP 상태코드/본문 대조, 최신 job stdout과 저장 커밋의 1:1 대조, 완성 ETH ESI 2.0 보고서 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진행, 전체 복구 미완료, 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
