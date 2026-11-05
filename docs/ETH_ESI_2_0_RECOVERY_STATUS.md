@@ -2214,3 +2214,12 @@ The initial statement that changing execution environment was required was prema
 - 보조 `workflow_run/success` [#42073725653](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42073725653) (02:20:55 KST), #42072907589 (02:15:57), #42072046193 (02:10:50), #42071196772 (02:05:45), #42070435492 (02:01:15) 연속 성공. 최신 두 실행의 Jobs API에서 수집·신선도 검증·JSON 커밋 단계 success 확인. main 최신 커밋 이력에 02:21 KST 갱신 존재. 다만 원본 stdout과 해당 저장 커밋의 정확한 일대일 대조는 미확보.
 - 독립 `schedule` 5분 간격 연속 성공은 여전히 입증되지 않음. YAML의 `cron: '2-59/5 * * * *'` 설정만으로 실행 성공 판정하지 않음. 별도 OKX 원시 HTTP 상태코드/본문 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 신규 복구 미진행.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음. **전체 복구 미완료; 완료 알림 금지.**
+
+
+## 자동 복구 점검 — 2026-11-06 04:09 KST
+
+- 직전 02:24 KST 체크포인트를 먼저 읽고 main의 OI JSON 및 워크플로 설정, Actions 실행과 최신 원본 job 로그를 재확인했습니다. 수집기·워크플로·보고서 정본은 변경하지 않았습니다.
+- 최신 JSON: `observed_at_utc=2026-11-05T19:05:55.373000+00:00` (04:05:55.373 KST), `fetched_at_utc=2026-11-05T19:05:55.424873+00:00`, `value=650146.202 ETH`, `oi_contracts=6501462.020`, `oi_usd=1460221868.230`, `status=VERIFIED`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`. **OKX ETH-USDT-SWAP 단일 거래소 OI; Binance 또는 전체 시장 OI 아님.**
+- 보조 `workflow_run/success` [#42090575520](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42090575520) (04:05:46 KST), #42089808285 (04:01:04), #42088960306 (03:55:46), #42088174642 (03:50:50), #42087363147 (03:45:49) 등 연속 성공. 최신 job `127467198115`의 수집·신선도 검증·저장 단계 success 확인. 원본 로그에서 `cfe864a` 커밋으로 `eth_oi_okx_latest.json` 단일 파일 변경 및 main push 성공 확인. 현재 JSON 관측시각과 최신 실행 시각도 부합합니다.
+- 최신 목록에서 확인된 성공 이벤트는 모두 `workflow_run`으로, 독립 `schedule`의 5분 간격 연속 성공을 입증하지 않습니다. 워크플로 YAML의 `cron: '2-59/5 * * * *'` 설정만으로 성공을 판정하지 않습니다. 별도 OKX 원시 HTTP 상태코드/본문 독립 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 이번 회차 미검증입니다.
+- **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 신규 복구 미진행.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음. **전체 복구 미완료; 완료 알림 금지.**
