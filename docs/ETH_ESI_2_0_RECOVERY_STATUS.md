@@ -2493,3 +2493,12 @@ The initial statement that changing execution environment was required was prema
 - 보조 `workflow_run/success` [#42329189218](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42329189218) (11:25:34 KST), #42328771977 (11:20:43), #42328330913 (11:15:38), #42327906120 (11:10:42), #42327470734 (11:05:38) 연속 성공 확인. 이는 독립 `schedule` 실행이 아님. YAML의 `cron: '2-59/5 * * * *'` 설정은 유지됨.
 - 이번 점검에서 독립 `schedule` 5분 간격 연속 성공, 별도 OKX 원시 HTTP 상태코드/본문 대조, 최신 job stdout과 저장 커밋 일대일 대조, 완성 ETH ESI 2.0 보고서 실측 반영은 입증하지 못함. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입; 전체 복구 미완료, 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-07 12:32 KST
+
+- 직전 11:30 KST 체크포인트를 먼저 확인하고 main의 OKX OI JSON 및 워크플로와 Actions 최근 실행 및 독립 `schedule` 이력을 재조회. 수집기·워크플로·보고서 정본 수정 없음.
+- main JSON(blob `e340b1bc36b6db6b5965e6d6278d630c75ca70f2`): `observed_at_utc=2026-11-07T03:30:56.369000+00:00` (12:30:56.369 KST), `fetched_at_utc=2026-11-07T03:30:56.442300+00:00`, `value=686262.773 ETH`, `oi_contracts=6862627.730`, `oi_usd=1541606968.012`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 OI이며 Binance 또는 전체 시장 OI 아님.** 내부 VERIFIED는 별도 원시 HTTP 응답 대조 증거가 아님.
+- 보조 `workflow_run/success` [#42334339127](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42334339127) (12:30:49 KST), #42333956330 (12:25:35), #42333579637 (12:20:45), #42333184627 (12:15:44), #42332774083 (12:10:42) 연속 성공. **독립 schedule의 연속 성공으로 계산하지 않음.**
+- **새 독립 `schedule/success` [#42327159020](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42327159020) (11:02:12 KST)** 확인. 직전 독립 예약 #42303350998 (07:15:54 KST)와 약 3시간 46분 간격. 독립 예약 5분 간격 연속 성공은 미입증. YAML `cron: '2-59/5 * * * *'` 유지.
+- 별도 OKX 원시 HTTP 상태코드/본문 대조, 최신 job stdout과 저장 커밋의 1:1 검증, 완성 ETH ESI 2.0 보고서의 실측 반영은 이번 점검에서 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
