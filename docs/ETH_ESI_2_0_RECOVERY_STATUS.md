@@ -2538,3 +2538,12 @@ The initial statement that changing execution environment was required was prema
 - 보조 `workflow_run/success` [#42352607872](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42352607872) (16:45:38 KST), #42352269506 (16:40:38), #42351926526 (16:35:34), #42351584085 (16:30:45), #42351230832 (16:25:35), #42350888510 (16:20:41) 연속 성공 확인. **독립 schedule 성공으로 계산하지 않음.**
 - 독립 `schedule/success` 최근 목록의 OKX OI 마지막 성공은 [#42327159020](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42327159020) (11:02:12 KST), 이전 #42303350998 (07:15:54 KST). YAML cron `2-59/5 * * * *` 존재하나 **독립 5분 예약 연속 성공 미입증**.
 - 이번 점검에서 별도 OKX 원시 HTTP 응답 대조, 최신 stdout과 저장 커밋 SHA 일대일 검증, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 검증하지 못함. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료 및 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-07 17:42 KST
+
+- 직전 16:47 KST 체크포인트 확인 후 main JSON, OI 워크플로, Actions 실행과 **독립 schedule job 원문 로그**를 조회. 기존 수집기·보고서·가중치·180일 데이터 수정 없음.
+- **새 독립 `schedule/success` [#42356547611](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42356547611), 17:41:29 KST** 확인. job `128355775670`의 API 수집·신선도 검증·JSON 커밋 단계 모두 success. 이전 확인 독립 schedule 11:02:12 KST와 간격이 길어 **독립 5분 연속 schedule 성공은 여전히 미입증**. 보조 workflow_run 17:20~17:40 KST 5건 성공은 독립 예약으로 계산하지 않음.
+- main JSON: `observed_at_utc=2026-11-07T08:41:36.401000+00:00` (17:41:36.401 KST), `fetched_at_utc=2026-11-07T08:41:36.500275+00:00`, `value=686531.044 ETH`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 OI; Binance/시장 전체 OI 아님.**
+- 이번에는 schedule job stdout의 OI 수치·관측시각이 main JSON과 일치하고, 로그에서 `a323410..48be702 HEAD -> main`, `STORED`를 확인하여 **해당 예약 실행의 출력→저장 커밋 48be702 일대일 검증 성공**. 단, OKX 원시 HTTP 상태코드/응답 본문에 대한 **별도 독립 대조는 미실시**, 완성 ETH ESI 2.0 보고서의 실측 반영도 미검증.
+- **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음.
