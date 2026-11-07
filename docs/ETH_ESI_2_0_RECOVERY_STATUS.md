@@ -2644,3 +2644,11 @@ The initial statement that changing execution environment was required was prema
 - **새 독립 schedule 성공** [#42406442619](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42406442619), 04:29:21 KST. job `128505072553` 수집·신선도·커밋 단계 성공. stdout의 04:29:28 UTC 관측값 `677573.441 ETH`와 `3280968` 커밋 및 `STORED` 확인. 최신 보조 workflow_run 04:20~04:40 KST 성공은 독립 예약으로 계산하지 않음.
 - 독립 schedule 직전 성공은 00:12:53 KST로 **5분 간격 연속 예약 성공은 미입증**. 별도 OKX 원시 HTTP 상태코드/본문 직접 대조 및 완성 ETH ESI 2.0 보고서 최신 OI 실측 반영도 미검증. JSON 내부 VERIFIED는 독립 대조 증거가 아님.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료 및 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 유지, 우회·노출·등록 없음. 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-08 05:59 KST
+
+- 직전 04:40 KST 체크포인트를 먼저 읽고 main의 OKX OI JSON 및 워크플로 YAML, GitHub Actions 최근 전체 실행을 재조회. 코드/보고서 수정 없음.
+- main `eth_oi_okx_latest.json` (blob `50c1188f5b1917e7ade18a8fcc01ecedafdde389`): `observed_at_utc=2026-11-07T20:55:37.750000+00:00` (05:55:37.750 KST), `fetched_at_utc=2026-11-07T20:55:37.826876+00:00`, `value=676218.734 ETH`, `oi_contracts=6762187.340`, `oi_usd=1504451439.403`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 OI, Binance/시장 전체 OI 아님.** 내부 VERIFIED는 별도 원시 HTTP 대조가 아님.
+- 최근 전체 Actions 목록에서 OKX OI 보조 `workflow_run/success` [#42413369694](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42413369694) (05:55:32 KST), [#42412984673](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42412984673) (05:50:36), [#42412584836](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42412584836) (05:45:36), [#42412192027](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42412192027) (05:40:36) 연속 성공 확인. **이들은 독립 schedule 성공이 아님.** 독립 schedule 5분 연속 성공은 이번 점검에서 입증되지 않음. 워크플로 YAML의 `cron: '2-59/5 * * * *'` 유지.
+- 이번 점검에서는 독립 OKX 원시 HTTP 응답 상태코드/본문 대조, 최신 stdout과 저장 커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서의 실측 반영을 확인하지 못함. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입; 전체 복구 미완료, 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
