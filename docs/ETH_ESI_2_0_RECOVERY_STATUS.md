@@ -2878,3 +2878,13 @@ The initial statement that changing execution environment was required was prema
 - 최근 Actions 전체 100건에서 보조 `workflow_run/success` OI 실행 #42529351059 (07:15:44 KST), #42528945787 (07:11:05), #42528475892 (07:05:44), #42528076561 (07:01:14), #42527712031 (06:56:50) 등을 확인. **이는 보조 트리거의 연속 성공이며 독립 `schedule` 연속 성공이 아님.** YAML의 `2-59/5 * * * *` cron은 유지되지만 실제 독립 schedule 5분 간격 연속 성공은 미입증.
 - 별도 OKX 원시 HTTP 응답 상태코드·본문 직접 대조, 최신 job stdout↔JSON 저장 커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 단계 미진입, 전체 복구 미완료 및 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-09 08:26 KST
+
+- 07:17 KST 최신 체크포인트를 읽고 main의 OKX OI 수집기, 워크플로, JSON을 재조회했습니다. 코드 및 기존 데이터 수정 없음.
+- main JSON: observed_at_utc=2026-11-08T23:25:43.626000+00:00 (08:25:43.626 KST), fetched_at_utc=2026-11-08T23:25:43.706210+00:00, value=667539.855 ETH, oi_contracts=6675398.550, oi_usd=1443294595.894, exchange=OKX, symbol=ETH-USDT-SWAP, unit=ETH, status=VERIFIED. 이전 07:15 관측보다 갱신됨. **OKX 단일 거래소 OI, Binance 또는 시장 전체 OI 아님.** 내부 VERIFIED는 별도 원시 HTTP 대조가 아님.
+- Actions 전체 최근 100건에서 보조 workflow_run/success #42535116854 (08:25:38 KST), #42534727456 (08:20:46), #42534313669 (08:15:46), #42533899033 (08:10:45), #42533462595 (08:05:38) 확인. 저장 JSON 커밋 cf8e9f55dc5ee6743be6433ae4a38ca1a8219f57 (08:25:44 KST)과 이전 커밋 7648f288b5ec853667377a63f1b5045cb2f9b067 (08:20:52 KST) 확인. 보조 트리거 연속 실행 및 JSON 저장 갱신의 증거이며 독립 schedule의 연속 성공은 아님.
+- 독립 event=schedule 실행 목록 직접 조회: 최근 OKX schedule/success #42520332853 (05:29 KST), 그 전 #42498288860 (01:07 KST). **5분 간격 독립 예약 연속 성공 미입증.** YAML의 cron 2-59/5 * * * *는 설정만 확인.
+- 이번 점검에서 별도 OKX 원시 HTTP 응답 대조, 최신 job stdout↔커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. 따라서 **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.**
+- Binance Cron CRONJOB_API_KEY Secret은 이전 체크포인트상 미등록이며 우회·조회·노출·등록하지 않았습니다. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 미변경.
