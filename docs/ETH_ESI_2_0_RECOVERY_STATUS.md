@@ -2736,3 +2736,12 @@ The initial statement that changing execution environment was required was prema
 - main JSON (blob `86f093ae3724b5b042975695e5c1d34af9ef7315`): `observed_at_utc=2026-11-08T06:20:38.964000+00:00` (15:20:38.964 KST), `fetched_at_utc=2026-11-08T06:20:39.041484+00:00`, `value=681736.649 ETH`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 OI이며 Binance 또는 시장 전체 OI가 아님.** JSON의 VERIFIED는 별도 원시 HTTP 대조 증거가 아님.
 - GitHub Actions 최근 전체 실행 중 정확히 `ETH OKX Live OI` 워크플로 이름을 필터링하여 보조 `workflow_run/success` [#42454346532](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42454346532) (15:20:34 KST), #42454002665 (15:15:36), #42453658352 (15:10:34), #42453312726 (15:05:31), #42452982713 (15:00:52)의 연속 성공을 확인. **독립 schedule 성공으로 계산하지 않음.** YAML의 `cron: '2-59/5 * * * *'` 설정은 확인했지만 독립 schedule 5분 간격 연속 성공은 입증하지 못함.
 - 별도 OKX 원시 HTTP 응답 상태/본문 대조, 최신 job stdout→저장 커밋 일대일 검증, 완성 ETH ESI 2.0 보고서 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입; 전체 복구 미완료 및 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-08 16:34 KST
+
+- 직전 15:24 KST 체크포인트를 읽고 main OI JSON, YAML, Actions 실행 및 최신 job 로그를 대조. 기존 수집기·보고서·가중치·백데이터 변경 없음.
+- main `eth_oi_okx_latest.json`: `observed_at_utc=2026-11-08T07:30:46.893000+00:00` (16:30:46.893 KST), `value=684248.852 ETH`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX ETH-USDT-SWAP 단일 거래소 OI; Binance 또는 시장 전체 OI 아님.**
+- 보조 `workflow_run/success` [#42459087057](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42459087057) (16:30:42 KST), #42458742121 (16:25:31), #42458395703 (16:20:35), #42458052263 (16:15:36) 확인. 최신 job `128664305479`의 API 수집·신선도 검증·JSON 커밋 단계 성공. stdout `PASS`, 커밋 `076cc7c`, `STORED`와 main JSON 관측시각/값 일치 확인. **이들은 독립 schedule 연속 성공이 아님.** 최신 Actions 30건에서 OI 독립 schedule 연속 실행 확인 불가.
+- 별도 OKX 원시 HTTP 상태코드/본문 직접 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. JSON `VERIFIED`는 독립 원시 HTTP 검증을 뜻하지 않음. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 단계 미진입, 전체 복구 미완료 및 완료 알림 금지.** 다른 이름의 펀딩/CVD 워크플로 실행 존재는 OI 게이트 통과 증거가 아님.
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
