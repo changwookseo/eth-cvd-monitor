@@ -2763,3 +2763,12 @@ The initial statement that changing execution environment was required was prema
 - 보조 `workflow_run/success` [#42469927714](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42469927714) (19:05:31 KST), #42469580550 (19:00:49), #42469217427 (18:55:31), #42468881595 (18:50:37) 확인. 최신 job `128698080032`의 수집·신선도·커밋 단계 모두 success. **이들은 독립 schedule 성공으로 계산하지 않음.** YAML cron `2-59/5 * * * *` 설정은 확인했으나 실제 독립 schedule 5분 연속 성공은 미입증.
 - 별도 OKX 원시 HTTP 응답 상태코드/본문 직접 대조, 최신 job stdout→저장 커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료 및 완료 알림 금지.**
 - Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-08 19:34 KST
+
+- 19:09 KST 최신 체크포인트를 먼저 읽고 main의 OKX OI JSON, YAML 및 Actions 전체 실행 목록을 재조회했습니다. OI 이외 수집기·보고서·가중치·백데이터는 변경하지 않았습니다.
+- main `eth_oi_okx_latest.json` (blob `fa608b9b812dbf82a8bb1c639ee64d6532859a89`): `observed_at_utc=2026-11-08T10:30:51.107000+00:00` (19:30:51.107 KST), `fetched_at_utc=2026-11-08T10:30:51.184995+00:00`, `value=686083.131 ETH`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. 이는 **OKX ETH-USDT-SWAP 단일 거래소 OI**이며 Binance OI나 전체 시장 OI가 아닙니다. JSON 내부 VERIFIED는 별도 원시 HTTP 직접 대조를 의미하지 않습니다.
+- Actions 전체 목록에서 보조 `workflow_run/success` [#42471729433](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42471729433) (19:30:46 KST), [#42471369425](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42471369425) (19:25:29), [#42471023396](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42471023396) (19:20:38), [#42470659138](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42470659138) (19:15:35) 연속 성공 확인. **이들은 독립 schedule 실행이 아닙니다.** YAML cron `2-59/5 * * * *` 설정은 있으나 독립 schedule 5분 연속 성공은 입증하지 못했습니다.
+- 이번 실행에서 별도 OKX 원시 HTTP 상태/본문 대조, 최신 job stdout과 JSON 저장 커밋의 일대일 대조, 완성 ETH ESI 2.0 보고서의 최신 실측 반영은 검증되지 않았습니다. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 단계 미진입, 전체 복구 미완료 및 완료 알림 금지.** 별도 펀딩·선물 CVD 워크플로 성공은 순차 복구 완료 판정에 사용하지 않았습니다.
+- Binance Cron `CRONJOB_API_KEY` Secret은 미등록 체크포인트를 유지하며 우회·노출·등록하지 않았습니다. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
