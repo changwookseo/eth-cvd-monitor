@@ -2833,3 +2833,12 @@ The initial statement that changing execution environment was required was prema
 - main `eth_oi_okx_latest.json`: `observed_at_utc=2026-11-08T17:30:47.310000+00:00` (02:30:47.310 KST), `fetched_at_utc=2026-11-08T17:30:47.386549+00:00`, `value=709496.827 ETH`, `oi_contracts=7094968.270`, `oi_usd=1578360831.281`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. 직전 01:25 KST 관측보다 새로 갱신됨. **OKX 단일 거래소 OI이며 Binance/전체 시장 OI 아님.** 내부 VERIFIED는 독립 원시 HTTP 응답 대조가 아님.
 - YAML의 `schedule` cron `2-59/5 * * * *` 및 보조 `workflow_run` 트리거를 확인. GitHub Actions workflow runs API 조회는 커넥터 URL 허용 제한으로 실패하여 **독립 schedule 5분 연속 성공 미입증**. 별도 OKX 원시 HTTP 상태/본문 대조, 최신 job 로그↔커밋 SHA 일대일 검증, 완성 ETH ESI 2.0 보고서의 최신 실측 반영도 미검증.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료 및 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-09 03:55 KST
+
+- 이전 02:35 KST 체크포인트를 읽고 main의 OI 수집기, 워크플로, JSON과 Actions 최근 실행을 조회. 코드·정본·현물 CVD·기술지표·7지표 가중치·180일 백데이터 변경 없음.
+- main JSON blob `04b077985da4f421b28772025c9d470c90f51963`: observed_at_utc=`2026-11-08T18:50:41.160000+00:00` (03:50:41.160 KST), fetched_at_utc=`2026-11-08T18:50:41.236607+00:00`, value=`709411.0730000016 ETH`, exchange=OKX, symbol=ETH-USDT-SWAP, status=VERIFIED. **OKX 단일 거래소 OI이며 Binance 또는 시장 전체 OI가 아님.** 내부 VERIFIED는 독립 원시 HTTP 응답 대조가 아님.
+- 최근 전체 Actions 30건에서 OKX OI 실행: [#42512001434](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42512001434) workflow_run/success (2026-11-08T18:50:36Z); [#42511586954](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42511586954) workflow_run/success (2026-11-08T18:45:35Z); [#42511179083](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42511179083) workflow_run/success (2026-11-08T18:40:34Z); [#42510775046](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42510775046) workflow_run/success (2026-11-08T18:35:30Z); [#42510369153](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42510369153) workflow_run/success (2026-11-08T18:30:47Z). 이들은 보조 workflow_run이며 독립 schedule의 연속 성공 증거가 아님. 워크플로에는 `2-59/5 * * * *` schedule 설정이 있음. 독립 schedule 목록을 필터링한 GitHub URL은 커넥터 허용 제한으로 조회 실패.
+- 별도 OKX 원시 HTTP 본문/상태 대조, 최신 job stdout→저장 커밋 일대일 검증, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 순차 복구 미진입; 전체 복구 미완료.** 이미 존재하는 펀딩/CVD 후보 워크플로 성공은 순차 게이트 통과로 인정하지 않음.
+- Binance Cron `CRONJOB_API_KEY` Secret은 이전 체크포인트상 미등록; 우회·노출·등록하지 않음. 완료 알림 금지.
