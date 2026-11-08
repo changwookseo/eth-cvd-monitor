@@ -2860,3 +2860,12 @@ The initial statement that changing execution environment was required was prema
 - Actions `event=schedule` 목록에서 **신규 독립 schedule/success** [#42520332853](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42520332853) (2026-11-09 05:29:00 KST)을 확인했습니다. 직전 독립 schedule/success [#42498288860](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42498288860) (01:07:41 KST)과 약 4시간 21분 간격입니다. 따라서 독립 `schedule`의 **5분 간격 연속 성공은 여전히 미입증**이며 보조 `workflow_run` 연속 실행을 독립 예약 성공으로 대체하지 않습니다. YAML의 cron `2-59/5 * * * *` 및 보조 `workflow_run` 트리거 유지 확인.
 - 이번 실행에서 별도 OKX 원시 HTTP 상태·본문 직접 대조, 최신 job stdout↔저장 커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 검증하지 못했습니다. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료, 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않았습니다.
+
+
+## 자동 복구 점검 — 2026-11-09 06:14 KST
+
+- 직전 05:49 KST 체크포인트를 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 및 독립 예약 실행 job을 재검증했습니다. 수집기·워크플로·기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+- main JSON (blob `7109eb2f33c63bd3b4722811cfd0832d5839ec9c`): `observed_at_utc=2026-11-08T21:10:43.736000+00:00` (06:10:43.736 KST), `fetched_at_utc=2026-11-08T21:10:43.794012+00:00`, `value=712138.672 ETH`, `oi_contracts=7121386.720`, `oi_usd=1584373238.852`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. 05:45 관측 이후 갱신됨. **OKX 단일 거래소 OI이며 Binance OI 또는 전체 시장 OI가 아님.** 내부 VERIFIED는 독립 원시 HTTP 응답 검증이 아님.
+- YAML 독립 `schedule` cron `2-59/5 * * * *`와 보조 `workflow_run` 확인. 최근 전체 실행 목록 API는 URL 허용 제한으로 실패. 기존 독립 schedule 성공 [#42520332853](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42520332853)의 job `128852236035`를 직접 조회하여 수집·신선도·커밋 단계 모두 success 확인. 다만 **새로운 독립 예약 5분 연속 성공은 입증되지 않음**; 보조 workflow_run을 독립 예약으로 계산하지 않음.
+- 별도 OKX 원시 HTTP 상태·본문 대조, 최신 실행 stdout과 저장 커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음.
