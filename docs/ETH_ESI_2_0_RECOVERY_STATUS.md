@@ -2808,3 +2808,11 @@ The initial statement that changing execution environment was required was prema
 - YAML의 독립 `schedule` cron `2-59/5 * * * *` 및 보조 `workflow_run` 트리거 유지 확인. Actions 실행 목록 API는 GitHub 커넥터 URL 허용 제한으로 조회 실패하여 독립 schedule의 5분 연속 성공은 입증되지 않았습니다.
 - 별도 OKX 원시 HTTP 상태/본문 대조, 최신 job stdout↔저장 커밋 SHA 일대일 검증, 완성 ETH ESI 2.0 보고서 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료 및 완료 알림 금지.**
 - Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-09 00:31 KST
+
+- 최신 2026-11-08 23:37 KST 체크포인트를 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 재조회. 수집기·워크플로·보고서·기존 데이터는 수정하지 않음.
+- main JSON: `observed_at_utc=2026-11-08T15:30:51.950000+00:00` (2026-11-09 00:30:51.950 KST), `fetched_at_utc=2026-11-08T15:30:52.028641+00:00`, `value=689691.543 ETH`, `oi_contracts=6896915.430`, `oi_usd=1544798705.673`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. 이전 23:35 KST 관측보다 새로 갱신됨. **OKX 단일 거래소 OI이며 Binance 또는 전체 시장 OI가 아님.** 내부 VERIFIED는 별도 독립 HTTP 원시 응답 검증이 아님.
+- YAML에 독립 `schedule` (`2-59/5 * * * *`) 및 보조 `workflow_run` 존재. GitHub Actions workflow runs 목록 조회는 커넥터 오류로 실패. 따라서 독립 schedule의 5분 간격 연속 성공을 검증하지 못함. 별도 원시 HTTP 응답 대조, 최신 job 로그↔저장 커밋 일대일 대조, 완성 ETH ESI 2.0 보고서의 실측 반영도 미검증.
+- **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
