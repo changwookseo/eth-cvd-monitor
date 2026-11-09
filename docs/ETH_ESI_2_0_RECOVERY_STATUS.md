@@ -2951,3 +2951,12 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions 전체 실행 목록에서 보조 workflow_run/success #42572466317 (15:20:47 KST), #42572955722 (15:25:39), #42573487052 (15:30:51), #42573993796 (15:35:40), #42574516898 (15:40:42)를 확인. main JSON 저장 커밋 5b45316e12d03827fe53951efa49a704ca201748 (15:40:53 KST), 82f2eb339b74b106862c5e8c1c45c2fcd692bc95 (15:35:48 KST) 확인. 자동 보조 트리거 연속 성공 및 연속 JSON 저장 증거이며 **독립 schedule의 5분 연속 성공을 의미하지 않음**.
 - 워크플로에는 독립 schedule cron '2-59/5 * * * *' 및 workflow_run 보조 트리거가 유지됨. 이번 점검에서 새로운 독립 schedule 연속 성공 증거는 확보하지 못함. 별도 OKX 원시 HTTP 응답 대조 및 완성 ETH ESI 2.0 보고서 최신 OI 실측 출력 반영도 미검증.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입. 전체 복구 미완료, 완료 알림 금지.** Binance Cron CRONJOB_API_KEY Secret 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않음.
+
+
+## 자동 복구 점검 — 2026-11-09 16:28 KST
+
+- 직전 15:41 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 재조회. 기존 수집기·워크플로·현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+- main JSON blob `6387f8bee778b8110cdee5859b8f349aa0d710dc`: observed_at_utc=`2026-11-09T07:25:50.416000+00:00` (16:25:50.416 KST), fetched_at_utc=`2026-11-09T07:25:50.492430+00:00`, value=`667276.031 ETH`, oi_contracts=`6672760.310`, oi_usd=`1396041548.257`, exchange=OKX, symbol=ETH-USDT-SWAP, status=VERIFIED. **OKX 단일 거래소 OI이며 Binance OI나 전체 시장 OI가 아님.** 내부 VERIFIED는 별도 원시 HTTP 대조를 의미하지 않음.
+- GitHub Actions bot의 JSON 저장 커밋 `8e296282` (2026-11-09T07:25:50Z UTC), `a6fc6d05` (2026-11-09T07:21:01Z UTC), `5dd3d288` (2026-11-09T07:16:19Z UTC) 확인. 연속 저장의 증거이지만 실행 event가 독립 `schedule`인지 확인되지 않음. 워크플로 cron `2-59/5 * * * *` 및 보조 `workflow_run` 유지. GitHub 커넥터의 워크플로 실행 목록 URL 조회가 실패하여 **독립 schedule의 5분 간격 연속 성공 미입증**.
+- 별도 OKX 원시 HTTP 응답 상태/본문 직접 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. 이전 14:25 KST 체크포인트의 stdout↔저장 SHA 일대일 대조 성공은 유지하되 이번 최신 실행에 대한 새 대조는 수행하지 못함. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료, 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret은 이전 체크포인트상 미등록이며 우회·조회·노출·등록하지 않음.
