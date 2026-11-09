@@ -3090,3 +3090,13 @@ The initial statement that changing execution environment was required was prema
 - JSON 저장 커밋 `90e61425` (07:25:54 KST), `05975e29` (07:31:09 KST), `24bf99a0` (07:35:49 KST), `75d23079` (07:40:54 KST), `9890d68f` (07:45:58 KST) 확인. 약 5분 간격 연속 저장. 이번 최신 실행의 stdout↔저장 SHA 일대일 대조는 별도 미검증.
 - 독립 OKX 원시 HTTP 직접 요청은 실행 환경 DNS 해석 실패(`Could not resolve host: www.okx.com`, HTTP 000)로 대조 불가. 완성 ETH ESI 2.0 보고서의 최신 OKX OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않음.
+
+
+## 자동 복구 점검 — 2026-11-10 08:48 KST
+
+- 직전 07:49 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 재조회. 수집기·워크플로 수정 없음. YAML에는 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 공존.
+- main JSON: `observed_at_utc=2026-11-09T23:45:56.610000+00:00` (08:45:56.610 KST), `fetched_at_utc=2026-11-09T23:45:56.687204+00:00`, `value=665455.507 ETH`, `oi_contracts=6654555.070`, `oi_usd=1418192158.298`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`. **OKX 단일 거래소 OI; Binance OI/시장 전체 OI 아님.** 내부 VERIFIED는 독립 원시 HTTP 검증을 뜻하지 않음.
+- GitHub Actions 전체 최근 100건 중 OKX OI 실행 17건(07:25~08:45 KST) 모두 `event=workflow_run`, `conclusion=success`; 독립 `event=schedule` 0건. 따라서 보조 트리거 성공과 독립 schedule 성공을 구분하며 **독립 예약 연속 성공 미입증**.
+- JSON 갱신 커밋 `89c5a58b` (08:25:54 KST), `3f38f8d9` (08:31:02), `572b7409` (08:35:48), `c6310f19` (08:40:55), `73b52e18` (08:46:01) 확인. 약 5분 간격 연속 저장. 최신 job stdout↔저장 SHA 일대일 대조는 이번 점검에서 미검증.
+- 별도 OKX 원시 HTTP 직접 요청은 DNS 해석 실패(`Could not resolve host: www.okx.com`, HTTP 000)로 검증 불가. 완성 ETH ESI 2.0 보고서에 최신 OKX OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
