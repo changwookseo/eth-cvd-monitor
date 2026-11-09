@@ -2984,3 +2984,11 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions bot의 JSON 갱신 커밋 `f1ed61e6d3e2aa9f34983c47ed0eae6c4a6b28a9` (19:40:53 KST), `e83496ce180c618e76b1308b8ecb797af47a6915` (19:45:56 KST), `59eb90621252cde234677a9b358d450b762b6efc` (19:46:15 KST)를 GitHub commits API로 확인. 19:40→19:45 약 5분 간격 저장 및 19:46 추가 갱신을 확인했으나 각 커밋의 실행 event는 확정하지 못함. YAML에 독립 schedule `2-59/5 * * * *` 및 보조 workflow_run 존재. GitHub Actions workflow runs 목록 URL은 커넥터 허용 제한으로 조회 실패해 **독립 schedule의 5분 간격 연속 성공은 미입증**.
 - 별도 OKX 원시 HTTP 상태코드·본문 직접 대조, 이번 최신 실행 stdout↔저장 커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서 최신 OI 실측 반영 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록 없음. 기존 데이터 및 정본 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-09 20:24 KST
+
+- 직전 19:50 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 재조회. 수집기와 워크플로는 변경하지 않음.
+- main JSON: `observed_at_utc=2026-11-09T11:21:04.420000+00:00` (20:21:04.420 KST), `fetched_at_utc=2026-11-09T11:21:04.471314+00:00`, `value=687213.067 ETH`, `oi_contracts=6872130.670`, `oi_usd=1463282783.563`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 ETH-USDT-SWAP OI이며 Binance OI나 전체 시장 OI가 아님.** 내부 VERIFIED는 독립 원시 HTTP 응답 대조를 의미하지 않음.
+- GitHub Actions bot JSON 저장 커밋 [0a9a361](https://github.com/changwookseo/eth-cvd-monitor/commit/0a9a3614326300e44609168b2d9700b2ddf139b3) (20:21:04 KST) 및 [2b046b1](https://github.com/changwookseo/eth-cvd-monitor/commit/2b046b118af1df0f96a7ed71a402dd38c018b65b) (20:15:55 KST)을 확인. 약 5분 간격 JSON 저장은 지속되나 실행 event가 독립 `schedule`인지 확인되지 않음. YAML의 독립 `schedule` cron `2-59/5 * * * *` 및 보조 `workflow_run` 유지. GitHub 커넥터의 Actions workflow runs URL은 허용 제한으로 조회 실패하여 **독립 schedule 연속 성공 미입증**.
+- OKX 원시 HTTP 응답의 별도 직접 대조, 이번 최신 job stdout↔저장 SHA 일대일 검증, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret은 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
