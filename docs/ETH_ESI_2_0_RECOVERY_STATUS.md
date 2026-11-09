@@ -2906,3 +2906,12 @@ The initial statement that changing execution environment was required was prema
 - Actions 전체 목록에서 보조 `workflow_run/success` #42545952384 (10:30:50 KST), #42546375327 (10:35:37), #42546826308 (10:40:43), #42547249174 (10:45:41), #42547679263 (10:50:40) 연속 성공 확인. 최신 #42547679263 job `128936113015`의 수집·신선도·JSON 커밋 단계 모두 success. JSON 변경 커밋 `e95a6cdcba53606a5c6ca871686c3436ddd01b00` (10:50:48 KST), 직전 `c127df13f7f66b60bd290ee66004080f71660551` (10:45:51 KST) 확인. 다만 job stdout에 출력된 저장 SHA와 커밋 SHA의 일대일 직접 대조는 미검증.
 - 독립 `event=schedule` 목록 조회에서 최근 OI 독립 성공 #42537684370 (08:58:08 KST), 이전 #42520332853 (05:29:00 KST) 확인. **독립 schedule의 5분 간격 연속 성공 미입증**. 보조 workflow_run 연속 성공을 독립 schedule로 계산하지 않음. YAML `cron: '2-59/5 * * * *'` 설정 확인.
 - 별도 OKX 원시 HTTP 응답 대조는 외부 네트워크 DNS 실패로 미검증. 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret은 이전 체크포인트상 미등록이며 우회·조회·노출·등록하지 않음.
+
+
+## 자동 복구 점검 — 2026-11-09 11:20 KST
+
+- 직전 10:54 KST 체크포인트를 읽고 main의 OKX OI 수집기, YAML 및 JSON을 재조회. 수집기/워크플로/기존 보고서 변경 없음.
+- main JSON (blob b41c7d50d411ee1084a224b25326108ef8b20519): observed_at_utc=2026-11-09T02:15:49.455000+00:00 (11:15:49.455 KST), fetched_at_utc=2026-11-09T02:15:49.533399+00:00, value=669737.766 ETH, oi_contracts=6697377.660, oi_usd=1435696756.841, exchange=OKX, symbol=ETH-USDT-SWAP, status=VERIFIED. **OKX 단일 거래소 OI이며 Binance/시장 전체 OI가 아님.** 내부 VERIFIED는 독립 원시 HTTP 대조가 아님.
+- GitHub commits API에서 JSON 저장 커밋 faa2a1f72f383e582609512d4ab9760961132321 (11:15:53 KST), de2053765551712e86d920334182cdd2ca9db906 (11:10:58), 1f6e46edd607607901cd005a11f075ee206f4516 (11:05:42) 확인. 약 5분 간격의 GitHub Actions bot 저장 갱신 증거이나 각 실행의 event 유형이 확인되지 않았으므로 **독립 schedule 5분 연속 성공으로 인정하지 않음**. Actions workflow runs 목록은 커넥터 URL 허용 제한으로 조회 실패. YAML에는 독립 schedule cron '2-59/5 * * * *' 및 보조 workflow_run 유지.
+- 별도 OKX 원시 HTTP 상태/본문 대조, 최신 job stdout↔저장 커밋 SHA 일대일 검증, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.**
+- Binance Cron importer CRONJOB_API_KEY Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
