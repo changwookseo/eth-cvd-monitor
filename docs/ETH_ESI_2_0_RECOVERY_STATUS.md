@@ -2888,3 +2888,12 @@ The initial statement that changing execution environment was required was prema
 - 독립 event=schedule 실행 목록 직접 조회: 최근 OKX schedule/success #42520332853 (05:29 KST), 그 전 #42498288860 (01:07 KST). **5분 간격 독립 예약 연속 성공 미입증.** YAML의 cron 2-59/5 * * * *는 설정만 확인.
 - 이번 점검에서 별도 OKX 원시 HTTP 응답 대조, 최신 job stdout↔커밋 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. 따라서 **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.**
 - Binance Cron CRONJOB_API_KEY Secret은 이전 체크포인트상 미등록이며 우회·조회·노출·등록하지 않았습니다. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-09 09:57 KST
+
+- 직전 08:26 KST 체크포인트를 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`과 Actions 실행·job 및 JSON 변경 커밋을 재검증. 기존 수집기·보고서·현물 CVD·기술지표·7지표 가중치·180일 백데이터 변경 없음.
+- main JSON (blob `ab3d123a7bbc19bf9be1d53da8fc4fce04dc99f0`): `observed_at_utc=2026-11-09T00:55:41.725000+00:00` (09:55:41.725 KST), `fetched_at_utc=2026-11-09T00:55:41.805409+00:00`, `value=664810.388 ETH`, `oi_contracts=6648103.880`, `oi_usd=1423817759.876`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX ETH-USDT-SWAP 단일 거래소 OI이며 Binance OI나 전체 시장 OI가 아님.** 내부 VERIFIED는 독립 원시 HTTP 대조가 아님.
+- Actions 전체 최근 100건에서 보조 `workflow_run/success` 09:35~09:55 KST 약 5분 간격 연속 성공 (#42541023779, #42541486408, #42541926371, #42542376187, #42542803415)을 확인. 최신 #42542803415 job `128921250903`의 수집·신선도 검증·커밋 단계 모두 success. main JSON 저장 커밋 [52ea27a](https://github.com/changwookseo/eth-cvd-monitor/commit/52ea27a9079e9b10a5891c8502a366f03d88c15d) (09:55:45 KST)의 변경 diff에서 이전 09:50:50.978 관측→09:55:41.725 관측 갱신을 확인. 다만 job stdout에서 출력한 커밋 SHA와 저장 커밋 SHA의 직접 일대일 대조는 아직 미검증.
+- **새로운 독립 `schedule/success`** [#42537684370](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42537684370) (08:58:08 KST 시작)을 확인했고 job `128905518512`의 수집·신선도·커밋 단계 모두 success. 앞서 05:29 KST 독립 schedule 성공과 5분 간격이 아니며 **독립 예약 5분 간격 연속 성공은 여전히 미입증**. YAML cron `2-59/5 * * * *` 존재 및 보조 `workflow_run` 확인; 보조 실행은 독립 schedule 연속 성공으로 대체하지 않음.
+- 별도 OKX 원시 HTTP 상태코드·본문 직접 대조는 접근 실패로 미검증. 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료 및 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않음.
