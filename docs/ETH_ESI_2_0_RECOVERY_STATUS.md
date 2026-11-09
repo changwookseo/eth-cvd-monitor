@@ -2966,3 +2966,12 @@ The initial statement that changing execution environment was required was prema
 
 - main OKX OI JSON 관측 17:35:47.190 KST, `677058.923 ETH` (`ETH-USDT-SWAP` 단일 OKX 거래소, Binance/전체 시장 아님), blob `b919e36f0412c57657122c07678f7039bbc712fb`. GitHub Actions bot의 JSON 갱신 커밋 `a070f1a3` (17:25:49), `4bc7a028` (17:31:02), `08743c55` (17:35:47 KST)로 약 5분 간격 연속 저장 확인.
 - YAML의 schedule cron 및 workflow_run 보조 트리거 확인. GitHub Actions 실행 목록 조회는 커넥터 URL 제한으로 실패하여 **독립 schedule 연속 성공 미입증**. 원시 OKX HTTP 별도 대조, 최신 실행 stdout↔SHA 대조, 완성 보고서의 최신 OI 실측 반영 미검증. **OI 게이트 미통과, 펀딩비·선물 CVD 미진입, 전체 복구 미완료 및 완료 알림 금지.** Binance Cron Secret 우회·노출·등록 없음. 기존 수집기·현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-09 18:38 KST
+
+- 직전 17:40 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 재조회. 수집기·워크플로 변경 없음.
+- main JSON blob `6db09b5267b1c893df5ec9079467eb744f0f2b20`: `observed_at_utc=2026-11-09T09:35:51.638000+00:00` (18:35:51.638 KST), `fetched_at_utc=2026-11-09T09:35:51.696701+00:00`, `value=678790.721 ETH`, `oi_contracts=6787907.210`, `oi_usd=1432085511.537`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX ETH-USDT-SWAP 단일 거래소 OI, Binance OI 또는 전체 시장 OI 아님.** 내부 VERIFIED는 별도 원시 HTTP 대조를 의미하지 않음.
+- GitHub Actions bot의 JSON 갱신 커밋 `f8d9794931a30a86730f5e044631a6b073191f8d` (18:25:53 KST), `db446c16068bfd0369fda577c773e3c43f13e36d` (18:31:06 KST), `cf5a1d776469f639a49cb4463ad87f13a985bb07` (18:35:52 KST)를 직접 확인. 약 5분 간격의 연속 JSON 저장 증거이나 각 실행이 독립 `schedule`인지 확인 불가. YAML cron `2-59/5 * * * *`와 보조 `workflow_run` 트리거 확인. GitHub 커넥터의 Actions workflow runs 목록 URL은 허용 제한으로 실패하여 **독립 schedule 연속 성공 미입증**.
+- 별도 OKX 원시 HTTP 상태/본문 직접 대조는 DNS 연결 실패로 미검증. 최신 실행 stdout↔저장 SHA 직접 대조와 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
