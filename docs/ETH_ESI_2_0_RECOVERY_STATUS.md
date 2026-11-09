@@ -3027,3 +3027,13 @@ The initial statement that changing execution environment was required was prema
 - main JSON blob `c9fdd073876c6b21b644019878f10b203bdc44b9`: `observed_at_utc=2026-11-09T15:20:59.641000+00:00` (00:20:59.641 KST), `fetched_at_utc=2026-11-09T15:20:59.723401+00:00`, `value=693033.078 ETH`, `oi_contracts=6930330.780`, `oi_usd=1480907732.724`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 OI이며 Binance OI 또는 전체 시장 OI가 아님.** 내부 VERIFIED는 독립 원시 HTTP 검증이 아님.
 - GitHub commits API로 Actions bot의 JSON 저장 커밋 [b9d74f9](https://github.com/changwookseo/eth-cvd-monitor/commit/b9d74f980a49b2fd5d3d1aa1992a5f66a377f69c) (00:21:00 KST), [0699639](https://github.com/changwookseo/eth-cvd-monitor/commit/069963975b5d77509317d9f1f7a839dc2f502bae) (00:15:56 KST), [89d1865](https://github.com/changwookseo/eth-cvd-monitor/commit/89d1865a42fc1a638332123d764f5500c2c6e02e) (00:11:13 KST) 확인. 약 5분 간격의 연속 JSON 저장은 확인되나 독립 schedule 실행의 연속 성공 증거는 아님. Actions workflow runs 목록 URL은 커넥터 허용 제한으로 조회 실패.
 - 별도 OKX 원시 HTTP 상태/본문 대조, 최신 job stdout↔저장 SHA 일대일 대조, 완성 ETH ESI 2.0 보고서 최신 OI 실측 반영 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록하지 않음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-10 02:12 KST
+
+- 직전 00:22 KST 체크포인트를 먼저 확인하고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 재조회. 기존 수집기·워크플로·보고서·현물 CVD·기술지표·7지표 가중치·180일 백데이터 변경 없음.
+- main JSON: `observed_at_utc=2026-11-09T17:11:04.332000+00:00` (02:11:04.332 KST), `fetched_at_utc=2026-11-09T17:11:04.394332+00:00`, `value=677257.715 ETH`, `oi_contracts=6772577.150`, `oi_usd=1440676156.502`, `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `status=VERIFIED`. **OKX 단일 거래소 OI, Binance OI/전체 시장 OI 아님.** 내부 VERIFIED는 독립 원시 HTTP 검증을 뜻하지 않음.
+- GitHub Actions 전체 실행 목록 최근 30건에서 OKX OI 보조 `workflow_run` 5건 연속 성공 확인: #42658852113 (01:50:51 KST), #42659632077 (01:55:43), #42660486389 (02:01:04), #42661241977 (02:05:46), #42662084964 (02:10:56). 이 목록에서 `event=schedule` 실행은 0건. 조회 범위는 최근 30건으로 제한됨. 독립 schedule 5분 간격 연속 성공 미입증.
+- GitHub JSON 저장 커밋 `274f458b` (01:51:07 KST), `22261a77` (01:55:58), `ac5e864f` (02:01:13), `6d6b400b` (02:06:00), `378f6646` (02:11:05) 확인. 약 5분 간격 저장 지속. 그러나 최신 job stdout↔저장 SHA 일대일 대조 미검증.
+- 별도 OKX 원시 HTTP 요청은 실행 환경의 DNS 해석 실패로 독립 대조 불가. 완성 ETH ESI 2.0 보고서에 최신 OKX OI 실측값이 반영되었는지도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지. 우회·조회·노출·등록하지 않음.
