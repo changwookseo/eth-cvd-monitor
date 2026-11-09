@@ -2960,3 +2960,9 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions bot의 JSON 저장 커밋 `8e296282` (2026-11-09T07:25:50Z UTC), `a6fc6d05` (2026-11-09T07:21:01Z UTC), `5dd3d288` (2026-11-09T07:16:19Z UTC) 확인. 연속 저장의 증거이지만 실행 event가 독립 `schedule`인지 확인되지 않음. 워크플로 cron `2-59/5 * * * *` 및 보조 `workflow_run` 유지. GitHub 커넥터의 워크플로 실행 목록 URL 조회가 실패하여 **독립 schedule의 5분 간격 연속 성공 미입증**.
 - 별도 OKX 원시 HTTP 응답 상태/본문 직접 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. 이전 14:25 KST 체크포인트의 stdout↔저장 SHA 일대일 대조 성공은 유지하되 이번 최신 실행에 대한 새 대조는 수행하지 못함. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입, 전체 복구 미완료, 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret은 이전 체크포인트상 미등록이며 우회·조회·노출·등록하지 않음.
+
+
+## 자동 복구 점검 — 2026-11-09 17:40 KST
+
+- main OKX OI JSON 관측 17:35:47.190 KST, `677058.923 ETH` (`ETH-USDT-SWAP` 단일 OKX 거래소, Binance/전체 시장 아님), blob `b919e36f0412c57657122c07678f7039bbc712fb`. GitHub Actions bot의 JSON 갱신 커밋 `a070f1a3` (17:25:49), `4bc7a028` (17:31:02), `08743c55` (17:35:47 KST)로 약 5분 간격 연속 저장 확인.
+- YAML의 schedule cron 및 workflow_run 보조 트리거 확인. GitHub Actions 실행 목록 조회는 커넥터 URL 제한으로 실패하여 **독립 schedule 연속 성공 미입증**. 원시 OKX HTTP 별도 대조, 최신 실행 stdout↔SHA 대조, 완성 보고서의 최신 OI 실측 반영 미검증. **OI 게이트 미통과, 펀딩비·선물 CVD 미진입, 전체 복구 미완료 및 완료 알림 금지.** Binance Cron Secret 우회·노출·등록 없음. 기존 수집기·현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
