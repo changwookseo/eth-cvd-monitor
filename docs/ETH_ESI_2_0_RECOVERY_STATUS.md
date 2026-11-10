@@ -3262,3 +3262,12 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions 전체 최신 목록에서 해당 워크플로 02:01, 02:05, 02:10, 02:15 KST 등 최근 5건 모두 `event=workflow_run`, `conclusion=success` (최신 [#42863120623](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42863120623)). JSON 저장 커밋 `2e6ef06` (01:41:13), `d56ee55` (01:46:10), `dc06b3c` (01:51:00), `c5b1468` (01:55:52), `c161f0a` (02:01:20), `f40325c` (02:05:53), `50626d9` (02:11:07), `d08074b` (02:15:56) KST를 직접 조회하여 연속 갱신 확인.
 - **독립 schedule의 인접한 2회 연속 성공 미입증**. 별도 OKX 원시 HTTP 응답 대조, 최신 job stdout↔저장 SHA 직접 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. 따라서 **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지**.
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-11 03:16 KST
+
+- 직전 02:19 KST 체크포인트를 읽고 main의 `eth_oi_okx_latest.json`, `.github/workflows/eth-oi-okx.yml` 및 GitHub Actions/커밋을 재조회. 수집기·워크플로·기존 보고서 파일은 수정하지 않음. YAML에 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 공존.
+- main JSON blob `f03e6aaa343f6177a177669ac170cb1b29df743c`: **OKX ETH-USDT-SWAP 단일 거래소** OI `697575.329 ETH`, 관측 `2026-11-10T18:15:53.614Z` (11일 03:15:53.614 KST), 수집 `18:15:53.693773Z`, 계약 `6975753.290`, USD 명목 `1412548186.705`. Binance 또는 시장 전체 OI 아님. 내부 VERIFIED는 독립 원시 HTTP 대조를 의미하지 않음.
+- 최근 전체 Actions 30건에서 해당 OKX 워크플로 5건(02:55~03:15 KST) 모두 `event=workflow_run`, `conclusion=success`. 최신 실행 [#42873392777](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42873392777). JSON 저장 커밋 `0eb1b0e` (02:55:51), `4d8fe7a` (03:01:13), `15fc305` (03:05:52), `06cc5fa` (03:10:59), `530a11f` (03:15:57) KST 확인: 약 5분 간격 연속 갱신. 최신 job stdout↔저장 SHA 일대일 대조는 미검증.
+- 독립 `schedule`의 **인접한 2회 연속 성공 미입증**. 별도 OKX 공개 API 원시 HTTP 요청은 DNS 실패(`Could not resolve host: www.okx.com`)로 대조 불가. 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
