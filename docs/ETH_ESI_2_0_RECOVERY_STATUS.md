@@ -3145,3 +3145,12 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions 최근 100건 중 OKX OI 워크플로 17건(12:10~13:30 KST) 모두 `event=workflow_run`, `conclusion=success`; 해당 범위 독립 schedule 0건. 앞서 09:17:55 KST 독립 schedule 성공 1건은 확인되었으나 **독립 schedule 2회 이상 연속 성공 미입증**.
 - JSON 저장 커밋 `ef58a92c` (13:05:46 KST), `568e6116` (13:10:57), `d83af5a0` (13:15:52), `add429d3` (13:20:48), `88ebdb79` (13:25:47), `df2bd2f0` (13:30:57) 확인. 약 5분 간격의 연속 main 저장. 최신 [실행 #42756332289](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42756332289)의 job #129631468089에서 수집·검증·저장 각 단계 성공 확인. 다만 stdout 원문과 저장 SHA 일대일 대조는 미검증.
 - 별도 OKX 원시 HTTP 응답 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 및 수집기/YAML 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-10 15:06 KST
+
+- 직전 13:33 KST 체크포인트를 확인한 후 main의 OKX OI JSON 및 workflow YAML, GitHub Actions 실행 목록을 재조회. YAML의 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 설정은 유지됨. 수집기·워크플로·기존 데이터 수정 없음.
+- main `eth_oi_okx_latest.json`: `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `value=678293.489 ETH`, `observed_at_utc=2026-11-10T06:05:45.985Z` (15:05:45.985 KST), `fetched_at_utc=2026-11-10T06:05:46.061430Z`, `oi_contracts=6782934.890`, `oi_usd=1439033551.588`, `status=VERIFIED`. **OKX 단일 거래소 OI; Binance OI나 시장 전체 OI 아님.** JSON 내부 VERIFIED는 독립 원시 HTTP 대조를 의미하지 않음.
+- GitHub Actions 최근 100건에서 정확한 `.github/workflows/eth-oi-okx.yml` 경로의 실행 17건(13:45~15:05 KST) 모두 `event=workflow_run`, `conclusion=success`; 해당 범위 독립 `schedule` 0건. 앞선 09:17 KST schedule 성공 1건은 기록 유지하되 독립 schedule 2회 이상 연속 성공은 미입증.
+- 약 5분 간격의 보조 실행 성공과 main의 최신 JSON 저장 확인. 이번 점검에서 별도 OKX 원시 HTTP 응답·stdout와 저장 SHA 일대일 대조·완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 미검증. 따라서 **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지**.
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
