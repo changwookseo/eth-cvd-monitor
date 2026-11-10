@@ -3288,3 +3288,12 @@ The initial statement that changing execution environment was required was prema
 - 최신 Actions 목록의 OKX OI 실행 5건(05:30~05:50 KST)은 모두 `workflow_run` 성공: #42896037350, #42896829332, #42897642285, #42898446715, #42899234555. 워크플로에 `schedule: 2-59/5 * * * *`가 설정되어 있으나, **인접한 독립 schedule 2회 연속 성공은 여전히 입증되지 않음**. 관측 JSON이 직전 체크포인트보다 갱신됨을 확인했으나 이번 실행에서는 개별 커밋 SHA↔job stdout 일대일 검증을 완료하지 못함.
 - 독립 OKX API 원시 응답 직접 대조와 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영도 이번 점검에서 검증하지 못함. **OI 전체 게이트 미통과; 펀딩비·선물 CVD 복구 단계로 진행하지 않음. 전체 복구 미완료, 완료 알림 금지.** 다른 워크플로가 실행 중인 사실은 단계 게이트 통과를 의미하지 않음.
 - Binance Cron importer의 `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-11 06:26 KST
+
+- 직전 05:54 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 및 GitHub Actions를 재조회. 수집기는 OKX 공개 API code=0·정확한 종목·양수/유한값·300초 신선도 검사 구현. YAML에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 공존. 코드·YAML 미변경.
+- main JSON blob `132bd1c75635d2d870a8fa3fb7e7a7f8e3d5daa0`: **OKX ETH-USDT-SWAP 단일 거래소** OI `677133.719 ETH`, 관측 `2026-11-10T21:25:49.478Z` (11일 06:25:49.478 KST), 수집 `21:25:49.558942Z`, 계약 `6771337.190`, USD 명목 `1393757876.492`. Binance 또는 시장 전체 OI 아님. 내부 VERIFIED는 독립 원시 HTTP 응답 대조를 의미하지 않음.
+- Actions 최근 100건에서 정확한 OKX OI 워크플로 17건(05:05~06:25 KST) 모두 `event=workflow_run`, `conclusion=success`. 최신 [실행 #42904940356](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42904940356)의 job #130140364803 수집·검증·저장 단계 성공. 원문 로그에서 최초 git push 경합 후 재시도 성공 `a5117ff..b0d0901 HEAD -> main` 및 `STORED` 확인. [커밋 b0d0901](https://github.com/changwookseo/eth-cvd-monitor/commit/b0d0901205b67525cd0f63d9a894f9e94244a0aa)은 06:25:52 KST에 `eth_oi_okx_latest.json`만 수정; 로그↔커밋 직접 연결 검증. 최근 5분 간격의 보조 실행과 JSON 갱신 지속.
+- **독립 schedule의 인접한 2회 연속 성공 미입증**. 별도 OKX 원시 HTTP 응답 독립 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 단계 미진입; 전체 복구 미완료; 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
