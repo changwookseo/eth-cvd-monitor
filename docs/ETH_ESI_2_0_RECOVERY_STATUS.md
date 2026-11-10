@@ -3219,3 +3219,11 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions 전체 최근 100건 중 정확한 OKX OI 워크플로 17건(19:55~21:15 KST) 모두 `event=workflow_run`, `conclusion=success`; 해당 범위 독립 `schedule` 0건. 09:17·16:33 KST 독립 예약 실행 성공 기록은 유지하지만 인접한 2회 연속 독립 schedule 성공은 미입증.
 - JSON 저장 커밋 `2580b87` (20:40:53 KST), `b572ebd` (20:45:56), `2d8878d` (20:50:49), `62f47e0` (20:55:50), `b49467d` (21:01:05), `cc6fab7` (21:05:49), `255cc1f` (21:10:50), `1f47dd2` (21:15:50) 확인. 최신 실행 [#42814225898](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42814225898)의 job #129823064208에서 수집·출력 신선도 검증·커밋 단계 모두 성공. 다만 최신 stdout 원문과 커밋 SHA 직접 대조는 이번 점검에서 미수행.
 - 별도 OKX 원시 HTTP 응답 독립 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·조회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-10 22:51 KST
+
+- 직전 21:20 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 재조회. 수집기·워크플로 수정 없음. 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 공존; 설정만으로 독립 예약 실행 성공을 판정하지 않음.
+- main JSON blob `3519ae27a4176924ec570b037103b03c3ff02ac1`: `exchange=OKX`, `symbol=ETH-USDT-SWAP`, `value=691687.648 ETH`, 관측 `2026-11-10T13:51:17.849Z` (22:51:17.849 KST), 수집 `13:51:17.926507Z`, 계약 `6916876.480`, USD 명목 `1432761794.067`, 내부 `status=VERIFIED`. **OKX 단일 거래소 OI이며 Binance OI 또는 시장 전체 OI가 아님.** 내부 VERIFIED는 별도 원시 HTTP 독립 대조가 아님.
+- GitHub 커밋 검색에서 최신 OI 저장 커밋 `ad550256b27be960199c3a71239b5b25c705888d` 등 여러 건을 확인. 직전 21:15 KST 관측 이후 JSON이 새로 갱신된 사실은 확인되나, 이번 조회에서 개별 커밋 시각·Actions 실행 이벤트 종류·로그 SHA의 일대일 대조는 확인하지 못했으므로 독립 schedule 인접 2회 연속 성공을 주장하지 않음.
+- 별도 OKX 원시 HTTP 응답 독립 대조 및 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
