@@ -3236,3 +3236,12 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions 전체 최근 100건에서 정확한 OKX OI 워크플로 17건(22:15~23:35 KST)이 모두 `event=workflow_run`, `conclusion=success`. 이번 범위 독립 `schedule` 0건. 앞서 09:17 및 16:33 KST의 개별 독립 예약 성공 기록은 유지하지만 **인접한 독립 schedule 2회 연속 성공은 여전히 미입증**.
 - 이전 체크포인트 이후 최신 JSON이 새 관측으로 교체되었으며 GitHub의 `Update verified OKX ETH OI` 저장 커밋들(최신 검색 결과 `4b099e8`, `6d8ccc6` 등)을 확인. 이번 점검에서 각 커밋 시각 및 최신 job stdout↔저장 SHA 일대일 대조는 수행하지 못함. 별도 OKX 원시 HTTP 응답 독립 대조와 완성 ETH ESI 2.0 보고서의 해당 실측값 반영도 미검증.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-11 01:11 KST
+
+- 최신 2026-11-10 23:38 KST 체크포인트를 먼저 확인한 뒤 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 재조회. 수집기에는 OKX API `code=0`, 정확한 종목, 양수·유한값 및 300초 신선도 검사가 구현됨. YAML에는 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run`이 공존하며 코드·워크플로 수정은 하지 않음.
+- main JSON blob `f05282ef7a42bab36fb2e8f54c6cd00d53519e19`: **OKX ETH-USDT-SWAP 단일 거래소** OI `692848.171 ETH`, 관측 `2026-11-10T16:11:05.651Z` (11일 01:11:05.651 KST), 수집 `16:11:05.727378Z`, 계약 `6928481.710`, USD 명목 `1404652667.959`. Binance OI 또는 시장 전체 OI가 아니며 내부 `VERIFIED`는 독립 원시 HTTP 대조를 뜻하지 않음.
+- GitHub Actions 최근 100건에서 정확한 OKX OI 워크플로 18건(11일 00:50~01:10 KST 포함)이 모두 성공. 17건 `workflow_run`, **1건 독립 `schedule` 성공**: [#42847810434](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42847810434), 11일 00:46:13 KST 생성, job #129940095083의 수집·검증·저장 단계 모두 성공. 앞서 10일 09:17, 16:33 KST 독립 schedule 성공 기록과 함께 누적 성공은 확인되나, **인접한 독립 schedule 2회 연속 성공은 미입증**.
+- 최신 보조 실행 [#42851948649](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42851948649)의 job #129954711214에서 수집·검증·저장 단계 모두 성공. JSON 저장 커밋 `1e23066` (00:41:08 KST), `8da03e6` (00:46:24), `5497995` (00:46:35), `18b4b7f` (00:51:07), `2e76ed7` (00:56:09), `b4d47e4` (01:01:35), `f9fc3e7` (01:05:53), `f74c4f2` (01:11:06) 확인. 약 5분 간격 연속 main 저장 지속. 단 개별 job 원문 stdout와 커밋 SHA 일대일 대조는 이번 점검에서 미수행.
+- 별도 OKX 원시 HTTP 직접 요청은 DNS 해석 실패(`Could not resolve host: www.okx.com`)로 대조 불가. 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
