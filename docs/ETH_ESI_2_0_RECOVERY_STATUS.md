@@ -3314,3 +3314,12 @@ The initial statement that changing execution environment was required was prema
 - main JSON: **OKX ETH-USDT-SWAP 단일 거래소** OI `671777.753 ETH`, 관측 `2026-11-10T23:10:56.093Z` (11일 08:10:56.093 KST), 수집 `23:10:56.175121Z`, 계약 `6717777.530`, USD 명목 약 `1372663636.037`. Binance OI 또는 시장 전체 OI 아님. 내부 VERIFIED는 독립 HTTP 원시 응답 검증이 아님.
 - GitHub Actions 최근 목록에서 07:50·07:55·08:00·08:05·08:10 KST OKX OI 5건 모두 `event=workflow_run`, `conclusion=success` (최신 [#42921157114](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42921157114)). 이전 07:50 관측 대비 JSON 갱신 확인. **인접한 독립 schedule 2회 연속 성공은 미입증**. 이번 점검에서 원시 HTTP 독립 대조, 최신 실행 로그↔저장 SHA 직접 연결, 완성 ESI 보고서의 최신 OI 실측 반영은 확인하지 못함.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-11 10:09 KST
+
+- 직전 08:13 KST 체크포인트를 읽고 main의 `eth_oi_okx_latest.json` 및 `.github/workflows/eth-oi-okx.yml`과 Actions 최근 실행·저장 커밋을 재조회. 코드·워크플로 변경 없음.
+- main JSON blob `5b8fdf9788d1c9328a3665c2f77ca158674f42bb`: **OKX ETH-USDT-SWAP 단일 거래소 OI 675224.278 ETH**, 관측 `2026-11-11T01:05:44.824Z` (10:05:44.824 KST), 수집 `01:05:44.905557Z`, 계약 `6752242.780`, USD 명목 약 `1380590567.770`. Binance 또는 전체 시장 OI 아님. 내부 VERIFIED는 독립 HTTP 대조를 의미하지 않음.
+- Actions 최근 전체 100건에서 OKX OI 보조 `workflow_run`이 09:30~10:05 KST 사이 약 5분 간격으로 성공. 최신 [#42936372580](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42936372580) 10:05:38 KST 생성, `event=workflow_run`, `conclusion=success`. OI 저장 커밋 [4fef511](https://github.com/changwookseo/eth-cvd-monitor/commit/4fef511894824f036ca11d0d81438d2d7291b05a) (10:05:45 KST), 2850ffe (10:01:11), 029e335 (09:55:46), 52d0c85 (09:50:53), 41bc830 (09:45:52), a9ecf03 (09:40:56) 등 연속 저장 확인. 단 이번 점검의 최신 job stdout↔SHA 일대일 대조는 미수행.
+- YAML에는 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 공존. 최근 관측 범위 내 OI 실행은 보조 트리거이며 **인접 독립 schedule 2회 연속 성공 미입증**. 별도 OKX 원시 HTTP 요청은 DNS 해석 실패(`Could not resolve host: www.okx.com`)로 독립 대조 불가. 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증.
+- **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
