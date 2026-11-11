@@ -3419,3 +3419,11 @@ The initial statement that changing execution environment was required was prema
 - 최근 Actions 목록의 해당 OKX OI 17건(19:01~20:20 KST) 모두 `event=workflow_run`, `conclusion=success`; 최신 [#43011173041](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43011173041) job #130490860378의 수집·신선도 검증·저장 단계 성공. 원문 로그의 `8bf05ad HEAD -> main` 및 `STORED`를 확인하여 [OI 저장 커밋 8bf05ad](https://github.com/changwookseo/eth-cvd-monitor/commit/8bf05ad)와 직접 연결. 직전 19:10 관측 이후 값과 시각 갱신 확인.
 - YAML의 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 공존. 앞선 18:30 점검에서 독립 schedule 1건 성공 확인했지만 **인접 독립 schedule 2회 연속 성공은 여전히 미입증**. 별도 OKX 원시 HTTP 요청은 DNS 해석 실패(`www.okx.com`)로 독립 대조 불가. 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-11 21:41 KST
+
+- 직전 20:21 KST 체크포인트를 읽고 main의 OKX OI 저장 JSON과 GitHub Actions 실행 목록을 재조회. 수집기·워크플로·정본 변경 없음.
+- main JSON blob `548490d53c5ae55b50a5ec4efd5d4c0c5a5537cb`: **OKX ETH-USDT-SWAP 단일 거래소 OI 688234.360 ETH**, 관측 `2026-11-11T12:40:51.098Z` (21:40:51.098 KST), 수집 `12:40:51.178360Z`, 계약 `6882343.600`, USD 명목 `1414865314.944`. Binance OI 또는 시장 전체 OI가 아님. JSON 내부 VERIFIED는 별도 원시 HTTP 독립 대조가 아님.
+- GitHub Actions 최근 100건 중 OKX OI 워크플로 17건(20:20~21:40 KST) 전부 `event=workflow_run`, `conclusion=success`; 최신 [#43022412514](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43022412514), 생성 21:40:44 KST. 직전 20:20 관측 이후 값과 시각 갱신 확인. **독립 `schedule` 인접 2회 연속 성공 미입증**. 이번 점검에서 별도 OKX 원시 HTTP 응답 대조, 최신 job stdout↔저장 커밋 SHA 직접 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 수행·확인하지 못함.
+- **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 단계 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret은 이전 체크포인트대로 미등록; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
