@@ -3392,3 +3392,12 @@ The initial statement that changing execution environment was required was prema
 - Actions 최근 전체 100건 중 OKX OI 워크플로 17건(15:50~17:10 KST)이 모두 `event=workflow_run`, `conclusion=success`; 최신 [#42984981076](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42984981076). JSON 저장 커밋 [5b3bcc5](https://github.com/changwookseo/eth-cvd-monitor/commit/5b3bcc5b2e79e59f6e6d1b12162fdea9deedd673) (17:10:53 KST), 2229f76 (17:05:46), c483f58 (17:01:07), f44eb5e (16:55:48), 3f09d49 (16:50:49), 5a6dc83 (16:45:49) 등 연속 갱신 확인. 최신 job stdout↔SHA 일대일 검증은 이번 점검에서 미수행.
 - 독립 `schedule: 2-59/5 * * * *`는 YAML에 있으나 **인접한 독립 schedule 2회 연속 성공 미입증**(최근 17건 전부 보조 `workflow_run`). 별도 OKX 원시 HTTP 응답 직접 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 복구 단계 미진입; 전체 복구 미완료; 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-11 18:30 KST
+
+- 직전 17:14 KST 체크포인트를 먼저 확인하고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`과 Actions 최근 실행을 재조회. 수집기 및 워크플로 변경 없음. YAML에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 공존.
+- main JSON blob `e8bddb619f56c8a37694e8d4044b95b29372719a`: **OKX ETH-USDT-SWAP 단일 거래소 OI 682046.291 ETH**, 관측 `2026-11-11T09:25:49.330Z` (18:25:49.330 KST), 수집 `09:25:49.389681Z`, 계약 `6820462.910`, USD 명목 약 `1402068919.483`. Binance OI 또는 전체 시장 OI가 아님. 내부 VERIFIED는 별도 원시 HTTP 대조가 아님.
+- GitHub Actions 최근 전체 100건의 OKX OI 실행 17건 중 보조 `workflow_run` 16건 성공 및 **독립 `schedule` 1건 성공을 새로 확인**: [#42985976562](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42985976562) 생성 17:18:21 KST, job #130407110776의 수집·신선도 검증·저장 단계 모두 success. 최신 보조 실행 [#42995083480](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42995083480) 18:25 KST 성공. **독립 schedule 인접 2회 연속 성공은 여전히 미입증**. 최신 실행 로그와 저장 커밋 SHA 직접 대조는 이번 점검에서 미수행.
+- 별도 OKX 공개 API 원시 HTTP 요청은 DNS 해석 실패로 독립 대조 불가. 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
