@@ -3365,3 +3365,12 @@ The initial statement that changing execution environment was required was prema
 - Actions 최근 전체 100건 중 해당 OKX OI 워크플로 17건(13:25~14:45 KST)이 모두 `event=workflow_run`, `conclusion=success`; 최신 [#42967856653](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42967856653). JSON 저장 커밋 `23203339`(14:10:56), `188ad8ae`(14:15:54), `097f6777`(14:20:50), `b09132b7`(14:25:46), `07b4c513`(14:31:00), `d2b41d96`(14:35:44), `bf014b4e`(14:40:54), `d2449ece`(14:45:53) UTC 05시대/KST 14시대로 약 5분 간격 저장 확인.
 - **독립 `schedule`의 인접 2회 연속 성공 미입증**(최근 17건 전부 보조 `workflow_run`). 별도 OKX 원시 HTTP 응답 독립 대조, 최신 job stdout↔저장 SHA 일대일 검증, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.**
 - Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-11 15:50 KST
+
+- 직전 14:49 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 및 GitHub Actions와 저장 커밋을 다시 확인. 수집기와 워크플로는 변경하지 않음. 수집기는 OKX 공개 API code=0, ETH-USDT-SWAP 일치, 양수/유한값, 300초 신선도 검사를 구현함.
+- main JSON blob `cb702e295f08e35dfd7cf9e931a730afdc3bac1f`: **OKX ETH-USDT-SWAP 단일 거래소** OI `682330.805 ETH`, 관측 `2026-11-11T06:45:52.264Z` (15:45:52.264 KST), 수집 `06:45:52.324494Z`, 계약 `6823308.050`, USD 명목 `1404509729.012`. Binance OI나 시장 전체 OI가 아님. 내부 VERIFIED는 별도 원시 HTTP 독립 대조를 의미하지 않음.
+- Actions 최근 100건에서 OKX OI 워크플로 완료 16건(14:30~15:45 KST)이 모두 `event=workflow_run`, `conclusion=success`; 15:50 KST 보조 실행 [#42975270126](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42975270126)은 조회 시 queued. 최신 완료 [#42974700837](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/42974700837). 저장 커밋 `cd9318a`(15:30:59), `2251b3e`(15:35:48), `ca678ff`(15:40:54), [`0381bd4`](https://github.com/changwookseo/eth-cvd-monitor/commit/0381bd4b03e0514f223718f30fe4e65b449b47b7)(15:45:56) 확인: 약 5분 간격 main 연속 갱신. 이번 점검에서는 최신 job 원문 stdout↔저장 SHA 일대일 대조 미수행.
+- YAML에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 공존. **독립 schedule 인접 2회 연속 성공은 미입증**(조회된 해당 워크플로 17건 전부 보조 트리거). 별도 OKX 원시 HTTP 응답 독립 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.**
+- Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
