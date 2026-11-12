@@ -3616,3 +3616,11 @@ The initial statement that changing execution environment was required was prema
 - OKX OI Actions [#43198772530](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43198772530) 및 [#43199533658](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43199533658) 모두 `event=workflow_run`, `conclusion=success`. 두 실행 모두 API 수집, 출력/신선도 검증, JSON commit 작업 단계 성공. **독립 schedule 인접 2회 연속 성공 증거는 아님**.
 - 독립 OKX 원시 HTTP 응답 직접 대조, 원문 stdout ↔ 저장 JSON SHA 대조, 완성 ETH ESI 2.0 보고서 최신 OI 실측 반영은 여전히 미검증. JSON 내부 VERIFIED는 독립 검증을 대체하지 않음.
 - **OI 전체 게이트 미통과; 펀딩비·선물 CVD 복구 게이트로 진입하지 않음; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` 미등록 체크포인트 유지, Secret 우회·노출·쓰기 없음. 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-12 20:52 KST
+- 이전 19:21 KST 체크포인트에서 이어서 OI 단계만 검증. `eth_oi_okx_live.py`와 `.github/workflows/eth-oi-okx.yml` 재확인. 독립 예약 cron `2-59/5 * * * *`과 보조 `workflow_run`이 별도 이벤트임을 확인.
+- main `eth_oi_okx_latest.json`: **OKX ETH-USDT-SWAP 단일 거래소 OI 681092.654 ETH**, observed `2026-11-12T11:50:49.845Z` (20:50:49.845 KST), fetched `2026-11-12T11:50:49.934913Z`, blob `d3bd39cd61d011099976473713a419ded5a9f6c9`, status VERIFIED. Binance 또는 시장 전체 OI가 아님.
+- 인접 보조 `workflow_run` [#43211903409](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43211903409) (11:45 UTC), [#43212631993](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43212631993) (11:50 UTC) 성공; 각 작업의 API 수집·신선도 검증·JSON 커밋 단계 성공. 저장 커밋 [1b369dc79](https://github.com/changwookseo/eth-cvd-monitor/commit/1b369dc79) (11:45:46 UTC), [2807111c6](https://github.com/changwookseo/eth-cvd-monitor/commit/2807111c6) (11:50:50 UTC) 확인.
+- **여전히 미검증:** 인접한 독립 `schedule` 2회 성공, 외부 OKX 원시 HTTP 응답 직접 대조(현재 환경 DNS `Temporary failure in name resolution`), 실행 원문 stdout ↔ 저장 JSON SHA 직접 대조, 최신 완성 ETH ESI 2.0 보고서의 해당 실측 OI 출력 반영. 내부 JSON의 VERIFIED 표시는 이 네 가지 독립 검증을 대체하지 않음.
+- **OI 전체 게이트 미통과.** 펀딩비·선물 CVD는 별도 수집 흔적이 있더라도 본 순차 복구 단계에서 검증·완료 처리하지 않음. 전체 복구 미완료 및 완료 알림 금지. Binance Cron `CRONJOB_API_KEY` Secret 미등록 상태 유지, 우회·노출·쓰기 없음. 현물 CVD·기술지표·정본·가중치·180일 백데이터 변경 없음.
