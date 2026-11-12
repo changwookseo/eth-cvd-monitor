@@ -3646,3 +3646,10 @@ The initial statement that changing execution environment was required was prema
 - GitHub Actions `ETH OKX Live OI` #43240587458 (14:45:57 UTC) 및 #43239718811 (14:40:56 UTC)는 `event=workflow_run`, `conclusion=success`. 최신 실행 jobs의 API 수집·출력 신선도 검증·JSON 저장 단계 success 확인. **독립 schedule 인접 2회 성공 증거는 아님**.
 - 최신 독립 OKX 원시 HTTP 응답 별도 대조, 원문 실행 stdout↔저장 blob SHA 직접 대조, 최신 완성 ETH ESI 2.0 보고서에서 실측 OI 출력 반영, 독립 schedule 인접 2회 연속 성공은 미검증. 내부 VERIFIED만으로 전체 게이트 통과 불가.
 - Actions 목록에서 OKX 펀딩 및 선물 CVD Candidate 워크플로가 별도로 실행되는 흔적은 관찰했으나 **OI 전체 게이트 미통과이므로 순차 복구의 펀딩비·선물 CVD 검증/완료 단계에 진입하지 않음**. 전체 복구 미완료 및 완료 알림 금지. Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·쓰기 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 미변경.
+
+
+## 자동 복구 점검 — 2026-11-13 00:21 KST
+- 최신 main `eth_oi_okx_latest.json`: OKX ETH-USDT-SWAP **단일 거래소** OI **680085.443 ETH**, 관측 `2026-11-12T15:20:57.675Z` (2026-11-13 00:20:57.675 KST), 수집 `15:20:57.749352Z`, blob `6cdceb43b098afd79e037b63105b323a120d8abe`, 내부 `status=VERIFIED`. Binance OI 또는 전체 시장 OI가 아님.
+- OKX OI GitHub Actions [#43245888363](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43245888363) (15:15:49 UTC) 및 [#43246786142](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43246786142) (15:20:50 UTC) 모두 `event=workflow_run`, `conclusion=success`; 두 실행의 API 수집, 신선도 검증, JSON 저장 job step success 확인. 독립 `schedule` 인접 2회 성공 증거는 아님.
+- 미검증: 독립 schedule 인접 2회 성공, 외부 OKX 원시 HTTP 응답 직접 대조, 원문 stdout ↔ 저장 JSON SHA 직접 대조, 완성 ETH ESI 2.0 보고서의 최신 실측 OI 출력 반영. 내부 VERIFIED만으로 OI 전체 게이트 통과 불가.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 복구 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·쓰기 없음. 현물 CVD·기술지표·정본·가중치·180일 백데이터 변경 없음.
