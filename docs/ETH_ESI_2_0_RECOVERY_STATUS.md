@@ -3557,3 +3557,12 @@ The initial statement that changing execution environment was required was prema
 - main `eth_oi_okx_latest.json` blob `7ca6d0658f44e879f18c0a6da1b88940d73ee206`: **OKX ETH-USDT-SWAP 단일 거래소 OI 658710.957 ETH**, 관측 `2026-11-12T03:15:43.705Z` (12:15:43.705 KST), 수집 `03:15:43.758811Z`, 계약 `6587109.570`, USD 명목 약 `1352340181.831`. 직전 11:40 관측 대비 값과 시각 갱신. Binance OI 또는 전체 시장 OI가 아님. JSON 내부 VERIFIED는 별도 원시 HTTP 응답 독립 대조가 아님.
 - GitHub 커밋 API에서 12:15 KST [저장 커밋 35629ae](https://github.com/changwookseo/eth-cvd-monitor/commit/35629aec95f292f7624043838ed5cd4b359deab7)와 직전 12:10 KST [c749d50](https://github.com/changwookseo/eth-cvd-monitor/commit/c749d500570e3ab76ebcaaec108e23c6cfb463ea)를 확인하여 약 5분 간격 연속 JSON 저장 확인. 워크플로의 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 설정은 유지. 다만 GitHub 연결에서 Actions 실행 목록 API URL이 INVALID_ARGUMENT로 거부되어 **독립 schedule 인접 2회 성공 및 최신 실행 stdout↔저장 SHA 직접 대조 미검증**.
 - 별도 OKX 원시 HTTP 응답 독립 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-12 14:11 KST
+
+- 최신 12:17 KST 체크포인트를 먼저 확인하고 main의 OKX OI JSON·워크플로와 최근 OI 저장 커밋을 재조회. 기존 수집기, 워크플로, 현물 CVD, 기술지표, 보고서 정본, 가중치(20/15/18/20/12/10/5), 180일 백데이터 변경 없음.
+- main `eth_oi_okx_latest.json` blob `946add08d673339f3d630a1307f6fe02ee313e5a`: **OKX ETH-USDT-SWAP 단일 거래소 OI 667514.984 ETH**, 관측 `2026-11-12T05:10:46.689Z` (14:10:46.689 KST), 수집 `05:10:46.750142Z`, 계약 `6675149.840`, USD 명목 `1366636802.4924026`, 내부 `status=VERIFIED`. 이전 12:15 관측보다 갱신됨. Binance OI 또는 전체 시장 OI가 아님. 내부 VERIFIED는 별도 OKX 원시 HTTP 응답 독립 대조와 다름.
+- GitHub 저장 커밋 [14:10 KST acabe5d](https://github.com/changwookseo/eth-cvd-monitor/commit/acabe5d5e4af8956e16880fa6c63df9c0b5cc436), [14:05 KST 92e5c4c](https://github.com/changwookseo/eth-cvd-monitor/commit/92e5c4c71e27e5bf58ed5bd7bb29b0211f3e8cac), 14:01 KST d5b9a31 등 연속 JSON 저장 커밋 확인. 약 5분 간격 저장은 확인되지만 트리거 종류는 커밋만으로 판별할 수 없음.
+- YAML에 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 설정 유지. GitHub Actions 워크플로 실행 목록 API는 연결에서 `INVALID_ARGUMENT`로 거부되어 **독립 schedule 인접 2회 성공 미검증**. 이번 실행에서 원문 job 로그↔저장 SHA 직접 대조, 별도 OKX 원시 HTTP 응답 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 출력 반영도 미검증.
+- **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음.
