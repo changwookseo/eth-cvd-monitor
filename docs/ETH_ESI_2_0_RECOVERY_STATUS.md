@@ -3593,3 +3593,9 @@ The initial statement that changing execution environment was required was prema
 - 별도 OKX 원시 HTTP 요청은 실행 환경 DNS `Temporary failure in name resolution`로 실패. 최신 job stdout ↔ 저장 SHA 직접 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 출력 반영도 미검증. 보고서 호출 규칙에 조회 지침이 존재하지만 실제 출력 증거로 간주하지 않음.
 - 저장소에는 별도의 OKX 펀딩 워크플로 실행이 관찰되나, **OI 전체 게이트 미통과이므로 본 순차 복구 작업에서 펀딩비·선물 CVD 게이트로 진입하거나 완료 판정하지 않음**. Binance Cron importer `CRONJOB_API_KEY` Secret은 이전 체크포인트의 미등록 상태를 유지하고 우회·노출·재발급·등록 시도 없음.
 - **판정: OI 부분 복구 및 보조 자동 연속 수집 확인 / 독립 schedule 인접 성공·원시 HTTP 독립 대조·실제 보고서 출력 반영 미검증 → 전체 OI 게이트 미통과. 전체 복구 미완료; 완료 알림 금지.**
+
+
+## 자동 복구 점검 — 2026-11-12 17:35 KST
+- main OKX ETH-USDT-SWAP 단일 거래소 OI 673535.783 ETH; observed 2026-11-12T08:30:54.213Z (17:30:54.213 KST), JSON blob e7fe41762765bbc0a253e4c34c13ab469e88713c. Binance/시장 전체 OI 아님.
+- OKX OI workflow_run #43183551415 및 #43182822712 성공. #43183551415 수집·신선도 검증·저장 단계 성공; 08:30:54Z 커밋 dcf4e0bedc6b86c5d6ede08de37305d9538f9d63, 08:25:38Z 커밋 23ae9ad3d6313fbf86db807f27939cbc848066e8로 연속 저장 확인.
+- 독립 schedule 인접 2회 성공, 독립 OKX 원시 HTTP 대조, stdout-SHA 대조, 완성 보고서 실측 반영은 미검증. OI 게이트 미통과; 펀딩비·선물 CVD 단계 미진입, 완료 알림 금지. Cron Secret 및 기존 지표·정본·가중치·180일 데이터 미변경.
