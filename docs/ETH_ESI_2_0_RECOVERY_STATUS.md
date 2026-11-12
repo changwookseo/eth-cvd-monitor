@@ -3566,3 +3566,11 @@ The initial statement that changing execution environment was required was prema
 - GitHub 저장 커밋 [14:10 KST acabe5d](https://github.com/changwookseo/eth-cvd-monitor/commit/acabe5d5e4af8956e16880fa6c63df9c0b5cc436), [14:05 KST 92e5c4c](https://github.com/changwookseo/eth-cvd-monitor/commit/92e5c4c71e27e5bf58ed5bd7bb29b0211f3e8cac), 14:01 KST d5b9a31 등 연속 JSON 저장 커밋 확인. 약 5분 간격 저장은 확인되지만 트리거 종류는 커밋만으로 판별할 수 없음.
 - YAML에 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 설정 유지. GitHub Actions 워크플로 실행 목록 API는 연결에서 `INVALID_ARGUMENT`로 거부되어 **독립 schedule 인접 2회 성공 미검증**. 이번 실행에서 원문 job 로그↔저장 SHA 직접 대조, 별도 OKX 원시 HTTP 응답 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 출력 반영도 미검증.
 - **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입, 전체 복구 미완료, 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음.
+
+
+## 자동 복구 점검 — 2026-11-12 14:56 KST
+
+- 직전 14:11 KST 체크포인트를 읽고 main의 OKX OI 수집기, 워크플로, JSON 및 JSON 저장 커밋을 재조회. 코드·워크플로·기존 지표 수정 없음.
+- main JSON blob `2f24ef83939ac5fe5c55a85f725a5862559f9d40`: **OKX ETH-USDT-SWAP 단일 거래소 OI 671778.962 ETH**, 관측 `2026-11-12T05:55:45.533Z` (14:55:45.533 KST), 수집 `05:55:45.588956Z`, 계약 `6717789.620`, USD 명목 `1374661289.9406028`. 이전 14:10 KST 관측 대비 값·시각 갱신. Binance OI 또는 전체 시장 OI 아님. JSON 내부 VERIFIED는 별도 OKX 원시 HTTP 응답 독립 대조가 아님.
+- GitHub API에서 14:55:46 KST 저장 커밋 [8580d8f](https://github.com/changwookseo/eth-cvd-monitor/commit/8580d8f31bb3ec4d83163f67fd94a7978d0368d6)와 14:50:50 KST 저장 커밋 `cccfee7`을 확인하여 약 5분 간격 연속 JSON 저장을 재확인. YAML의 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 유지. 다만 Actions 실행 목록 URL은 GitHub 연결에서 INVALID_ARGUMENT로 거부되어 **인접 독립 schedule 2회 연속 성공 미입증**. 이전에 확인된 단일 schedule 성공은 이 조건을 충족하지 않음.
+- 이번 점검에서 최신 job 원문 로그↔저장 SHA 직접 대조, 별도 OKX 원시 HTTP 응답 독립 대조, 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 미변경.
