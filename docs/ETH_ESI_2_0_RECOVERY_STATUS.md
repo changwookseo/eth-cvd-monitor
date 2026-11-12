@@ -3524,3 +3524,11 @@ The initial statement that changing execution environment was required was prema
 - main `eth_oi_okx_latest.json`의 **OKX ETH-USDT-SWAP 단일 거래소 OI 650507.798 ETH**, 관측 `2026-11-11T23:20:51.868Z` (2026-11-12 08:20:51.868 KST), 수집 `23:20:51.949569Z`, 계약 `6505077.980`, USD 명목 `1327875062.979`. 07:40 관측 대비 값·관측시각 갱신 확인. Binance 또는 시장 전체 OI가 아님. JSON 내부 VERIFIED는 별도 OKX 원시 HTTP 대조와 구별.
 - 이번 연결의 GitHub fetch는 Actions 워크플로 실행 목록 URL을 허용하지 않아 독립 `schedule` 인접 2회 성공 및 최신 job 로그↔저장 SHA 직접 대조를 새로 검증하지 못함. 별도 OKX 원시 HTTP 독립 응답 대조와 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.**
 - Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
+
+## 자동 복구 점검 — 2026-11-12 09:25 KST
+
+- 직전 08:23 KST 체크포인트를 먼저 읽고 main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`, `docs/ETH_ESI_2_0_REPORT_CALL_RULES.md`를 다시 조회. 코드·워크플로·보고서 정본 수정 없음.
+- main JSON blob `1b87bb89d54b06a64ad0c8798297bd43bff638cb`: **OKX ETH-USDT-SWAP 단일 거래소 OI 653834.135 ETH**, 관측 `2026-11-12T00:20:49.759Z` (09:20:49.759 KST), 수집 `00:20:49.844996Z`, 계약 `6538341.350`, USD 명목 `1345688724.950253`. 08:20 KST 체크포인트 이후 값·관측시각 갱신. Binance OI/전체 시장 OI 아님. 내부 `VERIFIED`는 별도 OKX 원시 HTTP 독립 대조가 아님.
+- 수집기의 OKX 공개 API `code=0`, 종목·수치·300초 신선도 검사와 워크플로의 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run`, JSON 저장·push 재시도 로직 확인. 그러나 GitHub 연결의 Actions 실행 목록 API URL 접근이 `INVALID_ARGUMENT`로 거부되어 **독립 schedule 인접 2회 성공** 및 이번 최신 실행 로그↔저장 SHA 직접 대조는 새로 검증하지 못함. 별도 OKX 원시 HTTP 응답 독립 대조 및 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영도 미검증. 보고서 호출 규칙의 조회 지침만으로 실측 반영 성공을 선언하지 않음.
+- **OI 전체 게이트 미통과 → 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료, 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·정본·7지표 가중치·180일 백데이터 변경 없음.
