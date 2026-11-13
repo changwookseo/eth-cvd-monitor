@@ -1,3 +1,10 @@
+## 자동 복구 점검 — 2026-11-13 17:43 KST
+- 직전 16:58 KST 체크포인트를 먼저 읽고 OI 게이트만 검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 및 보고서 호출 규칙을 직접 재조회. OKX 공개 API 단일 `ETH-USDT-SWAP`의 `oiCcy`(ETH), `code=0`, 거래소 관측시각 및 300초 신선도 검사 로직 유지.
+- main JSON의 **OKX ETH-USDT-SWAP 단일 거래소 OI 712825.850 ETH**, 거래소 관측 `2026-11-13T08:40:58.208Z` (17:40:58.208 KST), 수집 `08:40:58.283718Z`, 내부 `status=VERIFIED`, blob SHA `6f9f874b21ab5e7dd6560198cc7a25f0e3c43be7`. 16:55 KST 관측 이후 갱신. Binance OI 또는 전체 시장 OI가 아님.
+- GitHub Actions 최신 OKX 보조 `workflow_run` [#43395106807](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43395106807) (08:40:50 UTC)와 [#43394449629](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43394449629) (08:35:46 UTC) 모두 success. 독립 `schedule` 최근 성공 [#43385969455](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43385969455) (07:28:11 UTC) 및 [#43339979206](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43339979206) (00:48:23 UTC)은 인접한 5분 간격 실행이 아니므로 **독립 예약 2회 연속 성공 미입증**. 다른 워크플로의 예약 성공을 OKX 성공으로 계산하지 않음.
+- 별도 OKX 원시 HTTP 응답 직접 대조, 최신 job stdout↔저장 JSON SHA 직접 대조, 실제 생성된 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 이번 점검에서 입증하지 못함. 보고서 호출 규칙의 OKX 참조 지시만으로 실측 반영을 인정하지 않음. GitHub Actions 예약 실행 간격은 설정값과 실제 실행 시각이 다름; 근거 없는 성공 판정이나 무검증 코드 변경을 하지 않음.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 상태 문서 외 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-13 16:58 KST
 - 최신 15:45 KST 체크포인트를 먼저 읽고 OI 게이트만 점검. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 직접 조회. collector는 OKX 공개 API `ETH-USDT-SWAP` 단일 상품의 `oiCcy`(ETH), 응답 `code=0`, 관측시각 및 300초 신선도를 검사. 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 병존.
 - main JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 709963.354 ETH**, 거래소 관측 `2026-11-13T07:55:54.388Z` (16:55:54.388 KST), 수집 `07:55:54.443907Z`, 내부 `status=VERIFIED`, blob SHA `b8dffd62da56c0b8330c20aa90723a8e7d70e21e`. 이전 15:40 KST 관측 대비 갱신. Binance OI 또는 전체 시장 OI 아님.
