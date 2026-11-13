@@ -1,3 +1,11 @@
+## 자동 복구 점검 — 2026-11-13 20:09 KST
+- 직전 18:59 KST 체크포인트 확인 후 OI 게이트만 검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 및 보고서 호출 규칙 직접 조회. OKX 공개 API `ETH-USDT-SWAP` 단일 상품 `oiCcy`(ETH), `code=0`, 거래소 관측시각과 300초 신선도 검사 로직 유지. 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 병존.
+- main JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 717493.860 ETH**, 관측 `2026-11-13T11:05:55.898Z` (20:05:55.898 KST), 수집 `11:05:55.976961Z`, 내부 `status=VERIFIED`, blob SHA `eb9a9c519238fb4fd0b59589c42f06f8dee51023`. 직전 18:55 관측 이후 갱신. Binance OI나 시장 전체 OI 아님.
+- GitHub Actions [#43414259433](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43414259433) (11:05:47 UTC), [#43413601532](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43413601532) (11:00:59 UTC) 모두 `workflow_run` success. 각 jobs API에서 API 수집·신선도 검증·커밋 단계 success. 독립 예약 실행 연속 성공으로 간주하지 않음.
+- 전체 `event=schedule` 조회에서 가장 최근 OKX 독립 예약 성공은 [#43385969455](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43385969455) (07:28:11 UTC), 그 이전 [#43339979206](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43339979206) (00:48:23 UTC). 5분 간격 인접 독립 schedule 2회 성공 미입증. 다른 워크플로의 schedule 성공은 제외.
+- 별도 실행환경 OKX 원시 HTTP 요청은 DNS 해석 실패. 이번 실행의 원문 stdout↔저장 JSON SHA 직접 대조 및 실제 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영 미검증. `VERIFIED`는 수집기 내부 상태이며 전체 게이트 통과가 아님.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 상태 문서만 갱신하며 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-13 18:59 KST
 - 최신 17:43 KST 체크포인트를 먼저 읽고 OI 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 및 보고서 호출 규칙을 직접 조회. 수집기는 OKX 공개 API `ETH-USDT-SWAP` 단일 종목의 `oiCcy`(ETH), `code=0`, 관측시각 및 300초 신선도를 검증하도록 구현되어 있음. 워크플로에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 병존.
 - main JSON의 **OKX ETH-USDT-SWAP 단일 거래소 OI 719511.309 ETH**, 거래소 관측 `2026-11-13T09:55:51.087Z` (18:55:51.087 KST), 수집 `09:55:51.167985Z`, 내부 `status=VERIFIED`, blob SHA `4570a87662ac37c67ff1790af787b300ea3ed847`. 이전 17:40 관측 대비 갱신. Binance OI나 전체 시장 OI가 아님.
