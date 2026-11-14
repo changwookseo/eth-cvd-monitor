@@ -1,3 +1,11 @@
+## 자동 복구 점검 — 2026-11-15 02:06 KST
+- 직전 01:07 KST 체크포인트를 읽고 OI 선행 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 재조회. 수집기는 OKX 공개 API의 ETH-USDT-SWAP 단일 상품 `oiCcy`(ETH), 응답 `code=0`, 관측시각 및 300초 신선도를 검사하도록 구현되어 있음.
+- main JSON의 **OKX ETH-USDT-SWAP 단일 거래소 OI 706460.911 ETH**, 거래소 관측 `2026-11-14T17:06:02.854Z` (02:06:02.854 KST), 수집 `17:06:02.938309Z`, 내부 `VERIFIED`, blob SHA `749fc5c39641e89463c287a8b9fbe364b37a03fc`. 직전 01:05 관측보다 갱신됨. Binance OI 또는 시장 전체 OI가 아님.
+- 보조 Actions [#43619224708](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43619224708) (17:05:56 UTC) 및 [#43618759823](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43618759823) (17:01:04 UTC) 모두 `workflow_run` success. 두 실행의 jobs API에서 API 수집·신선도 검사·JSON 커밋 단계 모두 success 확인. 단계 성공만으로 실제 신규 커밋이나 실행 stdout↔저장 JSON SHA 대조까지 입증되지는 않음.
+- 전체 최근 100건의 `event=schedule` 목록에서 가장 최근 OKX 독립 예약 성공은 [#43609708642](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43609708642) (15:21:04 UTC), 그 전 [#43576665342](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43576665342) (08:36:59 UTC). **인접한 독립 schedule 2회 연속 성공 미입증**. 보조 workflow_run 성공과 구분.
+- 별도 OKX 원시 HTTP 응답 본문 직접 대조, 최신 실행 원문 stdout↔저장 JSON 전체 SHA 직접 대조, 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 이번 회차 미검증. 내부 VERIFIED는 전체 게이트 통과가 아님.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-15 01:07 KST
 - 직전 2026-11-14 23:40 KST 체크포인트를 먼저 읽고 OI 선행 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 직접 재조회. 수집기는 OKX 공개 API ETH-USDT-SWAP 단일 상품의 `oiCcy`(ETH), 응답 `code=0`, 거래소 관측시각 및 300초 신선도를 검사하도록 구현됨. 워크플로에 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 병존.
 - main 최신 JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 704757.920 ETH**, 관측 `2026-11-14T16:05:49.009Z` (2026-11-15 01:05:49.009 KST), 수집 `16:05:49.092724Z`, 내부 `VERIFIED`. 직전 23:35 관측 이후 갱신. Binance OI 또는 전체 시장 OI가 아님.
