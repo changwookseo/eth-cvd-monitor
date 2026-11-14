@@ -1,3 +1,11 @@
+## 자동 복구 점검 — 2026-11-14 23:40 KST
+- 직전 22:50 KST 체크포인트 확인 후 OI 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 재조회. 수집기는 OKX 공개 API `ETH-USDT-SWAP` 단일 상품의 `oiCcy`(ETH), 응답 `code=0`, 거래소 관측시각 및 300초 신선도를 검사하도록 구현됨.
+- main JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 694299.778 ETH**, 관측 `2026-11-14T14:35:49.184Z` (23:35:49.184 KST), 수집 `14:35:49.244393Z`, 내부 `VERIFIED`, blob SHA `ae974813530d4a8fb655b439c405a8862da01870`. 22:45 관측보다 갱신됨. Binance OI 또는 전체 시장 OI가 아님.
+- [#43605679408](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43605679408) (14:35:41 UTC) 및 [#43605263750](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43605263750) (14:31:03 UTC)는 모두 보조 `workflow_run` success. 최신 #43605679408의 API 수집·신선도 검사·JSON 커밋 단계 success를 jobs API에서 확인. 단계 success만으로 실행 원문과 저장 파일 전체 SHA 대조가 입증되는 것은 아님.
+- 최근 100개 전체 `event=schedule` 중 OKX 독립 예약 실행은 [#43576665342](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43576665342) (08:36:59 UTC)와 [#43543037732](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43543037732) (01:51:26 UTC) 등이 success이나 수시간 간격. **설정된 5분 주기의 인접 독립 schedule 2회 연속 성공은 미입증**.
+- 별도 OKX 원시 HTTP 본문 직접 교차대조, 최신 stdout↔저장 JSON 전체 SHA 대조, 실제 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 미검증. collector 내부 VERIFIED는 전체 게이트 통과를 뜻하지 않음.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 이번에는 상태 문서만 변경하고 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-14 22:50 KST
 - 직전 21:55 KST 체크포인트를 먼저 읽고 OI 선행 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 확인. OKX 공개 API 단일 ETH-USDT-SWAP `oiCcy`(ETH), `code=0`, 거래소 관측시각 및 300초 신선도 검사 구현 유지.
 - main JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 709913.640 ETH**, 거래소 관측 `2026-11-14T13:45:49.355Z` (22:45:49.355 KST), 수집 `13:45:49.430316Z`, 내부 `VERIFIED`, blob SHA `dfe3dc1ddcb3a810cb846e17372e5bfaf0b914cd`. 이전 21:55 관측 대비 갱신. Binance OI 또는 시장 전체 OI가 아님.
