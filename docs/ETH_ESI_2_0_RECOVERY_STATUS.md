@@ -1,3 +1,11 @@
+## 자동 복구 점검 — 2026-11-15 15:45 KST
+- 직전 14:30 KST 체크포인트를 먼저 확인. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`과 보고서 호출 규칙을 재조회. 수집기는 OKX 공개 API 단일 `ETH-USDT-SWAP`의 `oiCcy`(ETH), `code=0`, 관측시각 및 300초 신선도를 검증. 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 병존.
+- main 최신 JSON blob SHA `2b5ae7971ce73bd71db236a2b7ec1fa44fa04418`: **OKX ETH-USDT-SWAP 단일 거래소 OI 682710.791 ETH**, 거래소 관측 `2026-11-15T06:41:08.260000+00:00` (15:41:08.260 KST), 수집 `06:41:08.313327Z`, 내부 `status=VERIFIED`. 직전 14:25 관측보다 갱신. Binance OI 또는 시장 전체 OI 아님.
+- 보조 `workflow_run` [#43686546069](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43686546069) (06:40:51 UTC) 및 [#43686164617](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43686164617) (06:35:47 UTC) 모두 success. 두 실행의 jobs API에서 API 수집·신선도 검증·JSON 커밋 단계 success 확인. 단계 성공만으로 stdout↔JSON 전체 SHA 동일성은 입증되지 않음.
+- 최근 `event=schedule` 100건에서 OKX 독립 예약 성공은 [#43678396890](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43678396890) (04:49:05 UTC), 이전 [#43655293571](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43655293571) (23:51:20 UTC). 인접한 5분 독립 schedule 2회 연속 성공 미입증. 보조 workflow_run을 독립 예약으로 간주하지 않음.
+- 별도 OKX 원시 HTTP 응답 직접 대조, 최신 실행 stdout↔저장 JSON 전체 SHA 대조, 실제 생성된 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 미검증. 보고서 호출 규칙에 OKX OI 조회 지시가 존재하지만 실제 보고서 반영의 증거는 아님.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 복구 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 상태 문서 외 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-15 14:30 KST
 - 직전 13:22 KST 체크포인트를 먼저 읽고 OI 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 조회. 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 병존.
 - main JSON **OKX ETH-USDT-SWAP 단일 거래소 OI 687744.775 ETH**, 거래소 관측 `2026-11-15T05:25:58.859Z` (14:25:58.859 KST), 수집 `05:25:58.934122Z`, 내부 `status=VERIFIED`, blob SHA `433f443634f424b525572f3ed4e904c888458e95`. 이전 13:20 관측보다 갱신. Binance OI나 전체 시장 OI가 아님.
