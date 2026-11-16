@@ -1,3 +1,10 @@
+## 자동 복구 점검 — 2026-11-16 10:13 KST
+- 직전 09:43 KST 체크포인트를 먼저 읽고 OI 선행 게이트만 점검. main 수집기 `eth_oi_okx_live.py`(blob `6661e379f516b2457ab112a5dee3f4a6a1a41c78`)와 워크플로 `.github/workflows/eth-oi-okx.yml`(blob `e83eda4680206efbc50952e4e0dde49a501a2c06`) 확인: OKX 공개 API 단일 ETH-USDT-SWAP `oiCcy`(ETH), 거래소 관측시각·300초 신선도 검사; 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 병존.
+- main `eth_oi_okx_latest.json` blob `f20cdc0ed21d7918bf4f3e972b149804fdb9899e`: **OKX ETH-USDT-SWAP 단일 거래소 OI 671741.759000001 ETH**, 관측 `2026-11-16T01:11:12.082Z` (10:11:12.082 KST), 수집 `01:11:12.135053Z`, 내부 `status=VERIFIED`. 직전 09:41 관측보다 갱신. Binance 또는 시장 전체 OI가 아님.
+- 보조 [#43784726695](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43784726695) (01:10:57 UTC) 및 [#43784204941](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43784204941) (01:05:47 UTC) 모두 `workflow_run` success. 최신 실행 jobs API에서 API 수집·신선도 검사·JSON 커밋 단계 success 확인. 단계 성공만으로 신규 커밋 또는 stdout↔저장 SHA 직접 일치가 입증되지는 않음.
+- 최근 `event=schedule` 100건 중 OKX 독립 예약 성공 최신은 [#43774432171](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43774432171) (23:22:13 UTC), 이전 [#43750090961](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43750090961) (19:02:03 UTC). 인접 독립 예약 2회 연속 성공 미입증. 별도 OKX 원시 HTTP 본문 직접 대조, 최신 job stdout↔저장 JSON 전체 SHA 대조, 완성 ETH ESI 2.0 보고서 최신 실측 반영 미검증.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 상태 문서 외 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-16 09:43 KST
 - 직전 09:00 KST 체크포인트를 먼저 확인. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 재조회. 수집기는 OKX 공개 ETH-USDT-SWAP 단일 상품의 `oiCcy`(ETH) 및 300초 신선도 검사. 워크플로에 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 병존.
 - main JSON blob SHA `7475e714b97bb43b60890b475266837ccc720f32`: **OKX ETH-USDT-SWAP 단일 거래소 OI 671499.235 ETH**, 거래소 관측 `2026-11-16T00:41:00.529Z` (09:41:00.529 KST), 수집 `00:41:00.581673Z`, 내부 `status=VERIFIED`. 직전 08:55:50.773 KST 관측 이후 갱신. Binance 또는 전체 시장 OI 아님.
