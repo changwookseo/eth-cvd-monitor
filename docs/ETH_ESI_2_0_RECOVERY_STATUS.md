@@ -1,3 +1,10 @@
+## 자동 복구 점검 — 2026-11-17 13:34 KST
+- 직전 12:48 KST 체크포인트를 먼저 확인하고 OI 게이트만 재점검. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 조회. OKX 공개 ETH-USDT-SWAP 단일 거래소 `oiCcy`(ETH), API code=0 및 300초 신선도 검증 로직, 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 구성 유지.
+- main 최신 JSON blob `f7132dc49782c995423eab7e5a61fb0014c28011`: **OKX ETH-USDT-SWAP 단일 거래소 OI 670544.814 ETH**, 거래소 관측 `2026-11-17T04:31:06.262Z` (13:31:06.262 KST), 수집 `04:31:06.343715Z`, 내부 status=VERIFIED. 이전 12:45 관측 이후 갱신. Binance OI 또는 전체 시장 OI가 아님.
+- GitHub Actions 최근 보조 `workflow_run` [#44017708647](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44017708647) (04:30:57 UTC) 및 [#44017097126](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44017097126) (04:25:36 UTC) 모두 success. 전체 `event=schedule` 최근 100건 중 OKX 독립 예약 성공 최신 [#44011834416](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44011834416) (03:40:21 UTC), 직전 [#43954833115](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/43954833115) (11/16 20:55:55 UTC). **인접한 독립 schedule 2회 연속 성공은 미입증**. 최근 보조 성공은 독립 예약 성공으로 취급하지 않음.
+- 별도 OKX 원시 HTTP 응답 본문 직접 대조, 최신 실행 stdout↔저장 JSON 전체 SHA 대조, 실제 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 이번 점검에서 미검증. collector 내부 VERIFIED는 전체 게이트 통과가 아님.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 상태 문서 외 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-17 12:48 KST
 - 직전 11:47 KST 체크포인트를 먼저 읽고 OI 선행 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 조회. 공개 OKX ETH-USDT-SWAP 단일 거래소 `oiCcy`(ETH), code=0, 관측시각 및 300초 신선도 검증 로직과 독립 `schedule: 2-59/5 * * * *`·보조 `workflow_run` 구성 유지.
 - main JSON blob `346bb34f6caae68a5d7bcb948c4cc4471c322c78`: **OKX ETH-USDT-SWAP 단일 거래소 OI 666583.017 ETH**, 거래소 관측 `2026-11-17T03:45:56.228Z` (12:45:56.228 KST), 수집 `03:45:56.286740Z`, 내부 status=VERIFIED. 이전 11:45 관측 이후 갱신. Binance OI나 시장 전체 OI 아님.
