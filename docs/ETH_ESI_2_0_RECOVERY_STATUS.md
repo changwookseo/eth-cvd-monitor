@@ -1,3 +1,11 @@
+## 자동 복구 점검 — 2026-11-20 14:31 KST
+- 직전 13:51 KST 체크포인트를 먼저 확인하고 OI 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 조회. OKX 공개 API `ETH-USDT-SWAP` 단일 계약의 `oiCcy`(ETH), 거래소 관측시각 및 300초 신선도 검사 코드 유지. 워크플로 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 병존.
+- main 최신 JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 692026.028 ETH**, 거래소 관측 `2026-11-20T05:31:07.009Z` (14:31:07.009 KST), 수집 `05:31:07.083906Z`, 내부 `status=VERIFIED`. 직전 13:50:54.601 KST 대비 갱신. Binance OI 또는 전체 시장 OI 아님.
+- 보조 `workflow_run` [#44681534836](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44681534836) (05:31:01 UTC), [#44680958996](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44680958996) (05:25:43 UTC) 모두 success; jobs API에서 API 수집·신선도 검사·JSON 저장 단계 success. 저장 단계 success는 SKIP 가능성이 있으므로 신규 저장과 동일시하지 않음.
+- 최근 `event=schedule` 목록의 OKX OI 독립 성공은 [#44649661514](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44649661514) (00:55:14 UTC), [#44589494460](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44589494460) (전날 18:35:53 UTC). **인접 5분 간격 독립 예약 2회 연속 성공 미입증**. 다른 펀딩·선물 CVD 워크플로의 schedule 성공은 OI 게이트 증거로 대체하지 않음.
+- 별도 OKX 원시 HTTP 응답 직접 교차검증, 최신 실행 원문 stdout↔저장 JSON 전체 바이트 SHA 대조, 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 미검증. 내부 VERIFIED와 보조 실행 성공만으로 전체 게이트 통과 불가.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 상태 문서 외 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-20 13:51 KST
 - 직전 12:49 KST 체크포인트를 먼저 읽고 OI 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 조회. 수집기는 OKX 공개 API의 단일 `ETH-USDT-SWAP` `oiCcy`(ETH), 거래소 관측시각, 300초 신선도를 검사. 워크플로에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 병존.
 - main JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 691748.561 ETH**, 거래소 관측 `2026-11-20T04:50:54.601Z` (13:50:54.601 KST), 수집 `04:50:54.653606Z`, 내부 `status=VERIFIED`. 직전 12:45 관측 이후 갱신. Binance OI나 전체 시장 OI가 아님.
