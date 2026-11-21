@@ -152,6 +152,9 @@ def main():
         oi[hour] = {'oi_observed_at_utc': latest[0].isoformat(), 'oi_eth': latest[1], 'oi_usdt': latest[2], 'oi_samples': len(snapshots)}
 
     funding = {}
+    # First try public daily ZIP archives for each date. Monthly archives remain
+    # the preferred source for completed months, but the current partial month
+    # may have no daily fundingRate ZIPs yet.
     for url in funding_urls(start, end):
         rows = fetch_zip(url)
         if rows is None:
@@ -161,6 +164,8 @@ def main():
                 day_label = url.rsplit('-', 3)[-3:]
                 day_str = '-'.join(day_label).removesuffix('.zip')
                 day = datetime.strptime(day_str, '%Y-%m-%d').replace(tzinfo=timezone.utc)
+                # API access may be legally restricted (HTTP 451) on GitHub runners.
+                # Do not substitute or fabricate settlement rates.
                 rows = fetch_funding_api_day(day)
                 if rows:
                     funding_api_recovered_days.append(day_str)
@@ -198,9 +203,17 @@ def main():
         w.writerow(['funding_time_utc', 'funding_rate', 'funding_rate_pct'])
         for ts, rate in sorted(funding.items()):
             w.writerow([ts.isoformat(), rate, rate * 100])
+    # Coverage is measured by settlement events, not 24 hourly rows/day.
+    # Do not assume a fixed 8-hour schedule; report missing daily coverage
+    # separately, and never interpret a successful workflow as full coverage.
+    funding_days = {t.date().isoformat() for t in funding}
+    no_funding_event_days = [d.date().isoformat() for d in day_range(start, end)
+                             if d.date().isoformat() not in funding_days]
     summary = {
         'generated_utc': now.isoformat(), 'start_utc': start.isoformat(), 'end_utc_exclusive': end_exclusive.isoformat(),
-        'expected_hourly_oi_buckets': 4320, 'oi_hourly_buckets': len(oi), 'funding_events': len(funding),
+        'expected_hourly_oi_buckets': 4320, 'oi_hourly_buckets': len(oi), 'funding_events': len(funding), 'funding_days_with_events': len(funding_days),
+        'days_without_funding_events': no_funding_event_days,
+        'funding_coverage_complete': not missing_funding and not no_funding_event_days,
         'missing_metrics_days': missing_metrics, 'missing_funding_archives': missing_funding,
         'funding_api_recovered_days': funding_api_recovered_days, 'funding_api_failed_days': funding_api_failed_days,
         'schema_errors': schema_errors,
@@ -215,7 +228,7 @@ def main():
     }
     (OUT / 'derivatives_status.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(summary, ensure_ascii=False, indent=2), flush=True)
-    if missing_metrics or missing_funding or schema_errors or len(oi) != 4320:
+    if missing_metrics or missing_funding or no_funding_event_days or schema_errors or len(oi) != 4320:
         print('WARNING: data incomplete or schema issues; inspect derivatives_status.json', flush=True)
 
 
