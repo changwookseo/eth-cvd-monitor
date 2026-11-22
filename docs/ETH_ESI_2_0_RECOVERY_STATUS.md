@@ -1,3 +1,10 @@
+## 자동 복구 점검 — 2026-11-23 08:44 KST
+- 최신 07:18 KST 체크포인트를 먼저 읽고 OI 선행 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 조회. 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 병존.
+- main JSON blob SHA `0101859261acfe05f29f86c45475a4449d841103`: **OKX ETH-USDT-SWAP 단일 거래소 OI 675252.120 ETH**, 관측 `2026-11-22T23:40:48.195Z` (08:40:48.195 KST), 수집 `23:40:48.270997Z`, 내부 `status=VERIFIED`. 이전 07:15 관측 이후 갱신. Binance 또는 전체 시장 OI 아님.
+- 최근 [#45084529873](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45084529873) (23:40:42 UTC)와 [#45084088452](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45084088452) (23:35:40 UTC) 모두 보조 `workflow_run` success; jobs API에서 수집·신선도·JSON 저장 단계 성공 확인. 최신 job 원문 로그에 관측시각 `23:40:48.195Z`·OI `675252.120` 출력, `STORED` 및 커밋 `f3120a3` 원격 push 성공 확인. main JSON 필드와 직접 일치. 다만 원문 전체 SHA 계산 대조는 별도 미수행.
+- 전체 `event=schedule` 최근 100건에서 OKX 독립 성공은 [#45069249372](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45069249372) (20:56:31 UTC), [#45035199149](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45035199149) (14:52:45 UTC)로 약 6시간 간격. **독립 schedule 인접 5분 2회 연속 성공 미입증**. 보조 실행 성공과 구분.
+- 별도 OKX 원시 HTTP 응답 본문 대조, 전체 SHA 대조, 완성 ETH ESI 2.0 보고서에 실측 OI 반영은 미검증. 내부 VERIFIED는 전체 게이트 통과가 아님. **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 상태 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음. 상태 문서만 갱신.
+
 ## 자동 복구 점검 — 2026-11-23 07:18 KST
 - 직전 06:28 KST 체크포인트 확인 후 OI 선행 게이트만 재검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 재조회. OKX 공개 API 단일 `ETH-USDT-SWAP`의 `oiCcy`(ETH), code=0, 거래소 시각·300초 신선도 검증 로직과 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 병존 유지.
 - main 최신 JSON blob SHA `d656ba5d4e6294846e8a3361bfd6970b28b5fbfb`: **OKX ETH-USDT-SWAP 단일 거래소 OI 675080.770 ETH**, 관측 `2026-11-22T22:15:50.862Z` (07:15:50.862 KST), 수집 `22:15:50.939894Z`, 내부 `status=VERIFIED`. 직전 06:25 관측 이후 갱신. Binance OI 또는 전체 시장 OI 아님.
