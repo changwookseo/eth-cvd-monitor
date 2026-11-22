@@ -1,3 +1,10 @@
+## 자동 복구 점검 — 2026-11-22 16:29 KST
+- 직전 16:08 KST 체크포인트를 먼저 확인. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 재조회. OKX 공개 API의 ETH-USDT-SWAP 단일 거래소 OI `oiCcy`(ETH), code=0·관측시각·300초 신선도 검사 코드 확인. 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 설정 유지.
+- main JSON blob SHA `dc678b0d0331161654fcf49d383771c81e9d803f`: **OKX ETH-USDT-SWAP 단일 거래소 OI 672799.048 ETH**, 거래소 관측 `2026-11-22T07:25:47.490Z` (16:25:47.490 KST), 수집 `07:25:47.549172Z`, 내부 status=VERIFIED. 직전 16:05 관측보다 갱신됨. Binance OI 또는 전체 시장 OI 아님.
+- Actions 최신 보조 `workflow_run` [#44998182869](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44998182869) (07:25:40 UTC) 및 [#44997808186](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44997808186) (07:20:47 UTC) 모두 success. 독립 `schedule` 최근 성공 [#44994135632](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44994135632) (06:31:50 UTC) 및 [#44964288629](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44964288629) (전일 23:57:41 UTC)은 인접 5분 실행이 아님. **독립 schedule 5분 간격 2회 연속 성공 미입증**.
+- 별도 OKX 원시 HTTP 응답 직접 교차대조, 최신 stdout↔저장 JSON 전체 SHA 대조, 완성 ETH ESI 2.0 보고서 실측 OI 반영은 미검증. collector 내부 VERIFIED 및 보조 실행 success만으로 전체 게이트 통과 불가.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-22 16:08 KST
 - 최신 14:51 KST 체크포인트를 먼저 확인하고 OI만 검증. main의 OKX 수집 코드와 워크플로, 저장 JSON 직접 조회. OKX ETH-USDT-SWAP 단일 거래소 OI **671071.202 ETH**, 관측 2026-11-22T07:05:47.355Z (16:05:47.355 KST), 수집 07:05:47.431937Z, 내부 status=VERIFIED. 14:51 대비 갱신; Binance 또는 전체 시장 OI 아님.
 - 독립 schedule 성공 [#44994135632](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44994135632) (06:31:50 UTC) 신규 확인. 수집·신선도 검사·저장 job 단계 success. 이전 독립 성공 #44964288629 (전일 23:57:41 UTC)와 인접하지 않음. 보조 workflow_run [#44996645762](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44996645762) (07:05:39 UTC) 등 연속 성공. **독립 schedule 5분 간격 2회 연속 성공 미입증**.
