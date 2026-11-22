@@ -1,3 +1,11 @@
+## 자동 복구 점검 — 2026-11-22 17:15 KST
+- 직전 16:29 KST 체크포인트를 먼저 확인하고 OI 선행 게이트만 점검. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 재조회. collector는 OKX 공개 API의 단일 `ETH-USDT-SWAP` `oiCcy`(ETH), `code=0`, 관측시각과 300초 신선도 검사 로직 유지. 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 병존.
+- main 최신 JSON blob SHA `e6e5bff867afc76e463201f827f82456d3a5f3d0`: **OKX ETH-USDT-SWAP 단일 거래소 OI 672283.733 ETH**, 거래소 관측 `2026-11-22T08:10:54.318Z` (17:10:54.318 KST), 수집 `08:10:54.398765Z`, 내부 `status=VERIFIED`. 이전 16:25 관측 이후 갱신. Binance OI나 전체 시장 OI 아님.
+- 최신 보조 `workflow_run` [#45001582859](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45001582859) (08:10:46 UTC), [#45001179364](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45001179364) (08:05:35 UTC), [#45000810507](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45000810507) (08:00:56 UTC) 모두 success. 보조 실행을 독립 예약 성공으로 오인하지 않음.
+- Actions 전체 `event=schedule` 최근 100건 중 OKX 독립 예약 성공 최근 [#44994135632](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44994135632) (06:31:50 UTC) 및 [#44964288629](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/44964288629) (전일 23:57:41 UTC). **독립 schedule 5분 간격 인접 2회 연속 성공 미입증**.
+- 별도 OKX 원시 HTTP 응답 직접 대조, 이번 실행 stdout↔저장 JSON 전체 SHA 대조, 실제 완성 ETH ESI 2.0 보고서의 최신 실측 OI 반영은 미검증. collector 내부 VERIFIED 및 보조 실행 success는 전체 OI 게이트 통과를 의미하지 않음.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 이번 변경은 상태 문서만 대상으로 하며 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-22 16:29 KST
 - 직전 16:08 KST 체크포인트를 먼저 확인. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 재조회. OKX 공개 API의 ETH-USDT-SWAP 단일 거래소 OI `oiCcy`(ETH), code=0·관측시각·300초 신선도 검사 코드 확인. 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 설정 유지.
 - main JSON blob SHA `dc678b0d0331161654fcf49d383771c81e9d803f`: **OKX ETH-USDT-SWAP 단일 거래소 OI 672799.048 ETH**, 거래소 관측 `2026-11-22T07:25:47.490Z` (16:25:47.490 KST), 수집 `07:25:47.549172Z`, 내부 status=VERIFIED. 직전 16:05 관측보다 갱신됨. Binance OI 또는 전체 시장 OI 아님.
