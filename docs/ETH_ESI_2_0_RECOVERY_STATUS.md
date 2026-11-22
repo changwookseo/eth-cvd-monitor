@@ -1,3 +1,10 @@
+## 자동 복구 점검 — 2026-11-23 00:24 KST
+- 최신 2026-11-22 23:25 KST 체크포인트를 먼저 확인하고 OI 게이트만 점검. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 재조회. 수집기는 OKX 공개 API 단일 `ETH-USDT-SWAP`의 `oiCcy`(ETH), `code=0`, 거래소 관측시각 및 300초 신선도를 검증. 워크플로에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 병존.
+- main 최신 JSON: **OKX ETH-USDT-SWAP 단일 거래소 OI 666468.498 ETH**, 거래소 관측 `2026-11-22T15:20:57.888Z` (2026-11-23 00:20:57.888 KST), 수집 `15:20:57.937850Z`, 내부 `status=VERIFIED`. 이전 23:20 관측보다 갱신. Binance OI 또는 시장 전체 OI 아님.
+- GitHub Actions 전체 최신 30건 중 OKX 보조 `workflow_run` [#45037784398](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45037784398) (15:20:44 UTC), [#45037315667](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45037315667) (15:15:42 UTC), [#45036839741](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45036839741) (15:10:39 UTC) 모두 success. 보조 실행의 5분대 성공과 저장 JSON 갱신은 확인했지만 **독립 schedule 인접 2회 연속 성공을 입증하지 않음**. 전용 workflow runs 조회는 GitHub 커넥터 URL 제한으로 실패; 전체 목록 최신 30건에는 OKX 독립 schedule 없음.
+- 이번 회차 별도 OKX 원시 HTTP 본문 직접 교차검증, 최신 실행 stdout↔저장 JSON 전체 SHA 대조, 실제 완성 ETH ESI 2.0 보고서의 최신 OI 실측 반영은 미검증. 내부 VERIFIED 및 보조 실행 성공만으로 전체 게이트 통과 불가. 별도의 펀딩비·선물 CVD 후보 워크플로 성공이 보여도 OI 게이트 전에는 복구 완료 판정이나 다음 단계 진입을 하지 않음.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 복구 단계 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron importer `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지, 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음. 이번 변경은 상태 문서만 대상.
+
 ## 자동 복구 점검 — 2026-11-22 23:25 KST
 - 최신 22:47 KST 체크포인트를 먼저 읽고 OI 게이트만 재검증. `eth_oi_okx_live.py`는 OKX 공개 API의 `ETH-USDT-SWAP` 단일 행 `oiCcy`(ETH), 응답 code=0, 관측시각과 300초 신선도 검사 유지. `.github/workflows/eth-oi-okx.yml`에는 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run`이 병존.
 - main JSON blob SHA `2bfcc5cb54b1838c7538b0d063dea26cc44757ae`: **OKX ETH-USDT-SWAP 단일 거래소 OI 662064.901 ETH**, 거래소 관측 `2026-11-22T14:20:53.622Z` (23:20:53.622 KST), 수집 `14:20:53.729819Z`, 내부 status=VERIFIED. 직전 22:45 관측 이후 갱신. Binance OI 또는 전체 시장 OI가 아님.
