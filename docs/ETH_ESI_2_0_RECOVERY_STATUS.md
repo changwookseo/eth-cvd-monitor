@@ -1,3 +1,10 @@
+## 자동 복구 점검 — 2026-11-23 21:50 KST
+- 최신 20:13 KST 체크포인트를 먼저 확인하고 OI 게이트만 점검. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json` 직접 재조회. 공개 OKX ETH-USDT-SWAP 단일 상품 `oiCcy`(ETH), 응답 code=0 및 300초 신선도 검사 코드 유지. 독립 `schedule: 2-59/5 * * * *`와 보조 `workflow_run` 병존.
+- main JSON blob SHA `cf9c8bbf7ca427e14be8348406eb3a911b0d4d1b`: **OKX ETH-USDT-SWAP 단일 거래소 OI 702175.527 ETH**, 거래소 관측 `2026-11-23T12:45:49.175Z` (21:45:49.175 KST), 수집 `12:45:49.230068Z`, 내부 `status=VERIFIED`. 20:10 관측 대비 갱신. Binance OI 또는 전체 시장 OI 아님.
+- 최신 완료된 [#45177351199](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45177351199) (12:45:41 UTC), [#45176579006](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45176579006) (12:40:43 UTC) 모두 보조 `workflow_run` success. 12:50:49 UTC 시작 [#45178153009](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45178153009)은 조회 시 완료 판정 없음. 두 성공은 독립 예약 2회 성공 증거가 아님.
+- 전체 `event=schedule` 최근 100건의 OKX 독립 예약 성공은 #45149771153 (09:44:35 UTC), #45095102862 (01:32:08 UTC)로 **인접 5분 간격 독립 예약 2회 연속 성공 미입증**. 별도 OKX 원시 HTTP 응답 직접 대조, 최신 실행 stdout↔저장 JSON 전체 SHA 대조, 완성 ETH ESI 2.0 보고서 최신 실측 OI 반영도 미검증. 내부 VERIFIED만으로 전체 게이트 통과 불가.
+- **OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입; 전체 복구 미완료; 완료 알림 금지.** Binance Cron `CRONJOB_API_KEY` Secret 미등록 체크포인트 유지; 우회·노출·등록 없음. 기존 현물 CVD·기술지표·보고서 정본·7지표 가중치·180일 백데이터 변경 없음. 상태 문서만 수정.
+
 ## 자동 복구 점검 — 2026-11-23 20:13 KST
 - 최신 19:46 KST 체크포인트를 먼저 읽고 OI 게이트만 검증. main의 `eth_oi_okx_live.py`, `.github/workflows/eth-oi-okx.yml`, `eth_oi_okx_latest.json`을 직접 조회. 수집기는 OKX 공개 API ETH-USDT-SWAP 단일 상품 `oiCcy`(ETH), 응답 `code=0`, 거래소 관측시각과 300초 신선도를 검증. 독립 `schedule: 2-59/5 * * * *` 및 보조 `workflow_run` 병존.
 - main JSON blob SHA `447f89135dd551664554bc29dc12a113d4e4936e`: **OKX ETH-USDT-SWAP 단일 거래소 OI 699761.991 ETH**, 거래소 관측 `2026-11-23T11:10:47.726Z` (20:10:47.726 KST), 수집 `11:10:47.808139Z`, 내부 `status=VERIFIED`. 19:45 관측 이후 갱신. Binance 또는 전체 시장 OI가 아님.
