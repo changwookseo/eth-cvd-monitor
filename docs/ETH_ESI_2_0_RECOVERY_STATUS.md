@@ -1,3 +1,9 @@
+## 자동 복구 점검 — 2026-11-24 21:42 KST
+- 최신 20:14 체크포인트 및 main 수집기·워크플로·JSON 재조회. 독립 schedule 2-59/5 및 보조 workflow_run 유지.
+- OKX ETH-USDT-SWAP 단일 거래소 OI 685819.637 ETH, 관측 12:40:55.200 UTC, 수집 12:40:55.283783 UTC, 내부 VERIFIED, blob 1ec42c41599afe119975b7ad1421d5dbf0aa9ffd. 저장 커밋 d2b8e09e1ca93873c2ec6efa1f5a6e5d81f243be의 JSON과 main blob 일치. 직전 저장 커밋 862b3a9c052c5aca6a4fa3279b71a434a166c7ed의 OI 684565.120 ETH, 관측 12:35:51.958 UTC. 간격 303.242초. Binance/전체 시장 OI 아님.
+- Actions 독립 schedule 목록 및 OKX 원시 HTTP 직접 요청 DNS 해석 실패. 독립 schedule 인접 2회 성공, 최신 실행 로그 전체 대조, 완성 보고서 실측 반영 미검증. 연속 저장을 독립 예약 성공으로 간주하지 않음.
+- OI 전체 게이트 미통과, 펀딩비·선물 CVD 미진입, 전체 미완료. Secret 우회·노출·변경 없음. 기존 현물 CVD·기술지표·보고서 정본·가중치·180일 백데이터 변경 없음. 상태 문서만 갱신.
+
 ## 자동 복구 점검 — 2026-11-24 20:14 KST
 - 최신 19:44 체크포인트 및 main 수집기·워크플로·JSON 확인. 독립 schedule 2-59/5 및 보조 workflow_run 유지.
 - OKX ETH-USDT-SWAP 단일 거래소 OI 685443.517 ETH, 관측 11:10:59.842 UTC, 수집 11:10:59.947257 UTC, 내부 VERIFIED, blob cb15d214c545259b1b06bc7d060a806e0dd79edc. 저장 커밋 2c18495624891da51a0e19d7d2494c73737fb8a4의 JSON과 main blob 일치. 직전 저장 커밋 a5439aba520b0a8396ea3e67e45d318d588fdd7b의 OI 684222.664 ETH, 관측 11:05:52.852 UTC. 간격 306.990초. Binance/전체 시장 OI 아님.
