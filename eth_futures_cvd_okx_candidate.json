@@ -7,18 +7,18 @@
   "unit": "ETH",
   "source": "https://www.okx.com/api/v5/rubik/stat/taker-volume-contract",
   "observed_at_utc": "2026-11-24T13:00:00+00:00",
-  "fetched_at_utc": "2026-11-24T13:01:18.997248+00:00",
+  "fetched_at_utc": "2026-11-24T13:05:46.905452+00:00",
   "raw_array_semantics": "[ts,sell,buy] confirmed by official OKX API schema; ETH tape cross-check pending",
   "official_schema": "https://www.okx.com/docs-v5/en/#trading-statistics-rest-api-get-contract-taker-volume",
   "unit_mapping": "unit=0 base ETH; 24h independent OKX ticker cross-check",
-  "ticker_24h_eth": 5168302.63,
-  "ticker_24h_contracts": 51683026.3,
-  "closed_hourly_24h_to_ticker_eth_ratio": 1.0005211581427846,
+  "ticker_24h_eth": 5172670.186,
+  "ticker_24h_contracts": 51726701.86,
+  "closed_hourly_24h_to_ticker_eth_ratio": 0.9997102498427104,
   "volume_comparison_warning": false,
   "volume_comparison_alignment": "closed hourly 24h versus rolling ticker 24h; not identical endpoints",
   "last_complete_hour_consistency": {
     "hour_end_utc": "2026-11-24T13:00:00+00:00",
-    "relative_total_difference": 0.0013397531043347272
+    "relative_total_difference": 0.0
   },
   "windows": {
     "5m": {
@@ -59,22 +59,22 @@
       "end_utc": "2026-11-24T13:00:00+00:00",
       "bucket_count": 4,
       "taker_buy_eth_provisional": 310553.341,
-      "taker_sell_eth_provisional": 289367.669,
-      "total_eth": 599921.01,
-      "buy_pct_provisional": 51.76570512174594,
-      "sell_pct_provisional": 48.234294878254055,
-      "cvd_eth_provisional": 21185.67200000002
+      "taker_sell_eth_provisional": 289542.94,
+      "total_eth": 600096.281,
+      "buy_pct_provisional": 51.75058583640848,
+      "sell_pct_provisional": 48.24941416359153,
+      "cvd_eth_provisional": 21010.401000000013
     },
     "24h": {
       "start_utc": "2026-11-23T13:00:00+00:00",
       "end_utc": "2026-11-24T13:00:00+00:00",
       "bucket_count": 24,
       "taker_buy_eth_provisional": 2535346.1769999997,
-      "taker_sell_eth_provisional": 2635649.9560000002,
-      "total_eth": 5170996.132999999,
-      "buy_pct_provisional": 49.030130980374494,
-      "sell_pct_provisional": 50.96986901962551,
-      "cvd_eth_provisional": -100303.77900000056
+      "taker_sell_eth_provisional": 2635825.227,
+      "total_eth": 5171171.403999999,
+      "buy_pct_provisional": 49.02846915959624,
+      "sell_pct_provisional": 50.971530840403766,
+      "cvd_eth_provisional": -100479.05000000028
     }
   },
   "lagged_5m_stability_diagnostic": {
@@ -87,7 +87,7 @@
     "buy_pct_provisional": 69.29590598129268,
     "sell_pct_provisional": 30.704094018707313,
     "cvd_eth_provisional": 10917.831999999999,
-    "age_since_close_minutes": 16.31661666666667,
+    "age_since_close_minutes": 20.78175,
     "status": "PROVISIONAL_LAGGED_NOT_FINAL",
     "note": "At least 15 minutes behind latest closed 5m bucket; observed revisions may still occur later. Not report eligible or independently tape-verified."
   },
@@ -1677,6 +1677,6 @@
       "sell_eth_after": 2558.266
     }
   ],
-  "revision_audit_new_count": 1,
+  "revision_audit_new_count": 0,
   "revision_audit_note": "Best-effort comparison of overlapping 96-bucket snapshots; revisions may occur later or between missed runs. Not finality proof."
 }
