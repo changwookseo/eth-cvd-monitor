@@ -1,3 +1,7 @@
+## 자동 복구 점검 — 2026-11-25 02:44 KST
+- 02:09 체크포인트 및 main 수집기·워크플로·JSON 재조회. 독립 schedule 및 보조 workflow_run 유지. OKX 단일 거래소 OI 688548.208 ETH, 관측 01:27:32.997 KST, blob 7800c3c40e185bcbacfeae9db34839bd4df2b9ca 이전과 동일. 약 77분 경과, 300초 신선도 초과, 실시간 사용 금지. Binance/전체 시장 OI 아님.
+- Actions 실행 목록 및 OKX 원시 API 직접 호출 DNS 실패. 독립 schedule 연속 성공, 최신 로그 대조, 완성 보고서 실측 반영 미검증. 원인 미확정. OI 게이트 미통과, 펀딩비·선물 CVD 미진입, 전체 미완료. Secret 및 기존 데이터·보고서 정본·가중치·백데이터 변경 없음. 상태 문서만 갱신.
+
 ## 자동 복구 점검 — 2026-11-25 02:09 KST
 - 최신 01:08 체크포인트 및 main 수집기·워크플로·JSON 재조회. 독립 schedule 2-59/5 및 보조 workflow_run 유지.
 - 신규 저장 확인: OKX ETH-USDT-SWAP 단일 거래소 OI 688548.208 ETH, 관측 2026-11-25 01:27:32.997 KST, 수집 01:27:33.075261 KST, 내부 VERIFIED, blob 7800c3c40e185bcbacfeae9db34839bd4df2b9ca. 저장 커밋 a8443eb2802115ed1e5a6fe99e8015f8b4ca468c의 JSON과 main blob 일치. 이전 관측 23:36:13.457 대비 111분 19.540초 간격으로 연속 5분 갱신 미입증. 점검 시 약 42분 경과, 300초 신선도 초과로 실시간 사용 금지. Binance/전체 시장 OI 아님.
