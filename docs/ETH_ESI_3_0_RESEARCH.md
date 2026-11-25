@@ -1,0 +1,12 @@
+# ETH ESI 3.0 | 기대수익률 기반 매매 최적화 모델
+Status: research only; no validated live probabilities. Preserve main and ESI 2.0.
+## Data
+Completed UTC daily OHLC; Binance and Kraken spot aggressive buy/sell ETH separately; OKX OI ETH, funding with settlement distinction; liquidation, ETF, ETH/BTC and macro when timestamped histories exist. Never substitute stale snapshots or missing values. Use availability timestamps and common coverage for comparisons. Intraday horizons require separate intraday datasets.
+## Features
+Log-price slopes 7/14/30/90 days, slope differences, confirmed causal pivots, high/low trend slopes. Candidate five-wave structures with standard impulse constraints (wave 2 cannot retrace origin, wave 3 not shortest, wave 4 nonoverlap; diagonal exceptions excluded initially). Candidate only, not ground truth. Compare wave 3 and evolving wave 5 slopes, duration, volatility, normalized CVD and OI changes. Do not require wave 5 deceleration or new extreme. Preserve failed candidates. CVD imbalance=(buy-sell)/(buy+sell); OI direction alone cannot identify long/short. Spot confirmation required before interpreting futures-driven rally as durable.
+## Outcomes and validation
+Separate entry and exit decisions; 1/7/14/30/90 day forward returns; first target/stop hit with ambiguous same-bar hits flagged; costs, funding, slippage, drawdown, liquidation and exposure. Compare price baseline, slopes, slopes+wave, slopes+flows, slopes+flows+wave on identical dates. Walk-forward chronological train/calibration/test, purge overlapping outcome windows, block bootstrap, calibration/Brier score, net return and drawdown. No random split or future pivot leakage. Compare hold/cash and ESI 2 when historical scores available. Reject wave module if incremental out-of-sample utility absent.
+## Output
+As-of timestamps, coverage, sample count, probability of positive net return by horizon, expected net return, downside distribution, target-before-stop probability, separate buy/sell suitability (50 neutral only after defining utility mapping). Compare enter vs wait and hold vs sell. No score until calibration and risk preferences validated. No automatic orders.
+## Checkpoint
+Initial scaffold only. Next: inventory actual historical sources and coverage, implement causal candidate extraction and price-only baseline, test, then add aligned flows and compare. Existing 180-day aggregate event counts are not training rows. Do not claim deployment or live operation until verified.
