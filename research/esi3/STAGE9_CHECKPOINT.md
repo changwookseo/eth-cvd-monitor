@@ -1,0 +1,7 @@
+# ESI3 stage 9 checkpoint
+2026-11-26: user approves proceeding while retaining and accumulating available historical data.
+Research branch only. Never modify main or ESI2.
+Preserve existing spot/futures 2519 days each, OI 1817 with two approved gaps, funding 5457; counts are prior checkpoints, revalidate before final audit.
+Stage 7: Kraken cursor audit CURSOR_ADVANCED, continuous coverage false; persistent collection and coverage validation pending.
+Stage 8: Tardis four samples previously parsed; 83-day manifest and CSV not found at latest check. Public archive audit PARSED_REVIEW_REQUIRED, 22626 records across 28 observed dates; continuity unverified. Keep sources separate, never zero-fill missing dates or sum overlapping sources. Continue monthly free Tardis collection and prospective Binance liquidation capture; no paid subscriptions authorized.
+Stage 9: implement shared collection orchestration, incremental immutable source checkpoints, deduplication, UTC coverage and freshness checks, retries and actual storage verification. Validate real runs before completion. Keep stage 7 and 8 collection active; user approves proceeding with partial historical coverage, not declaring full coverage. Record source, capture time, checksum, schema, observed versus complete coverage and failure state. Do not overwrite verified historical records silently. Final audit must distinguish data gaps from collector failures.
