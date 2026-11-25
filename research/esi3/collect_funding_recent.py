@@ -4,11 +4,15 @@ import csv
 import hashlib
 import io
 import json
+import sys
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 
-from .binance_transport import read_market_data
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from research.esi3.binance_transport import read_market_data
 
 OUT = Path(__file__).resolve().parent / "data"
 STEP = 8 * 60 * 60 * 1000
