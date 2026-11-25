@@ -1,0 +1,30 @@
+name: ESI3 OI history
+on:
+  push:
+    branches: [research/eth-esi-3]
+    paths: [research/esi3/collect_oi.py, .github/workflows/esi3-oi.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  collect:
+    if: github.ref == 'refs/heads/research/eth-esi-3'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python research/esi3/collect_oi.py
+      - if: always()
+        run: |
+          if [ -f research/esi3/data/oi_manifest.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add research/esi3/data/oi_manifest.json research/esi3/data/binance_oi_daily.csv
+            if ! git diff --cached --quiet; then
+              git commit -m "ESI3 OI coverage audit"
+              git push origin HEAD:research/eth-esi-3
+            fi
+          fi
