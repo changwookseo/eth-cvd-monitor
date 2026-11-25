@@ -24,6 +24,8 @@ jobs:
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
           ESI3_OI_CRON_JOB_ID: '8738287'
+          ESI3_FUNDING_CRON_JOB_ID: '8946770'
+          ESI3_FUTURES_BARS_CRON_JOB_ID: '8946772'
         run: python -m research.esi3.collect_live
       - name: Save verified snapshot on the research branch
         run: |
