@@ -1,0 +1,31 @@
+name: ESI3 Kraken archive
+on:
+  push:
+    branches: [research/eth-esi-3]
+    paths: [research/esi3/collect_kraken_daily.py, .github/workflows/esi3-kraken.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: esi3-kraken
+  cancel-in-progress: false
+jobs:
+  archive:
+    if: github.ref == 'refs/heads/research/eth-esi-3'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - run: python research/esi3/collect_kraken_daily.py
+      - name: Save Kraken audit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for f in research/esi3/data/kraken_spot_archive_{daily.csv,audit.json}; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "ESI3 Kraken archive audit"
+            git push origin HEAD:research/eth-esi-3
+          fi
