@@ -34,7 +34,7 @@ def main():
     ts=sorted(events)
     gaps=[]
     for a,b in zip(ts,ts[1:]):
-        if (b-a).total_seconds()!=events[b][1]*3600: gaps.append({"previous":a.isoformat(),"next":b.isoformat()})
+        if abs((b-a).total_seconds()-events[b][1]*3600)>1: gaps.append({"previous":a.isoformat(),"next":b.isoformat()})
     if not ts or ts[0].date()!=start or ts[-1].date()!=(today.fromordinal(today.toordinal()-1)): errors.append({"error":"boundary coverage"})
     status="VERIFIED" if not errors and not gaps else "INCOMPLETE"
     with (OUT/"binance_funding_monthly_events.csv").open("w",newline="") as f:
