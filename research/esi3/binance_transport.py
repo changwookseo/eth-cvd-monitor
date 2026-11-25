@@ -11,6 +11,7 @@ PATHS = {
     "funding": "/fapi/v1/fundingRate",
     "oi": "/fapi/v1/openInterest",
     "futures_trades": "/fapi/v1/aggTrades",
+    "futures_bars": "/fapi/v1/klines",
 }
 
 

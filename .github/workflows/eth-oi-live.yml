@@ -1,14 +1,18 @@
-name: ETH Live OI
+name: ESI3 Binance live collection
+
 on:
   workflow_dispatch:
-# Automatic collection remains disabled until the runner can access the source API.
+
 permissions:
   contents: write
+
 concurrency:
-  group: eth-live-oi
+  group: esi3-binance-live
   cancel-in-progress: false
+
 jobs:
   collect:
+    if: github.ref == 'refs/heads/research/eth-esi-3'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -16,24 +20,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Import and validate OI collected by Cron
+      - name: Collect research-only Binance data
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
-        run: python eth_oi_cron_import.py
-      - name: Save failure evidence
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: eth-oi-failure-${{ github.run_id }}
-          path: eth_oi_attempt.json
-          if-no-files-found: warn
-      - name: Commit verified OI
+          ESI3_OI_CRON_JOB_ID: '8738287'
+        run: python -m research.esi3.collect_live
+      - name: Save verified snapshot on the research branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eth_oi_latest.json
+          git add research/esi3/data/binance_live_latest.json
           if ! git diff --cached --quiet; then
-            git commit -m "Update verified ETH open interest"
-            git pull --rebase origin main
-            git push origin HEAD:main
+            git commit -m "Update ESI3 Binance live snapshot"
+            git pull --rebase origin research/eth-esi-3
+            git push origin HEAD:research/eth-esi-3
           fi
