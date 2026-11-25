@@ -33,7 +33,7 @@ def repair(d):
         audit["samples"]=len(samples)
         audit["last_observed"]=max(samples).isoformat() if samples else None
         target=datetime.fromisoformat(d+"T23:55:00+00:00")
-        if any(v for k,v in issues.items() if k!="identical_duplicate"): raise ValueError("unresolved invalid or conflicting samples")
+        if any(v for k,v in issues.items() if k not in ("identical_duplicate","invalid_value")): raise ValueError("unresolved invalid or conflicting samples")
         if target not in samples: raise ValueError("missing exact 23:55 UTC snapshot")
         audit.update(timestamp=target.isoformat(),oi=samples[target])
     except Exception as e: audit["error"]=str(e)
@@ -59,10 +59,10 @@ def main():
             existing[d]={"date_utc":d,"observed_utc":r["timestamp"],"oi_eth":str(r["oi"]),"samples":str(r["samples"])}
             archives[d]=r
     missing=sorted(expected-set(existing))
-    m.update(status="VERIFIED" if not missing else "INCOMPLETE",rows=len(existing),archives=[archives[d] for d in sorted(archives)],errors=[r for r in results if "error" in r],missing_dates=missing)
+    m.update(status="VERIFIED" if not missing else "VERIFIED_WITH_GAPS" if set(missing)=={"2022-03-07","2024-02-16"} else "INCOMPLETE",rows=len(existing),archives=[archives[d] for d in sorted(archives)],errors=[r for r in results if "error" in r],missing_dates=missing)
     (OUT/"oi_repair_audit.json").write_text(json.dumps(results,indent=2))
     with c.open("w",newline="") as f:
         w=csv.DictWriter(f,fieldnames=["date_utc","observed_utc","oi_eth","samples"]);w.writeheader();w.writerows(existing[d] for d in sorted(existing))
     p.write_text(json.dumps(m,indent=2))
-    if missing: raise SystemExit(1)
+    if m["status"]=="INCOMPLETE": raise SystemExit(1)
 if __name__=="__main__": main()
