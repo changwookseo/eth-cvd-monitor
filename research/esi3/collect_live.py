@@ -23,8 +23,15 @@ def collect():
     # Optionally reuse the existing five-minute Cron OI job.
     job_id = os.environ.get("ESI3_OI_CRON_JOB_ID")
     oi, oi_source = read_market_data("oi", SYMBOL, cron_job_id=int(job_id) if job_id else None)
-    rates, rate_source = read_market_data("funding", {**SYMBOL, "limit": 3})
-    bars, bar_source = read_market_data("futures_bars", {**SYMBOL, "interval": "5m", "limit": 3})
+    funding_job = os.environ.get("ESI3_FUNDING_CRON_JOB_ID")
+    bars_job = os.environ.get("ESI3_FUTURES_BARS_CRON_JOB_ID")
+    rates, rate_source = read_market_data(
+        "funding", {**SYMBOL, "limit": 3}, cron_job_id=int(funding_job) if funding_job else None
+    )
+    bars, bar_source = read_market_data(
+        "futures_bars", {**SYMBOL, "interval": "5m", "limit": 3},
+        cron_job_id=int(bars_job) if bars_job else None,
+    )
     now = time.time_ns() // 1_000_000
     interest = quantity(oi["openInterest"])
     if oi["symbol"] != SYMBOL["symbol"] or interest <= 0 or not -30_000 <= now - oi["time"] <= 600_000:
@@ -35,7 +42,13 @@ def collect():
             or abs(funding_rate) > Decimal("0.01")
             or not -1000 <= now - rate["fundingTime"] <= 28_860_000):
         raise ValueError("Invalid or stale funding")
-    bar = max((row for row in bars if row[6] < now), key=lambda row: row[0])
+    for provenance in (oi_source, rate_source, bar_source):
+        execution = provenance.get("cron_executed_at_epoch")
+        if execution is not None and not -30_000 <= now - execution * 1000 <= 2 * BAR_MS:
+            raise ValueError("Stale or future Cron response")
+    # A bar still open when Cron captured it remains incomplete in that payload.
+    captured_at = min(now, bar_source.get("cron_executed_at_epoch", now // 1000 + 1) * 1000)
+    bar = max((row for row in bars if row[6] < captured_at), key=lambda row: row[0])
     if bar[6] - bar[0] != BAR_MS - 1 or not 0 < now - bar[6] <= 2 * BAR_MS:
         raise ValueError("Invalid or stale completed Binance futures bar")
     volume, buy = quantity(bar[5]), quantity(bar[9])
