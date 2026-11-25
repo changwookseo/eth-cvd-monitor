@@ -1,0 +1,20 @@
+name: ESI3 Tardis probe
+on:
+  push:
+    branches: [research/eth-esi-3]
+    paths: [research/esi3/probe_tardis_liquidations.py, .github/workflows/esi3-tardis-probe.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/research/eth-esi-3'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python research/esi3/probe_tardis_liquidations.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/esi3/data/tardis_liquidation_probe.json
+          git diff --cached --quiet || (git commit -m "ESI3 Tardis sample audit" && git push origin HEAD:research/eth-esi-3)
