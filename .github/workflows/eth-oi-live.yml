@@ -27,11 +27,13 @@ jobs:
           ESI3_FUNDING_CRON_JOB_ID: '8946770'
           ESI3_FUTURES_BARS_CRON_JOB_ID: '8946772'
         run: python -m research.esi3.collect_live
-      - name: Save verified snapshot on the research branch
+      - name: Render research report from verified snapshot
+        run: python -m research.esi3.render_live_report
+      - name: Save verified snapshot and report on the research branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add research/esi3/data/binance_live_latest.json
+          git add research/esi3/data/binance_live_latest.json research/esi3/data/binance_live_report.md
           if ! git diff --cached --quiet; then
             git commit -m "Update ESI3 Binance live snapshot"
             git pull --rebase origin research/eth-esi-3
