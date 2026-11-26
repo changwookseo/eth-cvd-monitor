@@ -3,6 +3,11 @@
 - 전체 schedule 및 전체 실행 각 최근 100건 재조회: 최신 OKX 독립 예약 45742688000 (11:28:48 KST success), 이전 45687075861 (04:37:47 KST success) 동일. 정상 5분 연속 갱신 미충족. 전체 최근 실행에는 ESI3 Binance live collection 17:10/17:15/17:20 KST 실행이 보이나 이는 별도 모델이며 ESI2 OKX OI 보조 실행 증거가 아님. 기존 Binance Spot CVD 완료 트리거의 최근 실행은 조회 범위에서 확인되지 않음. 원시 OKX HTTP 직접 요청 DNS 오류(curl 6). 완성 보고서 실측 반영 미검증.
 - OI 전체 게이트 미통과, 펀딩비·선물 CVD 미진입, 전체 미완료. 예약 지연 원인 미확정으로 코드 변경 없음. Secret 우회·노출·변경 없음. 기존 현물 CVD·기술지표·보고서 정본·가중치·180일 백데이터 변경 없음. 상태 문서만 갱신.
 
+## 자동 복구 점검 — 2026-11-26 18:49 KST
+- main 수집기·워크플로·JSON 재조회. 독립 cron `2-59/5 * * * *` 및 Binance Spot CVD 완료 보조 트리거 유지. OKX ETH-USDT-SWAP 단일 거래소 OI 653948.046 ETH, 관측 11:28:53.037 KST, blob `8ebb6959b2b2836077a2561b70935aa068e79942`; 약 440분 경과, 신규 갱신 없음, 300초 신선도 실패.
+- 전체 schedule 최근 100건 직접 조회: 최신 OKX 독립 성공 #45742688000 (11:28:48 KST), 이전 #45687075861 (04:37:47 KST). 약 411분 간격으로 5분 연속 실행 미충족. 이번 회차 원시 API 및 완성 보고서 실측 반영 미검증. 기존 로그 대조 증거는 이전 체크포인트에 한정.
+- OI 전체 게이트 미통과; 펀딩비·선물 CVD 미진입. 예약 지연 원인 미확정으로 코드 변경 없음. Secret 우회·노출·변경 없음. 기존 현물 CVD·기술지표·보고서 정본·가중치·180일 백데이터 변경 없음.
+
 ## 자동 복구 점검 — 2026-11-26 16:49 KST
 - 최신 14:33 체크포인트 및 main 수집기·워크플로·JSON 재조회. 독립 schedule 2-59/5 및 보조 workflow_run 유지. OKX ETH-USDT-SWAP 단일 거래소 OI 653948.046 ETH, 관측 11:28:53.037 KST, blob 8ebb6959b2b2836077a2561b70935aa068e79942 동일. 약 320분 경과, 300초 신선도 초과. Binance/전체 시장 OI 아님.
 - 전체 schedule 최근 100건 및 전체 실행 최근 100건 조회 성공. 최신 OKX 독립 예약 [45742688000](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45742688000) 11:28:48 KST success, 이전 [45687075861](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45687075861) 04:37:47 KST success. 약 411분 간격으로 5분 연속 예약 미충족. 최신 job 139651289518 원문 로그의 관측·수집시각, OI ETH/USD, 거래소·종목 및 실제 push 74fedfb와 저장 커밋 74fedfb8aaa915f57d95b631a908bbac9f0e370e JSON 및 main blob 일치 확인. API 수집·신선도·저장 단계 success. 원시 HTTP 직접 호출은 DNS 오류(curl 6), 완성 보고서 실측 반영 미검증.
