@@ -2,7 +2,7 @@
 
 User-selected research baseline, not production deployment or integrated validation.
 
-- Alarm: original OR rule in core_lead_lag.py and CORE_LEAD_LAG_REPLAY.json; historical recall buy 40.0%, sell 55.8%, matching next 1–5 bars (includes zero full-day lead). Recent stricter A replay recall 26.3%,39.4% under different cohort and 2–5 bar match.
+- Alarm (current BETA 1): 3-day directional cooldown, original OR rule; 72/114 low targets (63.2%), 82/95 high targets (86.3%), strict full-day lead 58/114 and 72/95; see BETA1_3DAY_REPLAY.json. Historical 10-day setting retained only for comparison. Historical alarm: original OR rule in core_lead_lag.py and CORE_LEAD_LAG_REPLAY.json; historical recall buy 40.0%, sell 55.8%, matching next 1–5 bars (includes zero full-day lead). Recent stricter A replay recall 26.3%,39.4% under different cohort and 2–5 bar match.
 - Buy confirmation: A baseline, normalized spot CVD improvement while negative, positive price slope acceleration, negative price slope; 5-day win 70/110, mean +1.6957% (CORE_ABC_REPLAY.json).
 - Sell confirmation: positive 5-day price slope, negative normalized spot CVD and OI slope, close below 60-day prior close; 8-day win 30/40, mean +5.5775% (CORE_WAVE_HORIZON_REPLAY.json).
 - B/C filters excluded; preserve research. Elliott and wave duration auxiliary only.
