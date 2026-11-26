@@ -1,3 +1,8 @@
+## 자동 복구 점검 — 2026-11-26 11:14 KST
+- 최신 10:15 체크포인트 및 main 수집기·워크플로·JSON 재조회. OKX ETH-USDT-SWAP 단일 거래소 OI 643839.508 ETH, 관측 08:14:59.143 KST, blob 6fbbf17615cf3ec8cad1007ed72ee44d18c90729, 약 179분 경과, 300초 신선도 초과. Binance/전체 시장 OI 아님.
+- GitHub 커넥터 전체 schedule 최근 100건 조회 성공: OKX 독립 예약 [45687075861](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45687075861) 11-26 04:37:47 KST 및 [45588521613](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/45588521613) 11-25 18:46:02 KST success. 최신 job 139462388599 수집·신선도·저장 단계 success. 약 9시간 52분 간격으로 5분 연속 예약 성공 아님. 전용 workflow 목록 URL은 커넥터에서 거부됨. OKX 원시 API 직접 요청 DNS 실패(curl 6). 최신 로그↔JSON 및 완성 보고서 실측 반영 미검증.
+- OI 전체 게이트 미통과, 펀딩비·선물 CVD 미진입, 전체 미완료. 원인 미확정으로 코드 수정 없음. Secret 우회·노출·변경 없음. 기존 현물 CVD·기술지표·보고서 정본·가중치·180일 백데이터 변경 없음. 상태 문서만 갱신.
+
 ## 자동 복구 점검 — 2026-11-26 10:15 KST
 - 최신 10:06 체크포인트 및 main 수집기·워크플로·JSON 재조회. 독립 schedule 2-59/5 및 보조 workflow_run 유지. OKX ETH-USDT-SWAP 단일 거래소 OI 643839.508 ETH, 관측 08:14:59.143 KST, blob 6fbbf17615cf3ec8cad1007ed72ee44d18c90729 동일. 약 120분 경과, 300초 신선도 초과. Binance/전체 시장 OI 아님.
 - OKX 원시 API 및 Actions 독립 schedule 목록 직접 요청 모두 DNS 실패(curl 6). 독립 예약 연속 성공, 최신 로그 대조 및 완성 보고서 실측 반영 미검증. 원인 미확정으로 코드 수정 없음.
