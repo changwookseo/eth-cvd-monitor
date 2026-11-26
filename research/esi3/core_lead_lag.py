@@ -4,6 +4,7 @@ from statistics import mean
 D=Path(__file__).parent/"data"
 def read(n):
  with (D/n).open() as f:return list(csv.DictReader(f))
+BETA1_ALARM_COOLDOWN=3
 def run():
  x=read("stage3_extended_daily.csv");s=read("binance_spot_daily.csv")
  assert len(x)==len(s) and all(a["date"]==b["open_utc"] for a,b in zip(x,s))
@@ -34,7 +35,7 @@ def run():
   for rule in ("base","confirm","lag","combined","combinedConfirm","union"):
    ss=[]
    for i,e in events:
-    if e[rule] and (not ss or i-ss[-1]>=10):ss.append(i)
+    if e[rule] and (not ss or i-ss[-1]>=(BETA1_ALARM_COOLDOWN if rule=="union" else 10)):ss.append(i)
    out[f"{d}:{rule}"]=dict(all=stat(ss,targets),pre=stat([i for i in ss if x[i]["date"]<"2024"],[i for i in targets if x[i]["date"]<"2024"]),post=stat([i for i in ss if x[i]["date"]>="2024"],[i for i in targets if x[i]["date"]>="2024"]))
  return dict(status="EXPLORATORY",rows=n,out=out)
 if __name__=="__main__":
