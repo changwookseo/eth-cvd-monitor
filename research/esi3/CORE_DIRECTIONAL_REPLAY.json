@@ -1,0 +1,347 @@
+{
+  "status": "EXPLORATORY",
+  "rows": 2519,
+  "columns": [
+    "signals",
+    "targets",
+    "matched_signals",
+    "detected_targets",
+    "positive_10d",
+    "mean_10d"
+  ],
+  "rules": {
+    "common": "5d price slope opposite direction; 10d cooldown; start index 20; same target and return as CORE_INITIAL_REPLAY",
+    "price": "price acceleration in reversal direction",
+    "buy_base": "price acceleration and improving negative normalized spot CVD",
+    "buy_buyshare": "base plus rising 3d volume-weighted buy share vs previous 3d",
+    "buy_multi": "base plus improving 10d normalized spot CVD",
+    "buy_strong": "base plus daily normalized CVD improvement >0.005",
+    "buy_earlycvd": "improving 5d normalized spot CVD and rising 3d buy share without price acceleration gate",
+    "sell_base": "negative normalized spot CVD",
+    "sell_oi": "base plus falling OI slope",
+    "sell_funding": "base plus falling funding slope",
+    "sell_oi_funding": "base plus both",
+    "sell_multi": "base plus negative 10d normalized spot CVD"
+  },
+  "out": {
+    "1:price": {
+      "all": [
+        156,
+        115,
+        34,
+        34,
+        83,
+        0.008335102845203739
+      ],
+      "pre": [
+        85,
+        67,
+        20,
+        20,
+        52,
+        0.013989283639386528
+      ],
+      "post": [
+        71,
+        48,
+        14,
+        14,
+        31,
+        0.00156601316202716
+      ]
+    },
+    "1:base": {
+      "all": [
+        112,
+        115,
+        25,
+        25,
+        68,
+        0.027853534919588845
+      ],
+      "pre": [
+        63,
+        67,
+        16,
+        16,
+        42,
+        0.0390182091594337
+      ],
+      "post": [
+        49,
+        48,
+        9,
+        9,
+        26,
+        0.013498953754074054
+      ]
+    },
+    "1:buyshare": {
+      "all": [
+        104,
+        115,
+        25,
+        25,
+        57,
+        0.025102598035583935
+      ],
+      "pre": [
+        56,
+        67,
+        16,
+        16,
+        32,
+        0.03286476361633635
+      ],
+      "post": [
+        48,
+        48,
+        9,
+        9,
+        25,
+        0.01604673819137279
+      ]
+    },
+    "1:multi": {
+      "all": [
+        51,
+        115,
+        10,
+        10,
+        31,
+        0.011636978768535653
+      ],
+      "pre": [
+        32,
+        67,
+        7,
+        7,
+        20,
+        -0.0001926947169524386
+      ],
+      "post": [
+        19,
+        48,
+        3,
+        3,
+        11,
+        0.031560639375673494
+      ]
+    },
+    "1:strong": {
+      "all": [
+        79,
+        115,
+        20,
+        20,
+        42,
+        0.013617505971947138
+      ],
+      "pre": [
+        41,
+        67,
+        13,
+        13,
+        24,
+        0.02866990121331326
+      ],
+      "post": [
+        38,
+        48,
+        7,
+        7,
+        18,
+        -0.0026232362621584145
+      ]
+    },
+    "1:earlycvd": {
+      "all": [
+        133,
+        115,
+        34,
+        34,
+        71,
+        0.014024436923027008
+      ],
+      "pre": [
+        71,
+        67,
+        18,
+        18,
+        38,
+        0.0064989607326454675
+      ],
+      "post": [
+        62,
+        48,
+        16,
+        16,
+        33,
+        0.022642320947496186
+      ]
+    },
+    "-1:price": {
+      "all": [
+        173,
+        95,
+        25,
+        25,
+        81,
+        -0.015023629682415593
+      ],
+      "pre": [
+        102,
+        55,
+        16,
+        16,
+        44,
+        -0.027854440953801178
+      ],
+      "post": [
+        71,
+        40,
+        9,
+        9,
+        37,
+        0.003409366791969345
+      ]
+    },
+    "-1:base": {
+      "all": [
+        160,
+        95,
+        40,
+        40,
+        74,
+        -0.02237798931100267
+      ],
+      "pre": [
+        92,
+        55,
+        25,
+        25,
+        39,
+        -0.03742379011569343
+      ],
+      "post": [
+        68,
+        40,
+        15,
+        15,
+        35,
+        -0.0020219058693622246
+      ]
+    },
+    "-1:oi": {
+      "all": [
+        84,
+        95,
+        19,
+        19,
+        47,
+        0.022573772502122717
+      ],
+      "pre": [
+        35,
+        55,
+        8,
+        8,
+        20,
+        0.03399850496686623
+      ],
+      "post": [
+        49,
+        40,
+        11,
+        11,
+        27,
+        0.014413249313020193
+      ]
+    },
+    "-1:funding": {
+      "all": [
+        81,
+        95,
+        18,
+        18,
+        39,
+        -0.0019606426108266296
+      ],
+      "pre": [
+        30,
+        55,
+        8,
+        8,
+        16,
+        0.013316555675947044
+      ],
+      "post": [
+        51,
+        40,
+        10,
+        10,
+        23,
+        -0.010947229838340554
+      ]
+    },
+    "-1:oi_funding": {
+      "all": [
+        57,
+        95,
+        14,
+        14,
+        28,
+        0.012770074911986328
+      ],
+      "pre": [
+        17,
+        55,
+        6,
+        6,
+        9,
+        0.04188667235930001
+      ],
+      "post": [
+        40,
+        40,
+        8,
+        8,
+        19,
+        0.00039552099687801265
+      ]
+    },
+    "-1:multi": {
+      "all": [
+        137,
+        95,
+        33,
+        33,
+        64,
+        -0.009348875919408743
+      ],
+      "pre": [
+        81,
+        55,
+        19,
+        19,
+        36,
+        -0.019729906863320018
+      ],
+      "post": [
+        56,
+        40,
+        14,
+        14,
+        28,
+        0.005666543838748646
+      ]
+    }
+  },
+  "limitations": [
+    "exploratory same history",
+    "no costs",
+    "no matched coverage control",
+    "no independent holdout",
+    "no executable replay yet"
+  ]
+}
