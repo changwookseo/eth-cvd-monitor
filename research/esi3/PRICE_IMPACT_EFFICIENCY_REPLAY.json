@@ -1,0 +1,1784 @@
+{
+  "status": "PRICE_IMPACT_PROXY_REPLAY",
+  "method": "Directional adverse log return floored at zero / side volume relative to common preceding 30d average. Compare adjacent equal trailing windows 1,2,3,5 days; signal requires volume increase, prior adverse return positive, efficiency decrease; strict additionally requires adverse return decrease (implies efficiency decrease). Spot and futures use own close. All daily eligible observations, pre2025 training descriptive, 2025 rule selection min10 cooldown alarms, H1 test, 15d purge, 3d cooldown. Controls daily complement not matched. Not causal absorption or integrated model. H1 previously inspected.",
+  "out": {
+    "1": {
+      "train": 1447,
+      "val": 350,
+      "test": 181,
+      "base": {
+        "n": 181,
+        "hits": 35,
+        "precision": 0.19337016574585636,
+        "unique": 7
+      },
+      "targets": 7,
+      "chosen": {
+        "w": 1,
+        "venue": "futures",
+        "kind": "signal",
+        "train": {
+          "n": 222,
+          "hits": 44,
+          "precision": 0.1981981981981982,
+          "unique": 0
+        },
+        "validation": {
+          "n": 51,
+          "hits": 19,
+          "precision": 0.37254901960784315,
+          "unique": 0
+        },
+        "test": {
+          "n": 25,
+          "hits": 6,
+          "precision": 0.24,
+          "unique": 5
+        },
+        "testDaily": {
+          "n": 31,
+          "hits": 7,
+          "precision": 0.22580645161290322,
+          "unique": 5
+        },
+        "control": {
+          "n": 150,
+          "hits": 28,
+          "precision": 0.18666666666666668,
+          "unique": 7
+        }
+      },
+      "rules": [
+        {
+          "w": 1,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 216,
+            "hits": 38,
+            "precision": 0.17592592592592593,
+            "unique": 0
+          },
+          "validation": {
+            "n": 46,
+            "hits": 15,
+            "precision": 0.32608695652173914,
+            "unique": 0
+          },
+          "test": {
+            "n": 26,
+            "hits": 7,
+            "precision": 0.2692307692307692,
+            "unique": 6
+          },
+          "testDaily": {
+            "n": 33,
+            "hits": 9,
+            "precision": 0.2727272727272727,
+            "unique": 6
+          },
+          "control": {
+            "n": 148,
+            "hits": 26,
+            "precision": 0.17567567567567569,
+            "unique": 7
+          }
+        },
+        {
+          "w": 1,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 202,
+            "hits": 35,
+            "precision": 0.17326732673267325,
+            "unique": 0
+          },
+          "validation": {
+            "n": 45,
+            "hits": 14,
+            "precision": 0.3111111111111111,
+            "unique": 0
+          },
+          "test": {
+            "n": 26,
+            "hits": 7,
+            "precision": 0.2692307692307692,
+            "unique": 6
+          },
+          "testDaily": {
+            "n": 33,
+            "hits": 9,
+            "precision": 0.2727272727272727,
+            "unique": 6
+          },
+          "control": {
+            "n": 148,
+            "hits": 26,
+            "precision": 0.17567567567567569,
+            "unique": 7
+          }
+        },
+        {
+          "w": 1,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 222,
+            "hits": 44,
+            "precision": 0.1981981981981982,
+            "unique": 0
+          },
+          "validation": {
+            "n": 51,
+            "hits": 19,
+            "precision": 0.37254901960784315,
+            "unique": 0
+          },
+          "test": {
+            "n": 25,
+            "hits": 6,
+            "precision": 0.24,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 31,
+            "hits": 7,
+            "precision": 0.22580645161290322,
+            "unique": 5
+          },
+          "control": {
+            "n": 150,
+            "hits": 28,
+            "precision": 0.18666666666666668,
+            "unique": 7
+          }
+        },
+        {
+          "w": 1,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 206,
+            "hits": 38,
+            "precision": 0.18446601941747573,
+            "unique": 0
+          },
+          "validation": {
+            "n": 49,
+            "hits": 17,
+            "precision": 0.3469387755102041,
+            "unique": 0
+          },
+          "test": {
+            "n": 24,
+            "hits": 6,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 30,
+            "hits": 7,
+            "precision": 0.23333333333333334,
+            "unique": 5
+          },
+          "control": {
+            "n": 151,
+            "hits": 28,
+            "precision": 0.18543046357615894,
+            "unique": 7
+          }
+        },
+        {
+          "w": 1,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 198,
+            "hits": 36,
+            "precision": 0.18181818181818182,
+            "unique": 0
+          },
+          "validation": {
+            "n": 42,
+            "hits": 13,
+            "precision": 0.30952380952380953,
+            "unique": 0
+          },
+          "test": {
+            "n": 23,
+            "hits": 6,
+            "precision": 0.2608695652173913,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 28,
+            "hits": 7,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "control": {
+            "n": 153,
+            "hits": 28,
+            "precision": 0.1830065359477124,
+            "unique": 7
+          }
+        },
+        {
+          "w": 1,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 185,
+            "hits": 33,
+            "precision": 0.1783783783783784,
+            "unique": 0
+          },
+          "validation": {
+            "n": 41,
+            "hits": 12,
+            "precision": 0.2926829268292683,
+            "unique": 0
+          },
+          "test": {
+            "n": 23,
+            "hits": 6,
+            "precision": 0.2608695652173913,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 28,
+            "hits": 7,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "control": {
+            "n": 153,
+            "hits": 28,
+            "precision": 0.1830065359477124,
+            "unique": 7
+          }
+        },
+        {
+          "w": 2,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 224,
+            "hits": 39,
+            "precision": 0.17410714285714285,
+            "unique": 0
+          },
+          "validation": {
+            "n": 38,
+            "hits": 7,
+            "precision": 0.18421052631578946,
+            "unique": 0
+          },
+          "test": {
+            "n": 23,
+            "hits": 2,
+            "precision": 0.08695652173913043,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 32,
+            "hits": 6,
+            "precision": 0.1875,
+            "unique": 3
+          },
+          "control": {
+            "n": 149,
+            "hits": 29,
+            "precision": 0.19463087248322147,
+            "unique": 7
+          }
+        },
+        {
+          "w": 2,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 203,
+            "hits": 31,
+            "precision": 0.15270935960591134,
+            "unique": 0
+          },
+          "validation": {
+            "n": 33,
+            "hits": 6,
+            "precision": 0.18181818181818182,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 2,
+            "precision": 0.1,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 27,
+            "hits": 4,
+            "precision": 0.14814814814814814,
+            "unique": 3
+          },
+          "control": {
+            "n": 154,
+            "hits": 31,
+            "precision": 0.2012987012987013,
+            "unique": 7
+          }
+        },
+        {
+          "w": 2,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 220,
+            "hits": 37,
+            "precision": 0.16818181818181818,
+            "unique": 0
+          },
+          "validation": {
+            "n": 38,
+            "hits": 7,
+            "precision": 0.18421052631578946,
+            "unique": 0
+          },
+          "test": {
+            "n": 23,
+            "hits": 2,
+            "precision": 0.08695652173913043,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 34,
+            "hits": 5,
+            "precision": 0.14705882352941177,
+            "unique": 3
+          },
+          "control": {
+            "n": 147,
+            "hits": 30,
+            "precision": 0.20408163265306123,
+            "unique": 7
+          }
+        },
+        {
+          "w": 2,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 199,
+            "hits": 28,
+            "precision": 0.1407035175879397,
+            "unique": 0
+          },
+          "validation": {
+            "n": 33,
+            "hits": 6,
+            "precision": 0.18181818181818182,
+            "unique": 0
+          },
+          "test": {
+            "n": 22,
+            "hits": 2,
+            "precision": 0.09090909090909091,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 31,
+            "hits": 4,
+            "precision": 0.12903225806451613,
+            "unique": 3
+          },
+          "control": {
+            "n": 150,
+            "hits": 31,
+            "precision": 0.20666666666666667,
+            "unique": 7
+          }
+        },
+        {
+          "w": 2,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 201,
+            "hits": 34,
+            "precision": 0.1691542288557214,
+            "unique": 0
+          },
+          "validation": {
+            "n": 36,
+            "hits": 7,
+            "precision": 0.19444444444444445,
+            "unique": 0
+          },
+          "test": {
+            "n": 22,
+            "hits": 2,
+            "precision": 0.09090909090909091,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 30,
+            "hits": 5,
+            "precision": 0.16666666666666666,
+            "unique": 3
+          },
+          "control": {
+            "n": 151,
+            "hits": 30,
+            "precision": 0.1986754966887417,
+            "unique": 7
+          }
+        },
+        {
+          "w": 2,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 183,
+            "hits": 26,
+            "precision": 0.14207650273224043,
+            "unique": 0
+          },
+          "validation": {
+            "n": 31,
+            "hits": 6,
+            "precision": 0.1935483870967742,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 2,
+            "precision": 0.1,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 27,
+            "hits": 4,
+            "precision": 0.14814814814814814,
+            "unique": 3
+          },
+          "control": {
+            "n": 154,
+            "hits": 31,
+            "precision": 0.2012987012987013,
+            "unique": 7
+          }
+        },
+        {
+          "w": 3,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 221,
+            "hits": 40,
+            "precision": 0.18099547511312217,
+            "unique": 0
+          },
+          "validation": {
+            "n": 40,
+            "hits": 8,
+            "precision": 0.2,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 4,
+            "precision": 0.2,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 33,
+            "hits": 8,
+            "precision": 0.24242424242424243,
+            "unique": 4
+          },
+          "control": {
+            "n": 148,
+            "hits": 27,
+            "precision": 0.18243243243243243,
+            "unique": 7
+          }
+        },
+        {
+          "w": 3,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 198,
+            "hits": 32,
+            "precision": 0.16161616161616163,
+            "unique": 0
+          },
+          "validation": {
+            "n": 36,
+            "hits": 6,
+            "precision": 0.16666666666666666,
+            "unique": 0
+          },
+          "test": {
+            "n": 19,
+            "hits": 3,
+            "precision": 0.15789473684210525,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 28,
+            "hits": 6,
+            "precision": 0.21428571428571427,
+            "unique": 3
+          },
+          "control": {
+            "n": 153,
+            "hits": 29,
+            "precision": 0.1895424836601307,
+            "unique": 7
+          }
+        },
+        {
+          "w": 3,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 224,
+            "hits": 41,
+            "precision": 0.18303571428571427,
+            "unique": 0
+          },
+          "validation": {
+            "n": 38,
+            "hits": 8,
+            "precision": 0.21052631578947367,
+            "unique": 0
+          },
+          "test": {
+            "n": 22,
+            "hits": 5,
+            "precision": 0.22727272727272727,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 39,
+            "hits": 9,
+            "precision": 0.23076923076923078,
+            "unique": 5
+          },
+          "control": {
+            "n": 142,
+            "hits": 26,
+            "precision": 0.18309859154929578,
+            "unique": 7
+          }
+        },
+        {
+          "w": 3,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 203,
+            "hits": 34,
+            "precision": 0.16748768472906403,
+            "unique": 0
+          },
+          "validation": {
+            "n": 35,
+            "hits": 7,
+            "precision": 0.2,
+            "unique": 0
+          },
+          "test": {
+            "n": 21,
+            "hits": 3,
+            "precision": 0.14285714285714285,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 33,
+            "hits": 6,
+            "precision": 0.18181818181818182,
+            "unique": 3
+          },
+          "control": {
+            "n": 148,
+            "hits": 29,
+            "precision": 0.19594594594594594,
+            "unique": 7
+          }
+        },
+        {
+          "w": 3,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 200,
+            "hits": 35,
+            "precision": 0.175,
+            "unique": 0
+          },
+          "validation": {
+            "n": 35,
+            "hits": 7,
+            "precision": 0.2,
+            "unique": 0
+          },
+          "test": {
+            "n": 19,
+            "hits": 4,
+            "precision": 0.21052631578947367,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 31,
+            "hits": 8,
+            "precision": 0.25806451612903225,
+            "unique": 4
+          },
+          "control": {
+            "n": 150,
+            "hits": 27,
+            "precision": 0.18,
+            "unique": 7
+          }
+        },
+        {
+          "w": 3,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 180,
+            "hits": 29,
+            "precision": 0.16111111111111112,
+            "unique": 0
+          },
+          "validation": {
+            "n": 32,
+            "hits": 6,
+            "precision": 0.1875,
+            "unique": 0
+          },
+          "test": {
+            "n": 18,
+            "hits": 3,
+            "precision": 0.16666666666666666,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 27,
+            "hits": 6,
+            "precision": 0.2222222222222222,
+            "unique": 3
+          },
+          "control": {
+            "n": 154,
+            "hits": 29,
+            "precision": 0.18831168831168832,
+            "unique": 7
+          }
+        },
+        {
+          "w": 5,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 196,
+            "hits": 24,
+            "precision": 0.12244897959183673,
+            "unique": 0
+          },
+          "validation": {
+            "n": 37,
+            "hits": 7,
+            "precision": 0.1891891891891892,
+            "unique": 0
+          },
+          "test": {
+            "n": 21,
+            "hits": 4,
+            "precision": 0.19047619047619047,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 34,
+            "hits": 4,
+            "precision": 0.11764705882352941,
+            "unique": 4
+          },
+          "control": {
+            "n": 147,
+            "hits": 31,
+            "precision": 0.2108843537414966,
+            "unique": 7
+          }
+        },
+        {
+          "w": 5,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 179,
+            "hits": 21,
+            "precision": 0.11731843575418995,
+            "unique": 0
+          },
+          "validation": {
+            "n": 34,
+            "hits": 6,
+            "precision": 0.17647058823529413,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 3,
+            "precision": 0.15,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 32,
+            "hits": 3,
+            "precision": 0.09375,
+            "unique": 3
+          },
+          "control": {
+            "n": 149,
+            "hits": 32,
+            "precision": 0.21476510067114093,
+            "unique": 7
+          }
+        },
+        {
+          "w": 5,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 195,
+            "hits": 26,
+            "precision": 0.13333333333333333,
+            "unique": 0
+          },
+          "validation": {
+            "n": 34,
+            "hits": 6,
+            "precision": 0.17647058823529413,
+            "unique": 0
+          },
+          "test": {
+            "n": 21,
+            "hits": 3,
+            "precision": 0.14285714285714285,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 37,
+            "hits": 5,
+            "precision": 0.13513513513513514,
+            "unique": 4
+          },
+          "control": {
+            "n": 144,
+            "hits": 30,
+            "precision": 0.20833333333333334,
+            "unique": 7
+          }
+        },
+        {
+          "w": 5,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 182,
+            "hits": 22,
+            "precision": 0.12087912087912088,
+            "unique": 0
+          },
+          "validation": {
+            "n": 31,
+            "hits": 6,
+            "precision": 0.1935483870967742,
+            "unique": 0
+          },
+          "test": {
+            "n": 21,
+            "hits": 2,
+            "precision": 0.09523809523809523,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 34,
+            "hits": 4,
+            "precision": 0.11764705882352941,
+            "unique": 3
+          },
+          "control": {
+            "n": 147,
+            "hits": 31,
+            "precision": 0.2108843537414966,
+            "unique": 7
+          }
+        },
+        {
+          "w": 5,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 171,
+            "hits": 20,
+            "precision": 0.11695906432748537,
+            "unique": 0
+          },
+          "validation": {
+            "n": 32,
+            "hits": 7,
+            "precision": 0.21875,
+            "unique": 0
+          },
+          "test": {
+            "n": 19,
+            "hits": 3,
+            "precision": 0.15789473684210525,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 29,
+            "hits": 3,
+            "precision": 0.10344827586206896,
+            "unique": 3
+          },
+          "control": {
+            "n": 152,
+            "hits": 32,
+            "precision": 0.21052631578947367,
+            "unique": 7
+          }
+        },
+        {
+          "w": 5,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 157,
+            "hits": 17,
+            "precision": 0.10828025477707007,
+            "unique": 0
+          },
+          "validation": {
+            "n": 30,
+            "hits": 6,
+            "precision": 0.2,
+            "unique": 0
+          },
+          "test": {
+            "n": 18,
+            "hits": 2,
+            "precision": 0.1111111111111111,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 27,
+            "hits": 2,
+            "precision": 0.07407407407407407,
+            "unique": 2
+          },
+          "control": {
+            "n": 154,
+            "hits": 33,
+            "precision": 0.21428571428571427,
+            "unique": 7
+          }
+        }
+      ]
+    },
+    "-1": {
+      "train": 1447,
+      "val": 350,
+      "test": 181,
+      "base": {
+        "n": 181,
+        "hits": 40,
+        "precision": 0.22099447513812154,
+        "unique": 8
+      },
+      "targets": 8,
+      "chosen": {
+        "w": 5,
+        "venue": "both",
+        "kind": "signal",
+        "train": {
+          "n": 210,
+          "hits": 35,
+          "precision": 0.16666666666666666,
+          "unique": 0
+        },
+        "validation": {
+          "n": 31,
+          "hits": 7,
+          "precision": 0.22580645161290322,
+          "unique": 0
+        },
+        "test": {
+          "n": 12,
+          "hits": 2,
+          "precision": 0.16666666666666666,
+          "unique": 2
+        },
+        "testDaily": {
+          "n": 20,
+          "hits": 5,
+          "precision": 0.25,
+          "unique": 4
+        },
+        "control": {
+          "n": 161,
+          "hits": 35,
+          "precision": 0.21739130434782608,
+          "unique": 8
+        }
+      },
+      "rules": [
+        {
+          "w": 1,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 248,
+            "hits": 41,
+            "precision": 0.16532258064516128,
+            "unique": 0
+          },
+          "validation": {
+            "n": 49,
+            "hits": 10,
+            "precision": 0.20408163265306123,
+            "unique": 0
+          },
+          "test": {
+            "n": 22,
+            "hits": 5,
+            "precision": 0.22727272727272727,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 24,
+            "hits": 5,
+            "precision": 0.20833333333333334,
+            "unique": 4
+          },
+          "control": {
+            "n": 157,
+            "hits": 35,
+            "precision": 0.2229299363057325,
+            "unique": 8
+          }
+        },
+        {
+          "w": 1,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 222,
+            "hits": 34,
+            "precision": 0.15315315315315314,
+            "unique": 0
+          },
+          "validation": {
+            "n": 45,
+            "hits": 8,
+            "precision": 0.17777777777777778,
+            "unique": 0
+          },
+          "test": {
+            "n": 19,
+            "hits": 5,
+            "precision": 0.2631578947368421,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 21,
+            "hits": 5,
+            "precision": 0.23809523809523808,
+            "unique": 4
+          },
+          "control": {
+            "n": 160,
+            "hits": 35,
+            "precision": 0.21875,
+            "unique": 8
+          }
+        },
+        {
+          "w": 1,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 257,
+            "hits": 44,
+            "precision": 0.17120622568093385,
+            "unique": 0
+          },
+          "validation": {
+            "n": 51,
+            "hits": 8,
+            "precision": 0.1568627450980392,
+            "unique": 0
+          },
+          "test": {
+            "n": 23,
+            "hits": 6,
+            "precision": 0.2608695652173913,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 24,
+            "hits": 6,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "control": {
+            "n": 157,
+            "hits": 34,
+            "precision": 0.21656050955414013,
+            "unique": 8
+          }
+        },
+        {
+          "w": 1,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 237,
+            "hits": 39,
+            "precision": 0.16455696202531644,
+            "unique": 0
+          },
+          "validation": {
+            "n": 48,
+            "hits": 7,
+            "precision": 0.14583333333333334,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 6,
+            "precision": 0.3,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 21,
+            "hits": 6,
+            "precision": 0.2857142857142857,
+            "unique": 5
+          },
+          "control": {
+            "n": 160,
+            "hits": 34,
+            "precision": 0.2125,
+            "unique": 8
+          }
+        },
+        {
+          "w": 1,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 217,
+            "hits": 35,
+            "precision": 0.16129032258064516,
+            "unique": 0
+          },
+          "validation": {
+            "n": 47,
+            "hits": 8,
+            "precision": 0.1702127659574468,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 5,
+            "precision": 0.25,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 21,
+            "hits": 5,
+            "precision": 0.23809523809523808,
+            "unique": 4
+          },
+          "control": {
+            "n": 160,
+            "hits": 35,
+            "precision": 0.21875,
+            "unique": 8
+          }
+        },
+        {
+          "w": 1,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 200,
+            "hits": 30,
+            "precision": 0.15,
+            "unique": 0
+          },
+          "validation": {
+            "n": 44,
+            "hits": 7,
+            "precision": 0.1590909090909091,
+            "unique": 0
+          },
+          "test": {
+            "n": 18,
+            "hits": 5,
+            "precision": 0.2777777777777778,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 19,
+            "hits": 5,
+            "precision": 0.2631578947368421,
+            "unique": 4
+          },
+          "control": {
+            "n": 162,
+            "hits": 35,
+            "precision": 0.21604938271604937,
+            "unique": 8
+          }
+        },
+        {
+          "w": 2,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 266,
+            "hits": 47,
+            "precision": 0.17669172932330826,
+            "unique": 0
+          },
+          "validation": {
+            "n": 49,
+            "hits": 8,
+            "precision": 0.16326530612244897,
+            "unique": 0
+          },
+          "test": {
+            "n": 21,
+            "hits": 5,
+            "precision": 0.23809523809523808,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 28,
+            "hits": 7,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "control": {
+            "n": 153,
+            "hits": 33,
+            "precision": 0.21568627450980393,
+            "unique": 8
+          }
+        },
+        {
+          "w": 2,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 246,
+            "hits": 44,
+            "precision": 0.17886178861788618,
+            "unique": 0
+          },
+          "validation": {
+            "n": 44,
+            "hits": 6,
+            "precision": 0.13636363636363635,
+            "unique": 0
+          },
+          "test": {
+            "n": 19,
+            "hits": 5,
+            "precision": 0.2631578947368421,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 24,
+            "hits": 6,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "control": {
+            "n": 157,
+            "hits": 34,
+            "precision": 0.21656050955414013,
+            "unique": 8
+          }
+        },
+        {
+          "w": 2,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 284,
+            "hits": 51,
+            "precision": 0.1795774647887324,
+            "unique": 0
+          },
+          "validation": {
+            "n": 49,
+            "hits": 8,
+            "precision": 0.16326530612244897,
+            "unique": 0
+          },
+          "test": {
+            "n": 22,
+            "hits": 5,
+            "precision": 0.22727272727272727,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 29,
+            "hits": 7,
+            "precision": 0.2413793103448276,
+            "unique": 5
+          },
+          "control": {
+            "n": 152,
+            "hits": 33,
+            "precision": 0.21710526315789475,
+            "unique": 8
+          }
+        },
+        {
+          "w": 2,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 262,
+            "hits": 48,
+            "precision": 0.183206106870229,
+            "unique": 0
+          },
+          "validation": {
+            "n": 45,
+            "hits": 6,
+            "precision": 0.13333333333333333,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 5,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 25,
+            "hits": 6,
+            "precision": 0.24,
+            "unique": 5
+          },
+          "control": {
+            "n": 156,
+            "hits": 34,
+            "precision": 0.21794871794871795,
+            "unique": 8
+          }
+        },
+        {
+          "w": 2,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 253,
+            "hits": 46,
+            "precision": 0.18181818181818182,
+            "unique": 0
+          },
+          "validation": {
+            "n": 48,
+            "hits": 8,
+            "precision": 0.16666666666666666,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 5,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 25,
+            "hits": 7,
+            "precision": 0.28,
+            "unique": 5
+          },
+          "control": {
+            "n": 156,
+            "hits": 33,
+            "precision": 0.21153846153846154,
+            "unique": 8
+          }
+        },
+        {
+          "w": 2,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 232,
+            "hits": 43,
+            "precision": 0.1853448275862069,
+            "unique": 0
+          },
+          "validation": {
+            "n": 43,
+            "hits": 6,
+            "precision": 0.13953488372093023,
+            "unique": 0
+          },
+          "test": {
+            "n": 18,
+            "hits": 5,
+            "precision": 0.2777777777777778,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 21,
+            "hits": 6,
+            "precision": 0.2857142857142857,
+            "unique": 5
+          },
+          "control": {
+            "n": 160,
+            "hits": 34,
+            "precision": 0.2125,
+            "unique": 8
+          }
+        },
+        {
+          "w": 3,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 273,
+            "hits": 40,
+            "precision": 0.14652014652014653,
+            "unique": 0
+          },
+          "validation": {
+            "n": 39,
+            "hits": 8,
+            "precision": 0.20512820512820512,
+            "unique": 0
+          },
+          "test": {
+            "n": 17,
+            "hits": 3,
+            "precision": 0.17647058823529413,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 26,
+            "hits": 4,
+            "precision": 0.15384615384615385,
+            "unique": 3
+          },
+          "control": {
+            "n": 155,
+            "hits": 36,
+            "precision": 0.23225806451612904,
+            "unique": 8
+          }
+        },
+        {
+          "w": 3,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 251,
+            "hits": 36,
+            "precision": 0.14342629482071714,
+            "unique": 0
+          },
+          "validation": {
+            "n": 39,
+            "hits": 8,
+            "precision": 0.20512820512820512,
+            "unique": 0
+          },
+          "test": {
+            "n": 16,
+            "hits": 3,
+            "precision": 0.1875,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 23,
+            "hits": 4,
+            "precision": 0.17391304347826086,
+            "unique": 3
+          },
+          "control": {
+            "n": 158,
+            "hits": 36,
+            "precision": 0.22784810126582278,
+            "unique": 8
+          }
+        },
+        {
+          "w": 3,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 283,
+            "hits": 42,
+            "precision": 0.14840989399293286,
+            "unique": 0
+          },
+          "validation": {
+            "n": 39,
+            "hits": 8,
+            "precision": 0.20512820512820512,
+            "unique": 0
+          },
+          "test": {
+            "n": 20,
+            "hits": 5,
+            "precision": 0.25,
+            "unique": 5
+          },
+          "testDaily": {
+            "n": 31,
+            "hits": 6,
+            "precision": 0.1935483870967742,
+            "unique": 5
+          },
+          "control": {
+            "n": 150,
+            "hits": 34,
+            "precision": 0.22666666666666666,
+            "unique": 8
+          }
+        },
+        {
+          "w": 3,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 264,
+            "hits": 39,
+            "precision": 0.14772727272727273,
+            "unique": 0
+          },
+          "validation": {
+            "n": 39,
+            "hits": 8,
+            "precision": 0.20512820512820512,
+            "unique": 0
+          },
+          "test": {
+            "n": 18,
+            "hits": 4,
+            "precision": 0.2222222222222222,
+            "unique": 4
+          },
+          "testDaily": {
+            "n": 28,
+            "hits": 6,
+            "precision": 0.21428571428571427,
+            "unique": 5
+          },
+          "control": {
+            "n": 153,
+            "hits": 34,
+            "precision": 0.2222222222222222,
+            "unique": 8
+          }
+        },
+        {
+          "w": 3,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 247,
+            "hits": 35,
+            "precision": 0.1417004048582996,
+            "unique": 0
+          },
+          "validation": {
+            "n": 37,
+            "hits": 8,
+            "precision": 0.21621621621621623,
+            "unique": 0
+          },
+          "test": {
+            "n": 17,
+            "hits": 3,
+            "precision": 0.17647058823529413,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 26,
+            "hits": 4,
+            "precision": 0.15384615384615385,
+            "unique": 3
+          },
+          "control": {
+            "n": 155,
+            "hits": 36,
+            "precision": 0.23225806451612904,
+            "unique": 8
+          }
+        },
+        {
+          "w": 3,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 229,
+            "hits": 32,
+            "precision": 0.13973799126637554,
+            "unique": 0
+          },
+          "validation": {
+            "n": 37,
+            "hits": 8,
+            "precision": 0.21621621621621623,
+            "unique": 0
+          },
+          "test": {
+            "n": 16,
+            "hits": 3,
+            "precision": 0.1875,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 23,
+            "hits": 4,
+            "precision": 0.17391304347826086,
+            "unique": 3
+          },
+          "control": {
+            "n": 158,
+            "hits": 36,
+            "precision": 0.22784810126582278,
+            "unique": 8
+          }
+        },
+        {
+          "w": 5,
+          "venue": "spot",
+          "kind": "signal",
+          "train": {
+            "n": 257,
+            "hits": 44,
+            "precision": 0.17120622568093385,
+            "unique": 0
+          },
+          "validation": {
+            "n": 31,
+            "hits": 6,
+            "precision": 0.1935483870967742,
+            "unique": 0
+          },
+          "test": {
+            "n": 13,
+            "hits": 3,
+            "precision": 0.23076923076923078,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 26,
+            "hits": 7,
+            "precision": 0.2692307692307692,
+            "unique": 4
+          },
+          "control": {
+            "n": 155,
+            "hits": 33,
+            "precision": 0.2129032258064516,
+            "unique": 8
+          }
+        },
+        {
+          "w": 5,
+          "venue": "spot",
+          "kind": "strict",
+          "train": {
+            "n": 239,
+            "hits": 37,
+            "precision": 0.15481171548117154,
+            "unique": 0
+          },
+          "validation": {
+            "n": 29,
+            "hits": 5,
+            "precision": 0.1724137931034483,
+            "unique": 0
+          },
+          "test": {
+            "n": 13,
+            "hits": 3,
+            "precision": 0.23076923076923078,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 25,
+            "hits": 6,
+            "precision": 0.24,
+            "unique": 4
+          },
+          "control": {
+            "n": 156,
+            "hits": 34,
+            "precision": 0.21794871794871795,
+            "unique": 8
+          }
+        },
+        {
+          "w": 5,
+          "venue": "futures",
+          "kind": "signal",
+          "train": {
+            "n": 239,
+            "hits": 40,
+            "precision": 0.16736401673640167,
+            "unique": 0
+          },
+          "validation": {
+            "n": 38,
+            "hits": 8,
+            "precision": 0.21052631578947367,
+            "unique": 0
+          },
+          "test": {
+            "n": 13,
+            "hits": 3,
+            "precision": 0.23076923076923078,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 21,
+            "hits": 5,
+            "precision": 0.23809523809523808,
+            "unique": 4
+          },
+          "control": {
+            "n": 160,
+            "hits": 35,
+            "precision": 0.21875,
+            "unique": 8
+          }
+        },
+        {
+          "w": 5,
+          "venue": "futures",
+          "kind": "strict",
+          "train": {
+            "n": 224,
+            "hits": 35,
+            "precision": 0.15625,
+            "unique": 0
+          },
+          "validation": {
+            "n": 34,
+            "hits": 7,
+            "precision": 0.20588235294117646,
+            "unique": 0
+          },
+          "test": {
+            "n": 13,
+            "hits": 3,
+            "precision": 0.23076923076923078,
+            "unique": 3
+          },
+          "testDaily": {
+            "n": 21,
+            "hits": 5,
+            "precision": 0.23809523809523808,
+            "unique": 4
+          },
+          "control": {
+            "n": 160,
+            "hits": 35,
+            "precision": 0.21875,
+            "unique": 8
+          }
+        },
+        {
+          "w": 5,
+          "venue": "both",
+          "kind": "signal",
+          "train": {
+            "n": 210,
+            "hits": 35,
+            "precision": 0.16666666666666666,
+            "unique": 0
+          },
+          "validation": {
+            "n": 31,
+            "hits": 7,
+            "precision": 0.22580645161290322,
+            "unique": 0
+          },
+          "test": {
+            "n": 12,
+            "hits": 2,
+            "precision": 0.16666666666666666,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 20,
+            "hits": 5,
+            "precision": 0.25,
+            "unique": 4
+          },
+          "control": {
+            "n": 161,
+            "hits": 35,
+            "precision": 0.21739130434782608,
+            "unique": 8
+          }
+        },
+        {
+          "w": 5,
+          "venue": "both",
+          "kind": "strict",
+          "train": {
+            "n": 196,
+            "hits": 30,
+            "precision": 0.15306122448979592,
+            "unique": 0
+          },
+          "validation": {
+            "n": 27,
+            "hits": 6,
+            "precision": 0.2222222222222222,
+            "unique": 0
+          },
+          "test": {
+            "n": 12,
+            "hits": 2,
+            "precision": 0.16666666666666666,
+            "unique": 2
+          },
+          "testDaily": {
+            "n": 20,
+            "hits": 5,
+            "precision": 0.25,
+            "unique": 4
+          },
+          "control": {
+            "n": 161,
+            "hits": 35,
+            "precision": 0.21739130434782608,
+            "unique": 8
+          }
+        }
+      ]
+    }
+  }
+}
