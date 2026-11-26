@@ -1,6 +1,6 @@
 # ETH ESI 3.0 연구 보고서 | Binance 선물 수급
 
-수집 기준 2026-11-26 08:55:22 KST
+수집 기준 2026-11-26 09:00:44 KST
 
 Binance USD-M / ETHUSDT
 
