@@ -1,0 +1,482 @@
+{
+  "status": "EXPLORATORY_DAILY_PROXY",
+  "rows": 2519,
+  "definition": "365d prior confirmed +/-5 pivots with 10d outcome known strictly before signal; zone halfwidth .5 current SMA ATR14; candidate within 2 ATR of zone edge, same side or inside; grade A >=3 touches span>=90d close-assigned volume share>=5%; B >=2 span>=30d share>=2.5%; C >=2 or share>=2.5%; D otherwise. Strongest then nearest. Daily close-assigned volume proxy not VPVR. Signal days >=365 and <n-15, target >=370 and <n-10, recall target <n-15. 3d OR cooldown unchanged. Thresholds exploratory. Miss zone at day before target, not independent signal. Mean10 directional next open to tenth close no costs.",
+  "out": {
+    "1": {
+      "baseline": {
+        "n": 285,
+        "hit": 74,
+        "strict": 55,
+        "detected": 63,
+        "targets": 98,
+        "mean10": 0.01746940932398124
+      },
+      "grades": {
+        "A": {
+          "all": {
+            "n": 66,
+            "hit": 21,
+            "strict": 14,
+            "detected": 18,
+            "targets": 98,
+            "mean10": 0.015556168098733815
+          },
+          "pre": {
+            "n": 28,
+            "hit": 8,
+            "strict": 6,
+            "detected": 7,
+            "targets": 98,
+            "mean10": 0.0368161924095543
+          },
+          "post": {
+            "n": 38,
+            "hit": 13,
+            "strict": 8,
+            "detected": 11,
+            "targets": 98,
+            "mean10": -0.00010911297239706239
+          },
+          "near": {
+            "n": 44,
+            "hit": 14,
+            "strict": 9,
+            "detected": 13,
+            "targets": 98,
+            "mean10": 0.01336081313487947
+          },
+          "far": {
+            "n": 22,
+            "hit": 7,
+            "strict": 5,
+            "detected": 7,
+            "targets": 98,
+            "mean10": 0.019946878026442513
+          }
+        },
+        "B": {
+          "all": {
+            "n": 63,
+            "hit": 12,
+            "strict": 11,
+            "detected": 11,
+            "targets": 98,
+            "mean10": 0.0013513024736162488
+          },
+          "pre": {
+            "n": 30,
+            "hit": 6,
+            "strict": 6,
+            "detected": 6,
+            "targets": 98,
+            "mean10": -0.006704999963207207
+          },
+          "post": {
+            "n": 33,
+            "hit": 6,
+            "strict": 5,
+            "detected": 5,
+            "targets": 98,
+            "mean10": 0.00867521377981939
+          },
+          "near": {
+            "n": 43,
+            "hit": 10,
+            "strict": 10,
+            "detected": 9,
+            "targets": 98,
+            "mean10": -0.008291398604529755
+          },
+          "far": {
+            "n": 20,
+            "hit": 2,
+            "strict": 1,
+            "detected": 2,
+            "targets": 98,
+            "mean10": 0.022083109791630157
+          }
+        },
+        "C": {
+          "all": {
+            "n": 99,
+            "hit": 20,
+            "strict": 17,
+            "detected": 20,
+            "targets": 98,
+            "mean10": 0.008132422297121814
+          },
+          "pre": {
+            "n": 55,
+            "hit": 11,
+            "strict": 8,
+            "detected": 11,
+            "targets": 98,
+            "mean10": -0.001158097768676868
+          },
+          "post": {
+            "n": 44,
+            "hit": 9,
+            "strict": 9,
+            "detected": 9,
+            "targets": 98,
+            "mean10": 0.019745572379370167
+          },
+          "near": {
+            "n": 82,
+            "hit": 15,
+            "strict": 12,
+            "detected": 15,
+            "targets": 98,
+            "mean10": 0.0038368961734967875
+          },
+          "far": {
+            "n": 17,
+            "hit": 5,
+            "strict": 5,
+            "detected": 5,
+            "targets": 98,
+            "mean10": 0.02885201889343075
+          }
+        },
+        "D": {
+          "all": {
+            "n": 25,
+            "hit": 9,
+            "strict": 6,
+            "detected": 8,
+            "targets": 98,
+            "mean10": 0.05792586334232233
+          },
+          "pre": {
+            "n": 5,
+            "hit": 1,
+            "strict": 1,
+            "detected": 1,
+            "targets": 98,
+            "mean10": 0.1473069623931604
+          },
+          "post": {
+            "n": 20,
+            "hit": 8,
+            "strict": 5,
+            "detected": 7,
+            "targets": 98,
+            "mean10": 0.035580588579612805
+          },
+          "near": {
+            "n": 16,
+            "hit": 4,
+            "strict": 2,
+            "detected": 4,
+            "targets": 98,
+            "mean10": 0.08046221305604442
+          },
+          "far": {
+            "n": 9,
+            "hit": 5,
+            "strict": 4,
+            "detected": 5,
+            "targets": 98,
+            "mean10": 0.017861241629038585
+          }
+        },
+        "none": {
+          "all": {
+            "n": 32,
+            "hit": 12,
+            "strict": 7,
+            "detected": 11,
+            "targets": 98,
+            "mean10": 0.05042769112522748
+          },
+          "pre": {
+            "n": 18,
+            "hit": 8,
+            "strict": 5,
+            "detected": 7,
+            "targets": 98,
+            "mean10": 0.06133814627908027
+          },
+          "post": {
+            "n": 14,
+            "hit": 4,
+            "strict": 2,
+            "detected": 4,
+            "targets": 98,
+            "mean10": 0.036399963070273864
+          },
+          "near": {
+            "n": 0,
+            "hit": 0,
+            "strict": 0,
+            "detected": 0,
+            "targets": 98,
+            "mean10": null
+          },
+          "far": {
+            "n": 0,
+            "hit": 0,
+            "strict": 0,
+            "detected": 0,
+            "targets": 98,
+            "mean10": null
+          }
+        }
+      },
+      "missZones": {
+        "none": 10,
+        "A": 6,
+        "C": 6,
+        "D": 4,
+        "B": 9
+      },
+      "missed": 35,
+      "ab": {
+        "n": 129,
+        "hit": 33,
+        "strict": 25,
+        "detected": 28,
+        "targets": 98,
+        "mean10": 0.008618908142281057
+      }
+    },
+    "-1": {
+      "baseline": {
+        "n": 344,
+        "hit": 87,
+        "strict": 66,
+        "detected": 68,
+        "targets": 80,
+        "mean10": -0.0047849906429247285
+      },
+      "grades": {
+        "A": {
+          "all": {
+            "n": 46,
+            "hit": 14,
+            "strict": 12,
+            "detected": 13,
+            "targets": 80,
+            "mean10": 0.002606437119974412
+          },
+          "pre": {
+            "n": 19,
+            "hit": 7,
+            "strict": 5,
+            "detected": 6,
+            "targets": 80,
+            "mean10": 0.003277913172928698
+          },
+          "post": {
+            "n": 27,
+            "hit": 7,
+            "strict": 7,
+            "detected": 7,
+            "targets": 80,
+            "mean10": 0.0021339169345621365
+          },
+          "near": {
+            "n": 38,
+            "hit": 10,
+            "strict": 8,
+            "detected": 10,
+            "targets": 80,
+            "mean10": 0.0014058951237162411
+          },
+          "far": {
+            "n": 8,
+            "hit": 4,
+            "strict": 4,
+            "detected": 4,
+            "targets": 80,
+            "mean10": 0.008309011602200725
+          }
+        },
+        "B": {
+          "all": {
+            "n": 54,
+            "hit": 15,
+            "strict": 11,
+            "detected": 13,
+            "targets": 80,
+            "mean10": -0.004131538546607986
+          },
+          "pre": {
+            "n": 31,
+            "hit": 7,
+            "strict": 6,
+            "detected": 6,
+            "targets": 80,
+            "mean10": -0.018551306289857433
+          },
+          "post": {
+            "n": 23,
+            "hit": 8,
+            "strict": 5,
+            "detected": 7,
+            "targets": 80,
+            "mean10": 0.01530380058559779
+          },
+          "near": {
+            "n": 39,
+            "hit": 11,
+            "strict": 7,
+            "detected": 10,
+            "targets": 80,
+            "mean10": -0.02004044470980956
+          },
+          "far": {
+            "n": 15,
+            "hit": 4,
+            "strict": 4,
+            "detected": 3,
+            "targets": 80,
+            "mean10": 0.03723161747771611
+          }
+        },
+        "C": {
+          "all": {
+            "n": 130,
+            "hit": 34,
+            "strict": 26,
+            "detected": 28,
+            "targets": 80,
+            "mean10": 0.009217814970338346
+          },
+          "pre": {
+            "n": 62,
+            "hit": 17,
+            "strict": 13,
+            "detected": 16,
+            "targets": 80,
+            "mean10": 0.0044867766577361586
+          },
+          "post": {
+            "n": 68,
+            "hit": 17,
+            "strict": 13,
+            "detected": 12,
+            "targets": 80,
+            "mean10": 0.013531408725946223
+          },
+          "near": {
+            "n": 117,
+            "hit": 29,
+            "strict": 21,
+            "detected": 25,
+            "targets": 80,
+            "mean10": 0.011314461403096035
+          },
+          "far": {
+            "n": 13,
+            "hit": 5,
+            "strict": 5,
+            "detected": 5,
+            "targets": 80,
+            "mean10": -0.00965200292448083
+          }
+        },
+        "D": {
+          "all": {
+            "n": 34,
+            "hit": 7,
+            "strict": 4,
+            "detected": 5,
+            "targets": 80,
+            "mean10": -0.028684426045059858
+          },
+          "pre": {
+            "n": 19,
+            "hit": 3,
+            "strict": 2,
+            "detected": 2,
+            "targets": 80,
+            "mean10": -0.06122807648515818
+          },
+          "post": {
+            "n": 15,
+            "hit": 4,
+            "strict": 2,
+            "detected": 3,
+            "targets": 80,
+            "mean10": 0.012537531179064665
+          },
+          "near": {
+            "n": 26,
+            "hit": 5,
+            "strict": 2,
+            "detected": 3,
+            "targets": 80,
+            "mean10": -0.043833837705806025
+          },
+          "far": {
+            "n": 8,
+            "hit": 2,
+            "strict": 2,
+            "detected": 2,
+            "targets": 80,
+            "mean10": 0.020551161852365163
+          }
+        },
+        "none": {
+          "all": {
+            "n": 80,
+            "hit": 17,
+            "strict": 13,
+            "detected": 15,
+            "targets": 80,
+            "mean10": -0.02207344084725062
+          },
+          "pre": {
+            "n": 41,
+            "hit": 9,
+            "strict": 6,
+            "detected": 8,
+            "targets": 80,
+            "mean10": -0.014439377267656723
+          },
+          "post": {
+            "n": 39,
+            "hit": 8,
+            "strict": 7,
+            "detected": 7,
+            "targets": 80,
+            "mean10": -0.03009899486682369
+          },
+          "near": {
+            "n": 0,
+            "hit": 0,
+            "strict": 0,
+            "detected": 0,
+            "targets": 80,
+            "mean10": null
+          },
+          "far": {
+            "n": 0,
+            "hit": 0,
+            "strict": 0,
+            "detected": 0,
+            "targets": 80,
+            "mean10": null
+          }
+        }
+      },
+      "missZones": {
+        "none": 4,
+        "C": 4,
+        "A": 2,
+        "B": 2
+      },
+      "missed": 12,
+      "ab": {
+        "n": 100,
+        "hit": 29,
+        "strict": 23,
+        "detected": 24,
+        "targets": 80,
+        "mean10": -0.0010320697399800794
+      }
+    }
+  }
+}
