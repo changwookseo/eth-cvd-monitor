@@ -1,0 +1,121 @@
+{
+  "status": "INITIAL_CAUSAL_REPLAY",
+  "summary": {
+    "all": {
+      "total": 75,
+      "statuses": {
+        "no_matched_endpoint_in_window": 40,
+        "matched_in_window": 22,
+        "matched_before_or_at_confirmation": 13
+      },
+      "eligible": 62,
+      "matched": 22,
+      "early": 19,
+      "median_full_days": 4,
+      "unmatched_signals": 40,
+      "returns": {
+        "1": {
+          "n": 62,
+          "positive": 27,
+          "median": -0.003326360670913131
+        },
+        "3": {
+          "n": 62,
+          "positive": 27,
+          "median": -0.011083056761464483
+        },
+        "5": {
+          "n": 62,
+          "positive": 24,
+          "median": -0.024402233910477744
+        },
+        "10": {
+          "n": 62,
+          "positive": 31,
+          "median": -0.00592871053795424
+        }
+      }
+    },
+    "up": {
+      "total": 45,
+      "statuses": {
+        "no_matched_endpoint_in_window": 18,
+        "matched_in_window": 17,
+        "matched_before_or_at_confirmation": 10
+      },
+      "eligible": 35,
+      "matched": 17,
+      "early": 15,
+      "median_full_days": 2,
+      "unmatched_signals": 18,
+      "returns": {
+        "1": {
+          "n": 35,
+          "positive": 15,
+          "median": -0.008223963705486392
+        },
+        "3": {
+          "n": 35,
+          "positive": 13,
+          "median": -0.012619362834849657
+        },
+        "5": {
+          "n": 35,
+          "positive": 16,
+          "median": -0.021001475310248985
+        },
+        "10": {
+          "n": 35,
+          "positive": 19,
+          "median": 0.010500737655124603
+        }
+      }
+    },
+    "down": {
+      "total": 30,
+      "statuses": {
+        "no_matched_endpoint_in_window": 22,
+        "matched_in_window": 5,
+        "matched_before_or_at_confirmation": 3
+      },
+      "eligible": 27,
+      "matched": 5,
+      "early": 4,
+      "median_full_days": 5.5,
+      "unmatched_signals": 22,
+      "returns": {
+        "1": {
+          "n": 27,
+          "positive": 12,
+          "median": -0.0029708363949628724
+        },
+        "3": {
+          "n": 27,
+          "positive": 14,
+          "median": 0.0017597296098186277
+        },
+        "5": {
+          "n": 27,
+          "positive": 8,
+          "median": -0.03959519523931965
+        },
+        "10": {
+          "n": 27,
+          "positive": 12,
+          "median": -0.015183950118492606
+        }
+      }
+    }
+  },
+  "source_sha256": "c31470c30dff5b8d8cae20764114520ffae18fbe5e6bee0f223231f3b5d07323",
+  "output_sha256": "4aced9e02808ec52571853ce613182a74122909f86feef297e0f382a6ea9a905",
+  "limitations": [
+    "20 daily bars fixed exploratory horizon",
+    "overlapping candidates dependent",
+    "unmatched signals are not necessarily false price reversal signals",
+    "no active invalidation yet",
+    "daily close availability proxy; no costs",
+    "spot-only baseline; OI and funding incremental tests pending",
+    "no holdout yet"
+  ]
+}
