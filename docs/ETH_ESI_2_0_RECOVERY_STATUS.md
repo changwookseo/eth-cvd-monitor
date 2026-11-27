@@ -1,3 +1,8 @@
+## 자동 복구 점검 — 2026-11-28 01:41 KST
+- 00:59 최신 체크포인트 및 main 수집기·워크플로·JSON 직접 재조회. OKX ETH-USDT-SWAP 단일 거래소 OI 682273.363 ETH, 관측 11-27 21:44:07.523 KST, blob e3a41a386905dd7cf3db1e1eeba90bef585fd3ba 동일. 약 237분 경과, 300초 신선도 실패. Binance/전체 시장 OI 아님.
+- 전체 schedule 최근 100건에서 정확한 OI 이름 및 main 기준 21건 모두 success. 최신 #46001107675, 이전 #45932814872 동일, 약 571분 간격. 신규 JSON 및 5분 연속 예약 미충족. 독립 cron과 보조 workflow_run 설정 유지. 예약 지연 원인 미확정, 별도 원시 API 대조 및 완성 보고서 실측 반영 미검증. 이전 로그 대조는 00:59 체크포인트 참조.
+- OI 전체 게이트 미통과, 펀딩비·선물 CVD 미진입, 전체 미완료. Secret 우회·노출·변경 없음. 기존 코드·현물 CVD·기술지표·보고서 정본·가중치·180일 백데이터 변경 없음. 상태 문서만 갱신.
+
 ## 자동 복구 점검 — 2026-11-28 00:59 KST
 - 최신 11-27 21:43 체크포인트와 main 수집기·워크플로·JSON 재조회. 신규 OKX ETH-USDT-SWAP 단일 거래소 OI 682273.363 ETH, 관측 11-27 21:44:07.523 KST, 수집 21:44:07.579 KST, blob e3a41a386905dd7cf3db1e1eeba90bef585fd3ba. 약 196분 경과, 300초 신선도 실패. Binance/전체 시장 OI 아님.
 - 전체 schedule 최근 100건에서 정확한 OI 이름 및 main 기준 21건 모두 success. 신규 [#46001107675](https://github.com/changwookseo/eth-cvd-monitor/actions/runs/46001107675) (21:44:01 KST), 이전 #45932814872 (12:12:37 KST), 약 571분 간격. 신규 job 140512671749 수집·검증·저장 단계 success, 원문 로그의 OI 및 관측·수집시각과 main JSON 일치, 실제 push 44a2c2f 및 STORED 확인. 5분 연속 예약 미충족.
