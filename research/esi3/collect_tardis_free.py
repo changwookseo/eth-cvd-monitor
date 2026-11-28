@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime,timezone
 from concurrent.futures import ThreadPoolExecutor
 out=Path("research/esi3/data")
-days=[f"{y}-{m:02d}-01" for y in range(2020,2027) for m in range(1,13) if (y,m)<=(2026,11)]
+days=[f"{y}-{m:02d}-01" for y in range(2020,datetime.now(timezone.utc).year+1) for m in range(1,13) if (y,m)<=(datetime.now(timezone.utc).year,datetime.now(timezone.utc).month)]
 def fetch(day):
  url="https://datasets.tardis.dev/v1/binance-futures/liquidations/"+day.replace("-","/")+"/ETHUSDT.csv.gz"
  r={"date":day,"url":url}
@@ -29,9 +29,15 @@ def fetch(day):
   except Exception as e:
    r["error"]=str(e);time.sleep(2**attempt)
  return dict(r,status="FAILED")
-with ThreadPoolExecutor(max_workers=3) as pool:results=list(pool.map(fetch,days))
+manifest_path=out/"tardis_free_liquidation_manifest.json"
+previous=json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+retained={r["date"]:r for r in previous.get("sources",[]) if r.get("status")=="VERIFIED_SAMPLE" and r.get("sha256")}
+pending=[d for d in days if d not in retained]
+with ThreadPoolExecutor(max_workers=3) as pool:
+ fresh=list(pool.map(fetch,pending))
+results=sorted([*retained.values(),*fresh],key=lambda r:r["date"])
 ok=[r for r in results if r["status"]=="VERIFIED_SAMPLE"]
-manifest={"checked_utc":datetime.now(timezone.utc).isoformat(),"status":"FREE_SAMPLE_VERIFIED" if len(ok)==len(days) else "PARTIAL","target_days":len(days),"verified_days":len(ok),"research_days":2519,"uncovered_days":2519-len(ok),"coverage_note":"Monthly first-day samples only; Binance published forceOrder snapshots, not all liquidation events. Grouped by UTC capture date. Exact duplicate rows flagged, not silently removed. Notional is reported amount times reported price, not verified executed value. Raw files not redistributed.","sources":results}
+manifest={"checked_utc":datetime.now(timezone.utc).isoformat(),"status":"FREE_SAMPLE_VERIFIED" if len(ok)==len(days) else "PARTIAL","target_days":len(days),"verified_days":len(ok),"research_days":2519,"uncovered_days":None,"coverage_note":"Monthly first-day samples only; Binance published forceOrder snapshots, not all liquidation events. Grouped by UTC capture date. Exact duplicate rows flagged, not silently removed. Notional is reported amount times reported price, not verified executed value. Raw files not redistributed.","sources":results}
 (out/"tardis_free_liquidation_manifest.json").write_text(json.dumps(manifest,indent=2))
 fields=["date","rows","long_eth","short_eth","long_notional_usdt","short_notional_usdt","sha256"]
 with (out/"tardis_free_liquidation_daily.csv").open("w",newline="") as f:
